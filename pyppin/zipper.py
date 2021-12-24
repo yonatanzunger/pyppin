@@ -1,5 +1,5 @@
-from typing import (Any, Callable, Generic, Iterable, Iterator, List,
-                    NamedTuple, Optional, Tuple, TypeVar, Union)
+from typing import (Callable, Generic, Iterable, Iterator, List, NamedTuple,
+                    Optional, Tuple, TypeVar, Union)
 
 ValueType = TypeVar("ValueType")
 KeyType = TypeVar("KeyType")
@@ -7,45 +7,76 @@ YieldedType = TypeVar("YieldedType")
 
 
 class ZipSource(NamedTuple):
-    """A ZipSource is a flexible input for a Zipper, providing an iterable plus extra options."""
+    """A ZipSource is a flexible input for a Zipper, providing an iterable plus extra options.
 
-    # The underlying iterator. The caller must guarantee that it is strictly sorted by key: that
-    # is, if source yields a and then b, key(a) < key(b).
+    See the documentation of zipper() for the meanings of these options.
+    """
+
     source: Iterable[ValueType]
-
-    # An optional function that pulls out the sort key given any element of the source. The default
-    # is to treat the entire yielded value as the key. Sort keys must be comparable with < and ==.
     key: Optional[Callable[[ValueType], KeyType]] = None
-
-    # An optional function that pulls out the item to be yielded in the zipper output for any given
-    # value type. The default is to simply yield whatever the iterator provides.
     value: Optional[Callable[[ValueType], YieldedType]] = None
-
-    # A name for this iterator, which will be used to give nicer error messages if given.
     name: Optional[str] = None
-
-    # The following three fields control what happens if a key shows up in some other source, but
-    # not in this one. Only one of these may be given.
-
-    # If required is true, then the zipper should skip any keys that don't appear in this one
-    # source; this source is a "required field."
     required: bool = False
-
-    # If this function is given, and this source had no value for the given key, we will yield
-    # missing(key) instead.
     missing: Optional[Callable[[KeyType], YieldedType]] = None
-
-    # If neither required nor missing was set, then we will yield this constant value for any
-    # missing values.
     missingValue: Optional[YieldedType] = None
+
+    @classmethod
+    def aux(
+        cls, value: Callable[[KeyType], YieldedType], name: Optional[str] = None
+    ) -> "ZipSource":
+        """Return a ZipSource that contains *just* default values; you can use this to add per-key
+        annotations to your yielded output easily.
+
+        Note that auxiliary sources will only yield when *other* iterators are yielding; if you pass
+        only auxiliary sources to zipper(), you'll get back the empty sequence.
+        """
+        return ZipSource(source=tuple(), name=name, missing=value)
 
 
 def zipper(
     *sources: Union[ZipSource, Iterable],
+    yieldKeys: bool = True,
 ) -> Iterator[Tuple]:
-    """Given N iterators which each yield results in sorted order, return a single iterator which
-    yields the values grouped by their keys. Keys must be comparable (< and ==) across all the
-    inputs.
+    """Combine N sorted iterators into a single iterator that yields merged tuples.
+
+    This is a sort of souped-up version of heapq.merge.
+
+    In the simplest use, if the sources are N iterators that yield values that are already strictly
+    sorted (i.e., if one yields a then b, then a < b), then this function will yield tuples of
+    N+1 items, with each entry being (key, val1, val2...), in sorted order. The key is the common
+    key for all of the items in the row, and the individual values are the corresponding values from
+    each source (if present) or None (if that iterator didn't have a value for this key).
+
+    The fun comes from the extra options you can provide per-source or overall. You can provide
+    options for each source by wrapping it in a ZipSource.
+
+    Per-Source Args:
+        key: A function that transforms the raw thing yielded from the iterator into the key which
+            should be compared. The iterator must be sorted by key. The default is to use the raw
+            value itself as the key.
+        value: A function that transforms the raw thing yielded from the iterator into the value
+            which should be yielded by the zipper. The default is to use the raw value as the output
+            value.
+        name: An optional label for this iterator, used to generate nicer error messages.
+
+    The next three per-source arguments control what happens when this iterator *doesn't* have a
+    value for the given key. No more than one of these may be given.
+        required: If set, this iterator is required: skip the entire output if this iterator
+            didn't provide a value for the given key.
+        missing: If given, call this function (with the key as argument) to generate a synthetic
+            default value for keys not present in this iterator.
+        missingValue: If neither required nor missing is set, return this value for missing keys.
+
+    (Note that the default behavior is thus to return None for missing keys)
+
+    Args:
+        sources: The set of N source iterators to scan over.
+        yieldKeys: If True, the tuples will have N+1 elements, and the first is the key. If false,
+            the tuples will have N elements, and the key will not be separately yielded.
+
+    Raises:
+        IndexError if any of the lists is *not* actually sorted in the correct way.
+        AssertionError if invalid options were passed for any source.
 
     Example:
         Say you have two sorted lists that you want to merge:
@@ -77,8 +108,8 @@ def zipper(
         You want to get, for each  number in l2, its printed name and its square.
 
             zipper(
-                MergeSource(l1, key=lambda x: int(sqrt(x))),
-                MergeSource(l2, key=lambda x: x[0], value=lambda x: x[1], required=True),
+                ZipSource(l1, key=lambda x: int(sqrt(x))),
+                ZipSource(l2, key=lambda x: x[0], value=lambda x: x[1], required=True),
             )
 
         This will yield
@@ -94,24 +125,6 @@ def zipper(
                second element, and because required=True, all items that don't show up in l2
                are dropped outright.
             => Because l1 *isn't* required, we get one yielded item that has no value for l1!
-
-    Args:
-        sources: Each source is an Iterable, optionally passed as a MergeSource to give it
-            non-default options.
-
-    Yields:
-        Tuples with N+1 entries, where N is the number of sources.
-
-        The first item yielded is the key; outputs of the zipper will be strictly sorted
-        by key, and the zipper will yield one element for every key which appears in any source, so
-        long as that key appears in *every* source marked 'required'.
-
-        The remaining items will be the corresponding values of the N iterators for that key,
-        swapping in their "missing" values if any iterator didn't yield a value.
-
-    Raises:
-        IndexError if any of the lists is *not* actually sorted in the correct way.
-        AssertionError if invalid options were passed for any source.
     """
     # Surprise! We aren't going to use a heap in here. It turns out that this is more efficient if
     # we just do a sequence of linear scans over all the arrays, because we always need to hit all
@@ -128,40 +141,45 @@ def zipper(
         return
 
     # An array that we'll reuse.
-    result = [None] * (len(sources) + 1)
+    result = [None] * (len(sources) + (1 if yieldKeys else 0))
+
+    def _set(index: int, value: YieldedType) -> None:
+        result[index + 1 if yieldKeys else index] = value
 
     while True:
         # Grab the pointer that's currently farthest behind.
         key = ptrs[minkey].key
-        print(f'Loop start: key is {key} from {minkey}')
+        # print(f"Loop start: key is {key} from {minkey}")
 
         # Let's assemble the result for this key! We're going to reuse this array, since the logic
         # below guarantees that we'll either skip the whole output, or fill in every field of the
         # result.
-        result[0] = key
+        if yieldKeys:
+            result[0] = key
+
         skip = False
         minkey = -1
 
         for index, ptr in enumerate(ptrs):
-            print(f'{index}: {ptr}')
+            # print(f"{index}: {ptr}")
             if ptr.active and ptr.key == key:
                 # Match! Add this to the result and increment the pointer.
-                result[index + 1] = ptr.result
+                _set(index, ptr.result)
                 ptr.increment()
-                print(f'  Update {index} to {ptr}')
+                # print(f"  Update {index} to {ptr}")
             elif ptr.source.required:
                 # Don't worry about updating result in this case, we aren't going to output.
                 skip = True
             elif ptr.source.missing:
-                result[index + 1] = ptr.source.missing(key)
+                _set(index, ptr.source.missing(key))
             else:
-                result[index + 1] = ptr.source.missingValue
+                _set(index, ptr.source.missingValue)
 
             # And update minkey
             if ptr.active and (minkey == -1 or ptr.key < ptrs[minkey].key):
                 minkey = index
 
-        print(f'Loop finished: skip {skip} minkey {minkey} yielded {result}')
+        # print(f"Loop finished: skip {skip} minkey {minkey} yielded {result}")
         if not skip:
             yield tuple(result)
 
@@ -170,40 +188,25 @@ def zipper(
             return
 
 
-def _identity(x: Any) -> Any:
-    return x
-
-
-def _makeSource(source: Union[ZipSource, Iterator]) -> ZipSource:
-    if not isinstance(source, ZipSource):
-        source = ZipSource(source)
-
-    # Check values and fill in defaults
-    if (
-        (1 if source.required else 0)
-        + (1 if source.missing else 0)
-        + (1 if source.missingValue else 0)
-    ) > 1:
-        raise AssertionError(
-            "No more than one of required, missing, and missingValue may be given "
-            "per source"
-        )
-
-    if not source.key or not source.value:
-        source = source._replace(
-            key=source.key or _identity,
-            value=source.value or _identity,
-        )
-
-    return source
-
-
 class _Pointer(Generic[KeyType, ValueType, YieldedType]):
     def __init__(
         self,
         source: Union[ZipSource, Iterable],
     ) -> None:
-        self.source = _makeSource(source)
+        if isinstance(source, ZipSource):
+            self.source = source
+            if (
+                (1 if source.required else 0)
+                + (1 if source.missing else 0)
+                + (1 if source.missingValue else 0)
+            ) > 1:
+                raise AssertionError(
+                    "No more than one of required, missing, and missingValue may be given "
+                    "per source"
+                )
+        else:
+            self.source = ZipSource(source)
+
         self.it = iter(self.source.source)
 
         try:
@@ -212,8 +215,10 @@ class _Pointer(Generic[KeyType, ValueType, YieldedType]):
             self.active = False
         else:
             self.active = True
-            self.key = self.source.key(self.value)  # mypy: ignore
-            self.result = self.source.value(self.value)  # mypy: ignore
+            self.key = self.source.key(self.value) if self.source.key else self.value
+            self.result = (
+                self.source.value(self.value) if self.source.value else self.value
+            )
 
     def __lt__(self, other: "_Pointer") -> bool:
         return self.key < other.key
@@ -223,8 +228,8 @@ class _Pointer(Generic[KeyType, ValueType, YieldedType]):
 
     def __str__(self) -> str:
         if not self.active:
-            return 'inactive'
-        return f'raw {self.value} => key {self.key} value {self.result}'
+            return "inactive"
+        return f"raw {self.value} => key {self.key} value {self.result}"
 
     def increment(self) -> None:
         assert self.active
@@ -232,12 +237,13 @@ class _Pointer(Generic[KeyType, ValueType, YieldedType]):
         try:
             self.value = next(self.it)
         except StopIteration:
-            print(f'Stop iteration; last key {self.key}')
+            # print(f"Stop iteration; last key {self.key}")
             self.active = False
             return
 
-        self.key = self.source.key(self.value)  # mypy: ignore
-        self.result = self.source.value(self.value)  # mypy: ignore
+        self.key = self.source.key(self.value) if self.source.key else self.value
+        self.result = self.source.value(self.value) if self.source.value else self.value
+
         if self.key <= oldkey:
             name = (
                 f'iterator "{self.source.name}"' if self.source.name else "an iterator"
