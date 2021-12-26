@@ -27,6 +27,10 @@ class ZipSource(NamedTuple):
         """Return a ZipSource that contains *just* default values; you can use this to add per-key
         annotations to your yielded output easily.
 
+        For example, zipper([1, 2, 3, 4, 5], ZipSource.aux(lambda x: x*x), yieldKeys=False) will
+        yield (1, 1), (2, 4), (3, 9), (4, 16), and (5, 25); the second value is the "auxiliary
+        source."
+
         Note that auxiliary sources will only yield when *other* iterators are yielding; if you pass
         only auxiliary sources to zipper(), you'll get back the empty sequence.
         """
@@ -143,6 +147,8 @@ def zipper(
     # An array that we'll reuse.
     result = [None] * (len(sources) + (1 if yieldKeys else 0))
 
+    assert len(result) > 0
+
     def _set(index: int, value: YieldedType) -> None:
         result[index + 1 if yieldKeys else index] = value
 
@@ -162,6 +168,10 @@ def zipper(
 
         for index, ptr in enumerate(ptrs):
             # print(f"{index}: {ptr}")
+            # Early exit if we've fallen off any required iterator.
+            if ptr.source.required and not ptr.active:
+                return
+
             if ptr.active and ptr.key == key:
                 # Match! Add this to the result and increment the pointer.
                 _set(index, ptr.result)
@@ -175,13 +185,13 @@ def zipper(
             else:
                 _set(index, ptr.source.missingValue)
 
-            # And update minkey
+            # And update minkey. NB we do this *after* any calls to increment().
             if ptr.active and (minkey == -1 or ptr.key < ptrs[minkey].key):
                 minkey = index
 
         # print(f"Loop finished: skip {skip} minkey {minkey} yielded {result}")
         if not skip:
-            yield tuple(result)
+            yield tuple(result) if len(result) > 1 else result[0]
 
         if minkey == -1:
             # Nothing left! We're done.
