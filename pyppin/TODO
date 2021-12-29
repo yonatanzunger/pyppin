@@ -1,4 +1,3 @@
-* memoize -- is this really distinct from cachetools.cached? Worth it?
 * histogram
 * expression tree
 * nowandthen

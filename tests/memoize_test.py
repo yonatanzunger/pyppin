@@ -1,8 +1,10 @@
+import threading
 import unittest
 from typing import Any, Dict
 
-from pyppin.memoize import cachemethod
+from pyppin.memoize import cache, cachemethod
 
+sharedLock = threading.Lock()
 sharedCache: Dict[str, Any] = {}
 
 
@@ -11,25 +13,35 @@ class MemoizedClass(object):
         self.cache: Dict[str, Any] = {}
         self.calls = 0
 
-    @cachemethod(var="cache", key=lambda x, y: y)
-    def functionWithInstanceCache(self, arg: str) -> str:
+    @cachemethod(cache="cache", key=lambda x, y: y)
+    def methodWithInstanceCache(self, arg: str) -> str:
         self.calls += 1
         return "fn" + arg
 
-    @cachemethod(cls=dict, key=lambda x, y: y)
-    def functionWithTypeCache(self, arg: str) -> str:
+    @cachemethod(cache=dict, key=lambda x, y: y)
+    def methodWithTypeCache(self, arg: str) -> str:
         self.calls += 1
         return "fn" + arg
 
-    @cachemethod(cacheobj=sharedCache, key=lambda x, y: y)
-    def functionWithObjectCache(self, arg: str) -> str:
+    @cachemethod(cache=sharedCache, key=lambda x, y: y)
+    def methodWithObjectCache(self, arg: str) -> str:
         self.calls += 1
         return "fn" + arg
 
-    @cachemethod(cls=dict)
-    def functionWithDefaultKey(self, arg: str) -> str:
+    @cachemethod(cache=dict)
+    def methodWithDefaultKey(self, arg: str) -> str:
         self.calls += 1
         return "def" + arg
+
+
+functionCallCount = 0
+
+
+@cache()
+def functionWithTypeCache(arg: str) -> str:
+    global functionCallCount
+    functionCallCount += 1
+    return "fn" + arg
 
 
 class MemoizeTest(unittest.TestCase):
@@ -37,26 +49,29 @@ class MemoizeTest(unittest.TestCase):
         self.foo = MemoizedClass()
         sharedCache.clear()
 
+        global functionCallCount
+        functionCallCount = 0
+
     def testInstanceCache(self) -> None:
         self.assertEqual(0, self.foo.calls)
-        self.assertFalse(self.foo.functionWithInstanceCache.incache("bar"))
+        self.assertFalse(self.foo.methodWithInstanceCache.incache("bar"))
 
-        self.assertEqual("fnbar", self.foo.functionWithInstanceCache("bar"))
+        self.assertEqual("fnbar", self.foo.methodWithInstanceCache("bar"))
         self.assertEqual(1, self.foo.calls)
-        self.assertTrue(self.foo.functionWithInstanceCache.incache("bar"))
+        self.assertTrue(self.foo.methodWithInstanceCache.incache("bar"))
 
-        self.assertEqual("fnbar", self.foo.functionWithInstanceCache("bar"))
+        self.assertEqual("fnbar", self.foo.methodWithInstanceCache("bar"))
         self.assertEqual(1, self.foo.calls)
-        self.assertTrue(self.foo.functionWithInstanceCache.incache("bar"))
+        self.assertTrue(self.foo.methodWithInstanceCache.incache("bar"))
 
         # White-box test
         self.assertEqual({"bar": "fnbar"}, self.foo.cache)
 
     def testSkipCacheRead(self) -> None:
         self.assertEqual(0, self.foo.calls)
-        self.assertEqual("fnbar", self.foo.functionWithInstanceCache("bar"))
+        self.assertEqual("fnbar", self.foo.methodWithInstanceCache("bar"))
         self.assertEqual(1, self.foo.calls)
-        self.assertEqual("fnbar", self.foo.functionWithInstanceCache("bar", _skip="r"))
+        self.assertEqual("fnbar", self.foo.methodWithInstanceCache("bar", _skip="r"))
         self.assertEqual(2, self.foo.calls)
 
         # White-box test
@@ -64,51 +79,63 @@ class MemoizeTest(unittest.TestCase):
 
     def testSkipCacheWrite(self) -> None:
         self.assertEqual(0, self.foo.calls)
-        self.assertEqual("fnbar", self.foo.functionWithInstanceCache("bar", _skip="w"))
+        self.assertEqual("fnbar", self.foo.methodWithInstanceCache("bar", _skip="w"))
         self.assertEqual(1, self.foo.calls)
 
         self.assertEqual({}, self.foo.cache)  # White-box test
 
-        self.assertEqual("fnbar", self.foo.functionWithInstanceCache("bar"))
+        self.assertEqual("fnbar", self.foo.methodWithInstanceCache("bar"))
         self.assertEqual(2, self.foo.calls)
 
         # White-box test
         self.assertEqual({"bar": "fnbar"}, self.foo.cache)
 
-        self.assertEqual("fnbar", self.foo.functionWithInstanceCache("bar"))
+        self.assertEqual("fnbar", self.foo.methodWithInstanceCache("bar"))
         # This time it hits the cache
         self.assertEqual(2, self.foo.calls)
 
-    def testTypeCache(self) -> None:
+    def testMethodTypeCache(self) -> None:
         self.assertEqual(0, self.foo.calls)
-        self.assertFalse(self.foo.functionWithTypeCache.incache("bar"))
+        self.assertFalse(self.foo.methodWithTypeCache.incache("bar"))
 
-        self.assertEqual("fnbar", self.foo.functionWithTypeCache("bar"))
+        self.assertEqual("fnbar", self.foo.methodWithTypeCache("bar"))
         self.assertEqual(1, self.foo.calls)
-        self.assertTrue(self.foo.functionWithTypeCache.incache("bar"))
+        self.assertTrue(self.foo.methodWithTypeCache.incache("bar"))
 
-        self.assertEqual("fnbar", self.foo.functionWithTypeCache("bar"))
+        self.assertEqual("fnbar", self.foo.methodWithTypeCache("bar"))
         self.assertEqual(1, self.foo.calls)
-        self.assertTrue(self.foo.functionWithTypeCache.incache("bar"))
+        self.assertTrue(self.foo.methodWithTypeCache.incache("bar"))
 
         # We shouldn't have used this!
         self.assertEqual({}, self.foo.cache)
 
-    def testObjectCache(self) -> None:
+    def testMethodObjectCache(self) -> None:
         self.assertEqual(0, self.foo.calls)
-        self.assertFalse(self.foo.functionWithObjectCache.incache("bar"))
+        self.assertFalse(self.foo.methodWithObjectCache.incache("bar"))
 
-        self.assertEqual("fnbar", self.foo.functionWithObjectCache("bar"))
+        self.assertEqual("fnbar", self.foo.methodWithObjectCache("bar"))
         self.assertEqual(1, self.foo.calls)
-        self.assertTrue(self.foo.functionWithObjectCache.incache("bar"))
+        self.assertTrue(self.foo.methodWithObjectCache.incache("bar"))
 
-        self.assertEqual("fnbar", self.foo.functionWithObjectCache("bar"))
+        self.assertEqual("fnbar", self.foo.methodWithObjectCache("bar"))
         self.assertEqual(1, self.foo.calls)
-        self.assertTrue(self.foo.functionWithObjectCache.incache("bar"))
+        self.assertTrue(self.foo.methodWithObjectCache.incache("bar"))
 
         # We shouldn't have used this!
         self.assertEqual({}, self.foo.cache)
         self.assertEqual({"bar": "fnbar"}, sharedCache)
+
+    def testFunctionTypeCache(self) -> None:
+        self.assertEqual(0, functionCallCount)
+        self.assertFalse(functionWithTypeCache.incache("bar"))
+
+        self.assertEqual("fnbar", functionWithTypeCache("bar"))
+        self.assertEqual(1, functionCallCount)
+        self.assertTrue(functionWithTypeCache.incache("bar"))
+
+        self.assertEqual("fnbar", functionWithTypeCache("bar"))
+        self.assertEqual(1, functionCallCount)
+        self.assertTrue(functionWithTypeCache.incache("bar"))
 
 
 if __name__ == "__main__":
