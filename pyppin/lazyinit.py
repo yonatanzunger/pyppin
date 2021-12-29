@@ -1,11 +1,4 @@
-# Apply to an instance method
-# @lazyinit
-# def value(...) -> Type
-#
-# Creates a read-only property with .set() and .reset() methods
 from typing import Callable, Generic, Optional, TypeVar
-
-from . import assertNotNone
 
 T = TypeVar("T")
 PREFIX = "__lazyinit_"

@@ -1,7 +1,7 @@
 * memoize -- is this really distinct from cachetools.cached? Worth it?
 * histogram
 * expression tree
-* zipper
 * nowandthen
 * siprefix
 * lazyimport
+* StreamingBuffer?

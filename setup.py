@@ -1,6 +1,6 @@
 import os
-from setuptools import setup, find_packages
 
+from setuptools import find_packages, setup
 
 with open(
     os.path.join(os.path.abspath(os.path.dirname(__file__)), "README.md"),
@@ -22,7 +22,10 @@ setup(
     project_urls={
         # XXX
     },
-    python_requires=">=3.6",
+    python_requires=">=3.7",
+    install_requires=[
+        "cachetools",
+    ],
     packages=find_packages(exclude=["tests", "tools", "docs", "docs_src"]),
     test_suite="tests",
 )
