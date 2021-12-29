@@ -1,17 +1,8 @@
 import functools
 import threading
 from contextlib import AbstractContextManager, nullcontext
-from typing import (
-    Any,
-    Callable,
-    Hashable,
-    Mapping,
-    NamedTuple,
-    Optional,
-    Type,
-    TypeVar,
-    Union,
-)
+from typing import (Any, Callable, Hashable, Mapping, NamedTuple, Optional,
+                    Type, TypeVar, Union)
 
 import cachetools.keys
 
@@ -23,12 +14,12 @@ WrappedFunctionType = Callable[..., ValueType]
 
 # The types you can pass in order to select the cache and its lock when decorating a method or a
 # bare function, respectively.
-MethodCacheSelector = Union[CacheType, Type[CacheType], str, None]
-MethodLockSelector = Union[
+MethodCacheArgument = Union[CacheType, Type[CacheType], str, None]
+MethodLockArgument = Union[
     AbstractContextManager, Type[AbstractContextManager], bool, str
 ]
-FunctionCacheSelector = Union[CacheType, Type[CacheType], None]
-FunctionLockSelector = Union[AbstractContextManager, Type[AbstractContextManager], bool]
+FunctionCacheArgument = Union[CacheType, Type[CacheType], None]
+FunctionLockArgument = Union[AbstractContextManager, Type[AbstractContextManager], bool]
 
 
 class CacheFlags(NamedTuple):
@@ -43,7 +34,7 @@ class CacheFlags(NamedTuple):
     write: bool
 
     @classmethod
-    def fromSkipArg(cls, arg: Union[bool, str, "CacheFlags", None]) -> "CacheFlags":
+    def fromSkipArg(cls, arg: "CacheSkipArgument") -> "CacheFlags":
         """Parse a "skip=<foo>" argument into CacheFlags."""
         if arg is None:
             return USE_CACHE
@@ -65,6 +56,8 @@ class CacheFlags(NamedTuple):
                         f'Unexpected character "{char}" in cache skip argument'
                     )
             return CacheFlags(read=read, write=write)
+        else:
+            raise TypeError(f'Bogus cache skip argument "{arg}"')
 
 
 SKIP_CACHE = CacheFlags(read=False, write=False)
@@ -77,8 +70,8 @@ CacheSkipArgument = Union[bool, str, CacheFlags, None]
 
 
 def cachemethod(
-    cache: MethodCacheSelector = dict,
-    lock: MethodLockSelector = False,
+    cache: MethodCacheArgument = dict,
+    lock: MethodLockArgument = False,
     key: Optional[Callable[..., KeyType]] = None,
     cacheExceptions: bool = False,
     **kwargs,
@@ -97,6 +90,9 @@ def cachemethod(
             * An explicit object to use as a cache. (Careful! @cachemethod(cache={}) will create
               a per-*class* dict and use it for every *instance*, which is rarely what you want!)
             * None to simply not cache.
+
+            The default is dict, i.e. to use a per-method unbounded cache.
+
         lock: The mutex to use to guard the cache. Valid values are:
             * A class (such as threading.Lock) to use for the lock.
             * The (string) name of an instance variable containing the lock.
@@ -104,25 +100,27 @@ def cachemethod(
             * True (equivalent to the class threading.Lock, the most common value to pass)
             * False (to not lock the cache)
 
-    The default behavior is cache=dict, lock=False, which uses a dedicated unlocked dict to cache
-    the method.
+            The default is False, i.e. to not lock the cache.
 
         key: A function that takes the same arguments as the decorated function, and returns
-            a cache key to use for those values. If not given, @memoize will pick a default based
-            on hashing the passed arguments, and using the id() of the instance.
+            a cache key to use for those values.
+
+            The default is to infer a key function based on all function arguments and the id of
+            self. Note that this default only works if all the arguments are hashable; you will
+            very often want to override this default!
 
         cacheExceptions: If True and the function raises an exception, we will cache the
             *exception*, so that future calls to the function will get a cache hit and the response
-            to that hit will be to re-raise the exception.
+            to that hit will be to re-raise the exception. The default is not to do this.
 
     The resulting function will be a wrapped version of the original, but will have an additional
     keyword argument _skip: Union[bool, str, CacheFlags, None]=None, which can be used to control
     caching behavior when invoking it. Some particular useful arguments:
 
-        wrappedfn(_skip=True) will completely skip the cache.
-        wrappedfn(_skip='r') will always re-evaluate the function, and update the cache, so
+        wrappedfn(..., _skip=True) will completely skip the cache.
+        wrappedfn(..., _skip='r') will always re-evaluate the function, and update the cache, so
             this can be used to forcibly refresh the cache entry for these arguments.
-        wrappedfn(_skip='w') will check, but not update, the cache; this is good if it's a
+        wrappedfn(..., _skip='w') will check, but not update, the cache; this is good if it's a
             value that would be expensive to store in cache, or otherwise a scenario where
             updating the cache would be bad. (e.g., if there are two paths that hit a function,
             one of which is performance-critical and the other isn't, and the second would have
@@ -130,9 +128,10 @@ def cachemethod(
             will get the benefits of the cache when possible, but not pollute the cache for the
             first one)
 
-    In addition, the wrapped function has an incache() method (i.e., foo.wrappedfn.incache(...))
-    that has the same signature as the function itself, but returns a bool: True if the given
-    arguments would lead to a cache hit, False otherwise.
+    In addition, the wrapped function has an incache() method of its own:
+
+        wrappedfn.incache(...) has the same signature as the function itself, but returns a bool:
+            True if the given arguments would lead to a cache hit, False otherwise.
     """
 
     def wrapper(function: WrappedFunctionType) -> _WrappedDescriptor:
@@ -157,8 +156,8 @@ def cachemethod(
 
 
 def cache(
-    cache: FunctionCacheSelector = dict,
-    lock: FunctionLockSelector = False,
+    cache: FunctionCacheArgument = dict,
+    lock: FunctionLockArgument = False,
     key: Optional[Callable[..., KeyType]] = None,
     cacheExceptions: bool = False,
     **kwargs,
@@ -208,8 +207,8 @@ class _CacheCore(object):
     def __init__(
         self,
         function: WrappedFunctionType,
-        cache: MethodCacheSelector,
-        lock: MethodLockSelector,
+        cache: MethodCacheArgument,
+        lock: MethodLockArgument,
         key: Callable[..., KeyType],
         cacheExceptions: bool,
         **kwargs,
