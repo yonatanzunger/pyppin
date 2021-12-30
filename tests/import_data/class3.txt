@@ -1,0 +1,7 @@
+from tests.import_data._def import ImportableThing
+
+
+# This file is valid Python, but we should skip it because it's not a .py file.
+
+class Class3(ImportableThing):
+    pass
