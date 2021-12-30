@@ -9,7 +9,7 @@ if REPO_ROOT not in sys.path:
     sys.path.append(REPO_ROOT)
 
 from pyppin.bulk_import import bulkImport  # noqa
-from pyppin.find_files import findFiles  # noqa
+from pyppin.list_files import listFiles  # noqa
 
 from tools.linters.common import LINTERS  # noqa
 
@@ -21,7 +21,7 @@ class LintableFiles(object):
         self._files: Dict[str, List[str]] = defaultdict(list)
 
     def add(self, filename: str) -> None:
-        for path in findFiles(
+        for path in listFiles(
             filename,
             select=lambda path: path.name not in EXCLUDE_NAMES
             and not path.name.startswith("."),
