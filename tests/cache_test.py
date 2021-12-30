@@ -2,7 +2,7 @@ import threading
 import unittest
 from typing import Any, Dict
 
-from pyppin.memoize import cache, cachemethod
+from pyppin.cache import cache, cachemethod
 
 sharedLock = threading.Lock()
 sharedCache: Dict[str, Any] = {}
