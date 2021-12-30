@@ -1,4 +1,4 @@
-from tests.import_data._def import ImportableThing
+from tests.bulk_import_test_data._def import ImportableThing
 
 
 # This file is valid Python, but we should skip it because it's not a .py file.

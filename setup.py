@@ -23,9 +23,7 @@ setup(
         # XXX
     },
     python_requires=">=3.7",
-    install_requires=[
-        "cachetools",
-    ],
+    install_requires=[],
     packages=find_packages(exclude=["tests", "tools", "docs", "docs_src"]),
     test_suite="tests",
 )

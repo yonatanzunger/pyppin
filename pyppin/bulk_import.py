@@ -68,6 +68,7 @@ def bulkImport(
         recursive=recursive,
         select=lambda p: not any(pat.match(p.name) for pat in pats),
     ):
+        # The set of file types that can actually be imported.
         if file.suffix not in importlib.machinery.all_suffixes():
             continue
 
@@ -75,6 +76,7 @@ def bulkImport(
         relpath = file.relative_to(root).with_suffix("")
         name = ".".join(relpath.parts)
 
+        # Don't re-import things.
         if name in sys.modules:
             if verbose:
                 print(f"Not importing {name} from {file}: Already loaded.")
@@ -84,6 +86,8 @@ def bulkImport(
         if verbose:
             print(f"Importing {name} from {file}")
 
+        # cf the documentation of importlib: it's important to insert the module into sys.modules
+        # *before* trying to exec its contents, but you need to clean that up afterwards!
         spec = importlib.util.spec_from_file_location(name, file)
         module = importlib.util.module_from_spec(spec)
         sys.modules[name] = module

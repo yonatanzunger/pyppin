@@ -1,10 +1,17 @@
 import functools
 import threading
 from contextlib import AbstractContextManager, nullcontext
-from typing import (Any, Callable, Hashable, Mapping, NamedTuple, Optional,
-                    Type, TypeVar, Union)
-
-import cachetools.keys
+from typing import (
+    Any,
+    Callable,
+    Hashable,
+    Mapping,
+    NamedTuple,
+    Optional,
+    Type,
+    TypeVar,
+    Union,
+)
 
 ValueType = TypeVar("ValueType")
 KeyType = TypeVar("KeyType")
@@ -67,6 +74,10 @@ USE_CACHE = CacheFlags(read=True, write=True)
 # This is the type for a "cache skip" argument. Any @memoized function or method will have an
 # optional kwarg _skip of this type attached, which you can use to control how the cache is invoked.
 CacheSkipArgument = Union[bool, str, CacheFlags, None]
+
+
+class ExplicitKeyNeeded(Exception):
+    pass
 
 
 def cachemethod(
@@ -140,7 +151,8 @@ def cachemethod(
         # the thing on which the descriptor is being called (self or the class or whatever) and
         # curry that as a "zeroth argument" for all the underlying function calls. NB that Python
         # would do this automatically if we just returned a function, but then we couldn't implement
-        # things like incache()!
+        # things like incache()! (That mechanism doesn't work for other callables; cf the discussion
+        # of instance methods in https://docs.python.org/3/reference/datamodel.html)
         return _WrappedDescriptor(
             _CacheCore(
                 function=function,
@@ -164,8 +176,9 @@ def cache(
 ) -> Callable[[WrappedFunctionType], "_WrappedFunction"]:
     """A decorator to memoize (cache) the results of a function call.
 
-    See the documentation for @cachemethod. The 'var' argument isn't available here, for obvious
-    reasons.
+    This works identically to @cachemethod, except that you can't pass strings for cache or lock
+    to refer to instance variables, for obvious reasons. See the documentation of that decorator for
+    all the other options and their meanings.
     """
 
     def wrapper(function: WrappedFunctionType) -> _WrappedFunction:
@@ -187,8 +200,8 @@ def cache(
 # Implementation begins here.
 
 
+# All the cache-related stuff for a single operation.
 class _CacheState(NamedTuple):
-    # All the cache-related stuff for a single operation.
     cache: CacheType
     lock: AbstractContextManager
     key: KeyType
@@ -213,6 +226,10 @@ class _CacheCore(object):
         cacheExceptions: bool,
         **kwargs,
     ) -> None:
+        """This class encapsulates all the logic which is common between methods and functions --
+        the actual meat of invoke() and incache().
+        """
+
         # self.cache will be a function that goes from the passed arguments to the actual cache
         # object. We need these arguments for the case where the cache was specified as an instance
         # variable name, so we have to getattr on args[0].
@@ -239,8 +256,6 @@ class _CacheCore(object):
         self.key = key
         self.function = function
         self.cacheExceptions = cacheExceptions
-
-        functools.update_wrapper(self, function)
 
     def getCacheState(self, *args, **kwargs) -> Optional[_CacheState]:
         cache = self.cache(*args, **kwargs)
@@ -338,6 +353,13 @@ class _WrappedMethod(object):
         core: _CacheCore,
         instance: Any,
     ) -> None:
+        """This object is the actual wrapped function that people will call.
+
+        It's almost identical to _WrappedFunction (below), but this one is aware of what 'self'
+        is, so that it can pass that argument correctly to both __call__ and incache. That's why
+        you can say something like "foo.wrappedfn.incache(arg1, arg2)" and incache will still
+        get foo as its zeroth argument, which it needs in order to actually work.
+        """
         self.core = core
         self.instance = instance
 
@@ -354,7 +376,15 @@ class _WrappedMethod(object):
 
 class _WrappedDescriptor(object):
     def __init__(self, core: _CacheCore) -> None:
+        """This is the object we return from @cachemethod.
+
+        It's a non-data descriptor, which will then get plugged in to the class whose method we're
+        decorating; when you access foo.wrappedfn, it will really return foo.[this
+        descriptor].__get__(foo, foo). That lets us capture the actual value of foo, which we can
+        pass to the _WrappedMethod and thus into methods like __call__ and incache.
+        """
         self.core = core
+        functools.update_wrapper(self, core.function)
 
     def __get__(self, instance: Any, owner: Any = None) -> _WrappedMethod:
         return _WrappedMethod(self.core, instance or owner)
@@ -362,7 +392,12 @@ class _WrappedDescriptor(object):
 
 class _WrappedFunction(object):
     def __init__(self, core: _CacheCore) -> None:
+        """This is the object we return from @cache.
+
+        It's just a callable object that exposes the wrapped function as well as incache.
+        """
         self.core = core
+        functools.update_wrapper(self, core.function)
 
     def __call__(self, *args, _skip: CacheSkipArgument = None, **kwargs) -> ValueType:
         return self.core.invoke(_skip, *args, **kwargs)
@@ -378,4 +413,12 @@ def _defaultMethodCacheKey(self, *args, **kwargs) -> Hashable:
     return _defaultFunctionCacheKey(id(self), *args, **kwargs)
 
 
-_defaultFunctionCacheKey = cachetools.keys.typedkey
+def _defaultFunctionCacheKey(*args, **kwargs) -> int:
+    try:
+        return hash(args + tuple(sorted(kwargs.items())))
+    except TypeError:
+        raise ExplicitKeyNeeded(
+            "The default cache key cannot be used for this function; not all of its arguments "
+            "are hashable types. Please specify an explicit key= argument for its caching "
+            "decorator."
+        )
