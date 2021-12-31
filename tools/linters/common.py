@@ -45,14 +45,14 @@ def linter(
             LINTERS[filetype].fixers.append(fix)
 
 
-def runCommand(*command: str, verbose: bool = False) -> bool:
+def run_command(*command: str, verbose: bool = False) -> bool:
     """Helper for linters: Run a command and return whether it succeeded."""
     if verbose:
         print(" ".join(command))
-    pythonPath = ":".join(sys.path)
+    python_path = ":".join(sys.path)
     try:
         subprocess.check_call(
-            [f'PYTHONPATH="{pythonPath}"', *command], cwd=REPO_ROOT, shell=True
+            [f'PYTHONPATH="{python_path}"', *command], cwd=REPO_ROOT, shell=True
         )
         return True
     except subprocess.CalledProcessError:

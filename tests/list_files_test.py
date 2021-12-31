@@ -1,16 +1,16 @@
 import unittest
 from pathlib import Path
 
-from pyppin.list_files import listFiles
+from pyppin.list_files import list_files
 
 
 class ListFilesTest(unittest.TestCase):
     def testListFiles(self) -> None:
         # Set up an absolute path to make it as hard as possible for relative_to to work below.
         root = Path(__file__).parent.joinpath("list_files_test_data").resolve()
-        found = listFiles(root, select=lambda path: "skip" not in path.name)
+        found = list_files(root, select=lambda path: "skip" not in path.name)
 
-        # The fact that relative_to will work in this case is a guaranteed invariant of listFiles!
+        # The fact that relative_to will work in this case is a guaranteed invariant of list_files!
         relative = [str(path.relative_to(root)) for path in found]
 
         # Things that do *not* show up in this output:

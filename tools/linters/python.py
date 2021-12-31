@@ -1,34 +1,34 @@
 from typing import List
 
-from tools.linters.common import linter, runCommand
+from tools.linters.common import linter, run_command
 
 
-def lintPyFiles(files: List[str], verbose: bool) -> bool:
+def lint_py_files(files: List[str], verbose: bool) -> bool:
     if not files:
         return True
 
     ok = True
-    if not runCommand("python", "-m", "flake8", *files, verbose=verbose):
+    if not run_command("python", "-m", "flake8", *files, verbose=verbose):
         ok = False
-    if not runCommand(
+    if not run_command(
         "python", "-m", "isort", "--atomic", "--check-only", *files, verbose=verbose
     ):
         ok = False
-    if not runCommand("python", "-m", "black", "--check", *files, verbose=verbose):
+    if not run_command("python", "-m", "black", "--check", *files, verbose=verbose):
         ok = False
-    if not runCommand("python", "-m", "mypy", *files, verbose=verbose):
+    if not run_command("python", "-m", "mypy", *files, verbose=verbose):
         ok = False
 
     print(f'Lint of {len(files)} Python files {"successful" if ok else "failed"}!')
     return ok
 
 
-def fixPyFiles(files: List[str], verbose: bool) -> None:
+def fix_py_files(files: List[str], verbose: bool) -> None:
     if not files:
         return
 
-    runCommand("python", "-m", "isort", "--atomic", *files, verbose=verbose)
-    runCommand("python", "-m", "black", *files, verbose=verbose)
+    run_command("python", "-m", "isort", "--atomic", *files, verbose=verbose)
+    run_command("python", "-m", "black", *files, verbose=verbose)
 
 
-linter([".py"], lint=lintPyFiles, fix=fixPyFiles)
+linter([".py"], lint=lint_py_files, fix=fix_py_files)

@@ -8,8 +8,8 @@ from _common import REPO_ROOT
 if REPO_ROOT not in sys.path:
     sys.path.append(REPO_ROOT)
 
-from pyppin.bulk_import import bulkImport  # noqa
-from pyppin.list_files import listFiles  # noqa
+from pyppin.bulk_import import bulk_import  # noqa
+from pyppin.list_files import list_files  # noqa
 
 from tools.linters.common import LINTERS  # noqa
 
@@ -21,7 +21,7 @@ class LintableFiles(object):
         self._files: Dict[str, List[str]] = defaultdict(list)
 
     def add(self, filename: str) -> None:
-        for path in listFiles(
+        for path in list_files(
             filename,
             select=lambda path: path.name not in EXCLUDE_NAMES
             and not path.name.startswith("."),
@@ -34,7 +34,7 @@ class LintableFiles(object):
             return f"1 {name}"
         return f"{num} {name}s"
 
-    def printStats(self) -> None:
+    def print_stats(self) -> None:
         for extension, filenames in sorted(self._files.items()):
             print(
                 f"Type [{extension}]: "
@@ -72,7 +72,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # Grab the linters
-    bulkImport(f'{REPO_ROOT}/tools/linters', verbose=args.verbose, root=REPO_ROOT)
+    bulk_import(f'{REPO_ROOT}/tools/linters', verbose=args.verbose, root=REPO_ROOT)
 
     # Grab the files to lint
     files = LintableFiles()
@@ -84,7 +84,7 @@ if __name__ == "__main__":
         files.add(REPO_ROOT)
 
     if args.verbose:
-        files.printStats()
+        files.print_stats()
 
     # If there was a fix request, run that first.
     if args.fix:

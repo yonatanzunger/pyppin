@@ -6,7 +6,7 @@ import sys
 from pathlib import Path
 from typing import List, Optional, Union, Dict
 
-from pyppin.list_files import listFiles
+from pyppin.list_files import list_files
 
 DEFAULT_EXCLUDE = [
     "\\..*",
@@ -14,7 +14,7 @@ DEFAULT_EXCLUDE = [
 ]
 
 
-def bulkImport(
+def bulk_import(
     path: Union[str, Path],
     recursive: bool = True,
     exclude: List[str] = DEFAULT_EXCLUDE,
@@ -63,7 +63,7 @@ def bulkImport(
 
     pats = [re.compile(p) for p in exclude]
 
-    for file in listFiles(
+    for file in list_files(
         path,
         recursive=recursive,
         select=lambda p: not any(pat.match(p.name) for pat in pats),

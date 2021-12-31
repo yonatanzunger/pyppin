@@ -41,7 +41,7 @@ class CacheFlags(NamedTuple):
     write: bool
 
     @classmethod
-    def fromSkipArg(cls, arg: "CacheSkipArgument") -> "CacheFlags":
+    def from_skip_arg(cls, arg: "CacheSkipArgument") -> "CacheFlags":
         """Parse a "skip=<foo>" argument into CacheFlags."""
         if arg is None:
             return USE_CACHE
@@ -84,7 +84,7 @@ def cachemethod(
     cache: MethodCacheArgument = dict,
     lock: MethodLockArgument = False,
     key: Optional[Callable[..., KeyType]] = None,
-    cacheExceptions: bool = False,
+    cache_exceptions: bool = False,
     **kwargs,
 ) -> Callable[[WrappedFunctionType], "_WrappedDescriptor"]:
     """A decorator to memoize (cache) the results of a class or instance method.
@@ -120,7 +120,7 @@ def cachemethod(
             self. Note that this default only works if all the arguments are hashable; you will
             very often want to override this default!
 
-        cacheExceptions: If True and the function raises an exception, we will cache the
+        cache_exceptions: If True and the function raises an exception, we will cache the
             *exception*, so that future calls to the function will get a cache hit and the response
             to that hit will be to re-raise the exception. The default is not to do this.
 
@@ -159,7 +159,7 @@ def cachemethod(
                 cache=cache,
                 lock=lock,
                 key=key or _defaultMethodCacheKey,
-                cacheExceptions=cacheExceptions,
+                cache_exceptions=cache_exceptions,
                 **kwargs,
             )
         )
@@ -171,7 +171,7 @@ def cache(
     cache: FunctionCacheArgument = dict,
     lock: FunctionLockArgument = False,
     key: Optional[Callable[..., KeyType]] = None,
-    cacheExceptions: bool = False,
+    cache_exceptions: bool = False,
     **kwargs,
 ) -> Callable[[WrappedFunctionType], "_WrappedFunction"]:
     """A decorator to memoize (cache) the results of a function call.
@@ -188,7 +188,7 @@ def cache(
                 cache=cache,
                 lock=lock,
                 key=key or _defaultFunctionCacheKey,
-                cacheExceptions=cacheExceptions,
+                cache_exceptions=cache_exceptions,
                 **kwargs,
             )
         )
@@ -223,7 +223,7 @@ class _CacheCore(object):
         cache: MethodCacheArgument,
         lock: MethodLockArgument,
         key: Callable[..., KeyType],
-        cacheExceptions: bool,
+        cache_exceptions: bool,
         **kwargs,
     ) -> None:
         """This class encapsulates all the logic which is common between methods and functions --
@@ -235,29 +235,29 @@ class _CacheCore(object):
         # variable name, so we have to getattr on args[0].
         self.cache: Callable[..., CacheType]
         if isinstance(cache, str):
-            self.cache = _attributeGetter(cache)
+            self.cache = _attribute_getter(cache)
         elif isinstance(cache, type):
-            self.cache = _constantGetter(cache(**kwargs))
+            self.cache = _constant_getter(cache(**kwargs))
         else:
-            self.cache = _constantGetter(cache)
+            self.cache = _constant_getter(cache)
 
         # Same drill for self.lock.
         self.lock: Callable[..., AbstractContextManager]
 
         if isinstance(lock, str):
-            self.lock = _attributeGetter(lock)
+            self.lock = _attribute_getter(lock)
         elif isinstance(lock, type):
-            self.lock = _constantGetter(lock())
+            self.lock = _constant_getter(lock())
         elif isinstance(lock, bool):
-            self.lock = _constantGetter(threading.Lock() if lock else nullcontext())
+            self.lock = _constant_getter(threading.Lock() if lock else nullcontext())
         else:
-            self.lock = _constantGetter(lock)
+            self.lock = _constant_getter(lock)
 
         self.key = key
         self.function = function
-        self.cacheExceptions = cacheExceptions
+        self.cache_exceptions = cache_exceptions
 
-    def getCacheState(self, *args, **kwargs) -> Optional[_CacheState]:
+    def get_cache_state(self, *args, **kwargs) -> Optional[_CacheState]:
         cache = self.cache(*args, **kwargs)
         return (
             _CacheState(
@@ -271,12 +271,12 @@ class _CacheCore(object):
 
     def invoke(self, skip: CacheSkipArgument, *args, **kwargs) -> ValueType:
         """The inner meat of a memoized function, the actual wrapped function!"""
-        cacheFlags = CacheFlags.fromSkipArg(skip)
+        cacheFlags = CacheFlags.from_skip_arg(skip)
         # Fast path if we're skipping cache completely.
         if not cacheFlags.read and not cacheFlags.write:
             return self.function(*args, **kwargs)
 
-        cache = self.getCacheState(*args, **kwargs)
+        cache = self.get_cache_state(*args, **kwargs)
         # Fast path if there's no cache.
         if not cache:
             return self.function(*args, **kwargs)
@@ -289,7 +289,7 @@ class _CacheCore(object):
                 pass
             else:
                 # Cache hit! Return or raise the result, as appropriate.
-                if self.cacheExceptions and isinstance(result, Exception):
+                if self.cache_exceptions and isinstance(result, Exception):
                     raise result
                 else:
                     return result
@@ -298,7 +298,7 @@ class _CacheCore(object):
         try:
             value = self.function(*args, **kwargs)
         except Exception as e:
-            if self.cacheExceptions and cacheFlags.write:
+            if self.cache_exceptions and cacheFlags.write:
                 # Drop the traceback to avoid holding pointers to a stack trace in a cache.
                 cache.set(e.with_traceback(None))
             raise
@@ -311,7 +311,7 @@ class _CacheCore(object):
 
     def incache(self, *args, **kwargs) -> bool:
         try:
-            self.getCacheState(*args, **kwargs).get()
+            self.get_cache_state(*args, **kwargs).get()
         except (KeyError, AttributeError):
             return False
         else:
@@ -321,7 +321,7 @@ class _CacheCore(object):
 # Two helper functions that return named attributes of args[0] (ie self) or just fixed values.
 
 
-def _attributeGetter(name: str) -> Callable:
+def _attribute_getter(name: str) -> Callable:
     def getAttribute(*args, **kwargs) -> Any:
         try:
             return getattr(args[0], name)
@@ -340,7 +340,7 @@ def _attributeGetter(name: str) -> Callable:
     return getAttribute
 
 
-def _constantGetter(value: Any) -> Callable:
+def _constant_getter(value: Any) -> Callable:
     def getConstant(*args, **kwargs) -> Any:
         return value
 

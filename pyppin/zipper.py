@@ -18,7 +18,7 @@ class ZipSource(NamedTuple):
     name: Optional[str] = None
     required: bool = False
     missing: Optional[Callable[[KeyType], YieldedType]] = None
-    missingValue: Optional[YieldedType] = None
+    missing_value: Optional[YieldedType] = None
 
     @classmethod
     def aux(
@@ -27,7 +27,7 @@ class ZipSource(NamedTuple):
         """Return a ZipSource that contains *just* default values; you can use this to add per-key
         annotations to your yielded output easily.
 
-        For example, zipper([1, 2, 3, 4, 5], ZipSource.aux(lambda x: x*x), yieldKeys=False) will
+        For example, zipper([1, 2, 3, 4, 5], ZipSource.aux(lambda x: x*x), yield_keys=False) will
         yield (1, 1), (2, 4), (3, 9), (4, 16), and (5, 25); the second value is the "auxiliary
         source."
 
@@ -39,7 +39,7 @@ class ZipSource(NamedTuple):
 
 def zipper(
     *sources: Union[ZipSource, Iterable],
-    yieldKeys: bool = True,
+    yield_keys: bool = True,
 ) -> Iterator[Tuple]:
     """Combine N sorted iterators into a single iterator that yields merged tuples.
 
@@ -69,13 +69,13 @@ def zipper(
             didn't provide a value for the given key.
         missing: If given, call this function (with the key as argument) to generate a synthetic
             default value for keys not present in this iterator.
-        missingValue: If neither required nor missing is set, return this value for missing keys.
+        missing_value: If neither required nor missing is set, return this value for missing keys.
 
     (Note that the default behavior is thus to return None for missing keys)
 
     Args:
         sources: The set of N source iterators to scan over.
-        yieldKeys: If True, the tuples will have N+1 elements, and the first is the key. If false,
+        yield_keys: If True, the tuples will have N+1 elements, and the first is the key. If false,
             the tuples will have N elements, and the key will not be separately yielded.
 
     Raises:
@@ -145,12 +145,12 @@ def zipper(
         return
 
     # An array that we'll reuse.
-    result = [None] * (len(sources) + (1 if yieldKeys else 0))
+    result = [None] * (len(sources) + (1 if yield_keys else 0))
 
     assert len(result) > 0
 
     def _set(index: int, value: YieldedType) -> None:
-        result[index + 1 if yieldKeys else index] = value
+        result[index + 1 if yield_keys else index] = value
 
     while True:
         # Grab the pointer that's currently farthest behind.
@@ -160,7 +160,7 @@ def zipper(
         # Let's assemble the result for this key! We're going to reuse this array, since the logic
         # below guarantees that we'll either skip the whole output, or fill in every field of the
         # result.
-        if yieldKeys:
+        if yield_keys:
             result[0] = key
 
         skip = False
@@ -183,7 +183,7 @@ def zipper(
             elif ptr.source.missing:
                 _set(index, ptr.source.missing(key))
             else:
-                _set(index, ptr.source.missingValue)
+                _set(index, ptr.source.missing_value)
 
             # And update minkey. NB we do this *after* any calls to increment().
             if ptr.active and (minkey == -1 or ptr.key < ptrs[minkey].key):
@@ -208,10 +208,10 @@ class _Pointer(Generic[KeyType, ValueType, YieldedType]):
             if (
                 (1 if source.required else 0)
                 + (1 if source.missing else 0)
-                + (1 if source.missingValue else 0)
+                + (1 if source.missing_value else 0)
             ) > 1:
                 raise AssertionError(
-                    "No more than one of required, missing, and missingValue may be given "
+                    "No more than one of required, missing, and missing_value may be given "
                     "per source"
                 )
         else:

@@ -49,7 +49,7 @@ def lazyinit(method: Callable[[object], T]) -> _LazyInitializedProperty[T]:
     return _LazyInitializedProperty(method.__name__, method)
 
 
-def resetAll(holder: object) -> None:
+def reset_all(holder: object) -> None:
     """Reset *all* lazyinit'ed variables inside a particular object.
 
     This is almost exclusively useful in unittests, if you need to hard-reset some kind of

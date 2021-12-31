@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Callable, Iterator, Optional, Set, Union
 
 
-def listFiles(
+def list_files(
     base: Union[str, Path],
     recursive: bool = True,
     select: Optional[Callable[[Path], bool]] = None,
@@ -23,16 +23,16 @@ def listFiles(
     """
     if isinstance(base, str):
         base = Path(base)
-    yield from _listFiles(base, recursive=recursive, select=select, seen=set())
+    yield from _list_files(base, recursive=recursive, select=select, seen=set())
 
 
-def _listFiles(
+def _list_files(
     base: Union[Path, os.DirEntry],
     recursive: bool,
     select: Optional[Callable[[Path], bool]],
     seen: Set[int],
 ) -> Iterator[Path]:
-    """The recursive meat of _listFiles.
+    """The recursive meat of _list_files.
 
     seen is the set of *dereferenced* inode entries that we have encountered, i.e. what we see after
     following symlinks -- the true set of files and directories we're scanning.
@@ -46,7 +46,7 @@ def _listFiles(
         inode = base.inode() if not base.is_symlink() else base.stat().st_ino
     else:
         path = base
-        stats = os.stat(path)
+        stats = os.stat(path, follow_symlinks=True)
         isDir = stat.S_ISDIR(stats.st_mode)
         isFile = stat.S_ISREG(stats.st_mode)
         inode = stats.st_ino
@@ -64,4 +64,4 @@ def _listFiles(
             return
         with os.scandir(path) as it:
             for dirEntry in it:
-                yield from _listFiles(dirEntry, recursive, select, seen)
+                yield from _list_files(dirEntry, recursive, select, seen)

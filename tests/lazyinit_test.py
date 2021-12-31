@@ -1,6 +1,6 @@
 import unittest
 
-from pyppin.lazyinit import lazyinit, resetAll
+from pyppin.lazyinit import lazyinit, reset_all
 
 
 class LazyInitStruct(object):
@@ -13,12 +13,12 @@ class LazyInitStruct(object):
         return 3
 
     @property
-    def nonLazyValue(self) -> int:
+    def non_lazy_value(self) -> int:
         self.calls += 1
         return 4
 
     @lazyinit
-    def anotherLazyValue(self) -> int:
+    def another_lazy_value(self) -> int:
         self.calls += 1
         return 5
 
@@ -28,10 +28,10 @@ class LazyInitTest(unittest.TestCase):
         foo = LazyInitStruct()
         self.assertEqual(0, foo.calls)
 
-        self.assertEqual(4, foo.nonLazyValue)
+        self.assertEqual(4, foo.non_lazy_value)
         self.assertEqual(1, foo.calls)
 
-        self.assertEqual(4, foo.nonLazyValue)
+        self.assertEqual(4, foo.non_lazy_value)
         self.assertEqual(2, foo.calls)
 
     def testLazyInit(self) -> None:
@@ -67,19 +67,19 @@ class LazyInitTest(unittest.TestCase):
     def testResetAll(self) -> None:
         foo = LazyInitStruct()
         self.assertEqual(3, foo.value)
-        self.assertEqual(4, foo.nonLazyValue)
-        self.assertEqual(5, foo.anotherLazyValue)
+        self.assertEqual(4, foo.non_lazy_value)
+        self.assertEqual(5, foo.another_lazy_value)
         self.assertEqual(3, foo.calls)
 
         self.assertEqual(3, foo.value)
-        self.assertEqual(4, foo.nonLazyValue)
-        self.assertEqual(5, foo.anotherLazyValue)
+        self.assertEqual(4, foo.non_lazy_value)
+        self.assertEqual(5, foo.another_lazy_value)
 
-        resetAll(foo)
+        reset_all(foo)
 
         self.assertEqual(3, foo.value)
-        self.assertEqual(4, foo.nonLazyValue)
-        self.assertEqual(5, foo.anotherLazyValue)
+        self.assertEqual(4, foo.non_lazy_value)
+        self.assertEqual(5, foo.another_lazy_value)
         self.assertEqual(7, foo.calls)  # All three call
 
 

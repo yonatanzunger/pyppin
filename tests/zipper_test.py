@@ -18,7 +18,7 @@ class ZipperTest(unittest.TestCase):
         )
 
     def testOneInput(self) -> None:
-        self.assertEqual([1, 2, 3, 4], list(zipper([1, 2, 3, 4], yieldKeys=False)))
+        self.assertEqual([1, 2, 3, 4], list(zipper([1, 2, 3, 4], yield_keys=False)))
 
     def testZeroInputs(self) -> None:
         self.assertEqual([], list(zipper()))
@@ -77,9 +77,9 @@ class ZipperTest(unittest.TestCase):
                         value=lambda x: f"a_{x}",
                         missing=lambda x: f"noa_{x}",
                     ),
-                    ZipSource([2, 3, 4], value=lambda x: f"b_{x}", missingValue=False),
+                    ZipSource([2, 3, 4], value=lambda x: f"b_{x}", missing_value=False),
                     ZipSource(
-                        [1, 2, 3], value=lambda x: f"c_{x}", missingValue="bleah"
+                        [1, 2, 3], value=lambda x: f"c_{x}", missing_value="bleah"
                     ),
                 )
             ),
@@ -87,12 +87,12 @@ class ZipperTest(unittest.TestCase):
 
     def testMultiMissingValues(self) -> None:
         with self.assertRaises(AssertionError):
-            list(zipper(ZipSource([1, 2, 3], required=True, missingValue=3)))
+            list(zipper(ZipSource([1, 2, 3], required=True, missing_value=3)))
 
         with self.assertRaises(AssertionError):
             list(
                 zipper(
-                    ZipSource([1, 2, 3], missing=lambda x: f"foo_{x}", missingValue=3)
+                    ZipSource([1, 2, 3], missing=lambda x: f"foo_{x}", missing_value=3)
                 )
             )
 
