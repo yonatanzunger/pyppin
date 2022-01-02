@@ -13,7 +13,7 @@ from pyppin.list_files import list_files  # noqa
 
 from tools.linters.common import LINTERS  # noqa
 
-EXCLUDE_NAMES = {"build", "dist", "__pycache__"}
+EXCLUDE_NAMES = {"build", "dist", "__pycache__", "docs", "lib"}
 
 
 class LintableFiles(object):

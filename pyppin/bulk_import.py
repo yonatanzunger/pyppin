@@ -8,15 +8,14 @@ from pathlib import Path
 from types import ModuleType
 from typing import Dict, List, Optional, Union
 
+from pyppin import assert_not_none
 from pyppin.list_files import list_files
 
 DEFAULT_EXCLUDE = [
     # Ignore dotfiles, and more importantly, dot directories.
     "\\..*",
-
     # Don't try to recurse into the Python build cache.
     "__pycache__",
-
     # Don't import underscore files; they're not part of the API of a directory.
     "_.*",
 ]
@@ -41,22 +40,30 @@ def bulk_import(
         exclude: A list of filename regexps (not globs!) to skip.
         verbose: If true, print when we import things.
         root: If given, modules will be named as dotted components starting from this
-            path. By default, it is the same as path.
+            path. By default, it is the same as path. It is often useful to pass your
+            repository root here, which will lead to package names that are consistent
+            with your repository structure as a whole.
 
     Returns:
         A dict of all the modules found.
 
-    Example: If you have the structure::
+    Example: Say your repository looks like this::
 
-        impls/
-            class1.py
-            class2.py
-            foo/
-                class3.py
+        src/
+            common/
+                superclass.py
+                all_types.py
+            impls/
+                class1.py
+                class2.py
+                foo/
+                    class3.py
 
-    then `bulk_import('impls')` would create the modules `class1`, `class2`, and `foo.class3`,
-    while `bulk_import(Path('impls'), root=Path('impls').parent)` would instead load the same
-    files as `impls.class1`, `impls.class2`, and `impls.foo.class3`.
+    Then `all_types.py` might find its `REPO_ROOT` using `__file__`, and call
+    ``bulk_import(f'{REPO_ROOT}/impls', root=REPO_ROOT)``. This would load the modules
+    `impls.class1`, `impls.class2`, and `impls.foo.class3`. If those classes were (for example)
+    registered using `RegisteredClass`, you would then be able to grab all of them at once, without
+    having to maintain a directory in-code of all the implementations.
     """
     if isinstance(path, str):
         path = Path(path)
@@ -97,12 +104,12 @@ def bulk_import(
 
         # cf the documentation of importlib: it's important to insert the module into sys.modules
         # *before* trying to exec its contents, but you need to clean that up afterwards!
-        spec = importlib.util.spec_from_file_location(name, file)
+        spec = assert_not_none(importlib.util.spec_from_file_location(name, file))
         module = importlib.util.module_from_spec(spec)
         sys.modules[name] = module
         found[name] = module
         try:
-            spec.loader.exec_module(module)
+            assert_not_none(spec.loader).exec_module(module)
         except Exception as e:
             del sys.modules[name]
             del found[name]
