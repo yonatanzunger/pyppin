@@ -84,6 +84,7 @@
              
   <section id="module-pyppin.registered_class">
 <span id="pyppin-registered-class"></span><h1>pyppin.registered_class<a class="headerlink" href="#module-pyppin.registered_class" title="Permalink to this headline">¶</a></h1>
+<p>Make it easy to look up subclasses of an abstract class by name.</p>
 <p class="rubric">Classes</p>
 <table class="longtable docutils align-default">
 <colgroup>
@@ -92,7 +93,7 @@
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#pyppin.registered_class.RegisteredClass" title="pyppin.registered_class.RegisteredClass"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RegisteredClass</span></code></a>(name, bases, namespace[, ...])</p></td>
-<td><p>Make it easy to look up subclasses of an abstract class by name.</p></td>
+<td><p>A metaclass to make classes findable through a registry.</p></td>
 </tr>
 </tbody>
 </table>
@@ -100,7 +101,7 @@
 <dt class="sig sig-object py" id="pyppin.registered_class.RegisteredClass">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyppin.registered_class.</span></span><span class="sig-name descname"><span class="pre">RegisteredClass</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bases</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">namespace</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">register</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">registration_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyppin.registered_class.RegisteredClass" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></p>
-<p>Make it easy to look up subclasses of an abstract class by name.</p>
+<p>A metaclass to make classes findable through a registry.</p>
 <p>RegisteredClass is a metaclass that lets you define classes whose subclasses you can look up
 by name. This is useful if (for example) you want to define an abstract class in a library,
 have users of the library define their own implementations of that class, and pick which

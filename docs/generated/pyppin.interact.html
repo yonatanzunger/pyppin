@@ -84,6 +84,7 @@
              
   <section id="module-pyppin.interact">
 <span id="pyppin-interact"></span><h1>pyppin.interact<a class="headerlink" href="#module-pyppin.interact" title="Permalink to this headline">¶</a></h1>
+<p>A function to open an iteractive debugging REPL anywhere in your code.</p>
 <p class="rubric">Functions</p>
 <table class="longtable docutils align-default">
 <colgroup>
@@ -106,14 +107,12 @@ when the REPL exits.) That means that it gives you a lot of the flexibility and 
 a debugger without the overhead of running your entire program in a debugging environment.</p>
 <p>For example, your code might compute some value in a complicated way, and then use it. Rather
 than using printf debugging, you can use interactive debugging:</p>
-<blockquote>
-<div><dl class="simple">
-<dt>def someFunction(…):</dt><dd><p># … Compute foo
-interact()  # Instead of print(f”Foo: {foo}”)
-# … Use foo</p>
-</dd>
-</dl>
-</div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">someFunction</span><span class="p">(</span><span class="o">...</span><span class="p">):</span>
+    <span class="c1"># ... Compute foo</span>
+    <span class="n">interact</span><span class="p">()</span>  <span class="c1"># Instead of print(f&quot;Foo: {foo}&quot;)</span>
+    <span class="c1"># ... Use foo</span>
+</pre></div>
+</div>
 <p>When the code reaches interact(), it will stop and pop open a Python shell, from which you
 can simply examine the value of foo (by typing ‘foo’), or even <em>change</em> it (“foo = 1”).</p>
 <p>If you exit the shell with a ^D, your program will resume executing. If you exit the shell by

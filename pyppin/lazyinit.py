@@ -1,3 +1,4 @@
+"""An instance method decorator to make initializers execute once, on demand."""
 from typing import Callable, Generic, Optional, TypeVar
 
 T = TypeVar("T")

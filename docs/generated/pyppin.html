@@ -91,14 +91,18 @@
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#pyppin.assert_not_none" title="pyppin.assert_not_none"><code class="xref py py-obj docutils literal notranslate"><span class="pre">assert_not_none</span></code></a>(val)</p></td>
-<td><p></p></td>
+<td><p>Assert that a value is not None, to make mypy happy.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyppin.assert_not_none">
 <span class="sig-prename descclassname"><span class="pre">pyppin.</span></span><span class="sig-name descname"><span class="pre">assert_not_none</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">pyppin._T</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pyppin._T</span></span></span><a class="headerlink" href="#pyppin.assert_not_none" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Assert that a value is not None, to make mypy happy.</p>
+<p>This is useful when a function technically returns an <cite>Optional[Foo]</cite>, but you know for other
+reasons that it’s never None. Wrapping the result in this assertion makes that statement
+explicit and thus makes mypy happy as well when you use its result as a <cite>Foo</cite>.</p>
+</dd></dl>
 
 <p class="rubric">Modules</p>
 <table class="longtable docutils align-default">
@@ -108,25 +112,25 @@
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="pyppin.bulk_import.html#module-pyppin.bulk_import" title="pyppin.bulk_import"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.bulk_import</span></code></a></p></td>
-<td><p></p></td>
+<td><p>A function to import an entire directory; useful with registered classes!</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="pyppin.cache.html#module-pyppin.cache" title="pyppin.cache"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.cache</span></code></a></p></td>
 <td><p>Caching decorators for functions and methods</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="pyppin.interact.html#module-pyppin.interact" title="pyppin.interact"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.interact</span></code></a></p></td>
-<td><p></p></td>
+<td><p>A function to open an iteractive debugging REPL anywhere in your code.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="pyppin.lazyinit.html#module-pyppin.lazyinit" title="pyppin.lazyinit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.lazyinit</span></code></a></p></td>
-<td><p></p></td>
+<td><p>An instance method decorator to make initializers execute once, on demand.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="pyppin.list_files.html#module-pyppin.list_files" title="pyppin.list_files"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.list_files</span></code></a></p></td>
-<td><p></p></td>
+<td><p>(Correctly) yield all files (recursively) in a directory.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="pyppin.registered_class.html#module-pyppin.registered_class" title="pyppin.registered_class"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.registered_class</span></code></a></p></td>
-<td><p></p></td>
+<td><p>Make it easy to look up subclasses of an abstract class by name.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="pyppin.zipper.html#module-pyppin.zipper" title="pyppin.zipper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.zipper</span></code></a></p></td>
-<td><p></p></td>
+<td><p>Merge multiple sorted iterators into a single iterator over sorted tuples.</p></td>
 </tr>
 </tbody>
 </table>

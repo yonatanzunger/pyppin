@@ -1,3 +1,4 @@
+"""(Correctly) yield all files (recursively) in a directory."""
 import os
 import stat
 from pathlib import Path

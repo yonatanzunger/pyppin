@@ -1,3 +1,5 @@
+"""Merge multiple sorted iterators into a single iterator over sorted tuples."""
+
 from typing import (Callable, Generic, Iterable, Iterator, List, Optional,
                     Tuple, TypeVar, Union)
 

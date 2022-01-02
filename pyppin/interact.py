@@ -1,3 +1,4 @@
+"""A function to open an iteractive debugging REPL anywhere in your code."""
 import code
 import sys
 from typing import Callable, Iterable, Optional
@@ -15,7 +16,7 @@ def interact(
     a debugger without the overhead of running your entire program in a debugging environment.
 
     For example, your code might compute some value in a complicated way, and then use it. Rather
-    than using printf debugging, you can use interactive debugging:
+    than using printf debugging, you can use interactive debugging::
 
         def someFunction(...):
             # ... Compute foo

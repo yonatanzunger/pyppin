@@ -1,8 +1,9 @@
+"""Make it easy to look up subclasses of an abstract class by name."""
 from typing import Any, Dict, Optional, Tuple, Type
 
 
 class RegisteredClass(type):
-    """Make it easy to look up subclasses of an abstract class by name.
+    """A metaclass to make classes findable through a registry.
 
     RegisteredClass is a metaclass that lets you define classes whose subclasses you can look up
     by name. This is useful if (for example) you want to define an abstract class in a library,

@@ -1,3 +1,5 @@
+"""A function to import an entire directory; useful with registered classes!"""
+
 import importlib.machinery
 import importlib.util
 import re
