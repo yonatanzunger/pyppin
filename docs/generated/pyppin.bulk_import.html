@@ -112,24 +112,32 @@ look at the implementation of tools/lint.py in the pyppin package itself.</p>
 <li><p><strong>exclude</strong> – A list of filename regexps (not globs!) to skip.</p></li>
 <li><p><strong>verbose</strong> – If true, print when we import things.</p></li>
 <li><p><strong>root</strong> – If given, modules will be named as dotted components starting from this
-path. By default, it is the same as path.</p></li>
+path. By default, it is the same as path. It is often useful to pass your
+repository root here, which will lead to package names that are consistent
+with your repository structure as a whole.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>A dict of all the modules found.</p>
 </dd>
 </dl>
-<p>Example: If you have the structure:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">impls</span><span class="o">/</span>
-    <span class="n">class1</span><span class="o">.</span><span class="n">py</span>
-    <span class="n">class2</span><span class="o">.</span><span class="n">py</span>
-    <span class="n">foo</span><span class="o">/</span>
-        <span class="n">class3</span><span class="o">.</span><span class="n">py</span>
+<p>Example: Say your repository looks like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">src</span><span class="o">/</span>
+    <span class="n">common</span><span class="o">/</span>
+        <span class="n">superclass</span><span class="o">.</span><span class="n">py</span>
+        <span class="n">all_types</span><span class="o">.</span><span class="n">py</span>
+    <span class="n">impls</span><span class="o">/</span>
+        <span class="n">class1</span><span class="o">.</span><span class="n">py</span>
+        <span class="n">class2</span><span class="o">.</span><span class="n">py</span>
+        <span class="n">foo</span><span class="o">/</span>
+            <span class="n">class3</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
-<p>then <cite>bulk_import(‘impls’)</cite> would create the modules <cite>class1</cite>, <cite>class2</cite>, and <cite>foo.class3</cite>,
-while <cite>bulk_import(Path(‘impls’), root=Path(‘impls’).parent)</cite> would instead load the same
-files as <cite>impls.class1</cite>, <cite>impls.class2</cite>, and <cite>impls.foo.class3</cite>.</p>
+<p>Then <cite>all_types.py</cite> might find its <cite>REPO_ROOT</cite> using <cite>__file__</cite>, and call
+<code class="docutils literal notranslate"><span class="pre">bulk_import(f'{REPO_ROOT}/impls',</span> <span class="pre">root=REPO_ROOT)</span></code>. This would load the modules
+<cite>impls.class1</cite>, <cite>impls.class2</cite>, and <cite>impls.foo.class3</cite>. If those classes were (for example)
+registered using <cite>RegisteredClass</cite>, you would then be able to grab all of them at once, without
+having to maintain a directory in-code of all the implementations.</p>
 </dd></dl>
 
 </section>
