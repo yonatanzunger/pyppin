@@ -2,52 +2,55 @@ from typing import Any, Dict, Optional, Tuple, Type
 
 
 class RegisteredClass(type):
-    """RegisteredClass is a metaclass that lets you define classes whose subclasses you can look up
-    by name. This is useful if (for example) you want to define an abstract class in a library, have
-    users of the library define their own implementations of that class, and pick which
-    implementation you want to use at runtime based on a parameter. For example:
+    """Make it easy to look up subclasses of an abstract class by name.
+
+    RegisteredClass is a metaclass that lets you define classes whose subclasses you can look up
+    by name. This is useful if (for example) you want to define an abstract class in a library,
+    have users of the library define their own implementations of that class, and pick which
+    implementation you want to use at runtime based on a parameter. For example::
 
        class AbstractWorker(metaclass=RegisteredClass):
-        ... define some stuff ...
+           ... define some stuff ...
 
-        @classmethod
-        def make(cls, worker: str, other_arguments) -> "AbstractWorker":
-        return RegisteredClass.get(AbstractWorker, worker)(other_arguments)
+           @classmethod
+           def make(cls, worker: str, other_arguments) -> "AbstractWorker":
+               return RegisteredClass.get(AbstractWorker, worker)(other_arguments)
 
        # In another file
        class RealWorker(AbstractWorker):
-        ... just a normal subclass ...
+           ... just a normal subclass ...
 
     You access this registration using two static methods:
 
-      RegisteredClass.get(superclass, name)  -- returns a named subclass of the superclass
-      RegisteredClass.subclasses(superclass)  -- returns all registered subclasses of that class.
+    * ``RegisteredClass.get(superclass, name)`` returns a named subclass of the superclass
+    * ``RegisteredClass.subclasses(superclass)`` returns all registered subclasses of that class.
 
     Or via class methods:
 
-      AbstractWorker.get_subclass(name)  # type: ignore
-      AbstractWorker.subclasses()  # type: ignore
+    * ``AbstractWorker.get_subclass(name)  # type: ignore``
+    * ``AbstractWorker.subclasses()  # type: ignore``
 
     You can also define "intermediate" classes which don't themselves appear in the registry. For
-    example:
+    example::
 
-      class RemoteWorker(AbstractWorker, register=False):  # type: ignore
-        ... some partial implementation of AbstractWorker ...
+        class RemoteWorker(AbstractWorker, register=False):  # type: ignore
+            ... some partial implementation of AbstractWorker ...
 
-      class RealRemoteWorker(RemoteWorker):
-        ... a concrete worker ...
+        class RealRemoteWorker(RemoteWorker):
+            ... a concrete worker ...
 
-    Then RegisteredClass.subclasses(AbstractWorker) will return RealWorker and RealRemoteWorker (but
-    not RemoteWorker), and RegisteredClass.subclasses(RemoteWorker) will return RealRemoteWorker.
+    Then ``RegisteredClass.subclasses(AbstractWorker)`` will return `RealWorker` and
+    `RealRemoteWorker` (but not `RemoteWorker`), and ``RegisteredClass.subclasses(RemoteWorker)``
+    will return `RealRemoteWorker`.
 
     Every subclass must be registered with a unique name, which by default is just the name of the
-    class. You can override this with registration_name="Foo".
+    class. You can override this with ``registration_name="Foo"``.
 
 
     MYPY WARNING: There are some bugs in the way mypy handles dynamic type declarations. As a
-    result, if you use any of the class methods (rather than RegistrationClass.*) or if you pass
-    any arguments like register or registration_name, you have to mark the line as # type: ignore.
-    Sorry.
+    result, if you use any of the class methods (rather than ``RegistrationClass.*``) or if you
+    pass any arguments like `register` or `registration_name`, you have to mark the line as
+    ``# type: ignore``.  Sorry.
     """
 
     # Type signature to make mypy happy: All types that use this as a metaclass will have this
@@ -100,19 +103,19 @@ class RegisteredClass(type):
         klass = type(name, bases, namespace)
 
         def init_subclass(
-            cls, register: bool = True, registration_name: Optional[str] = None
+            cls: type, register: bool = True, registration_name: Optional[str] = None
         ) -> None:
             if register:
                 registration_name = registration_name or cls.__name__
                 # Don't register the root class itself, that's pretty much never useful.
                 if registration_name == name:
                     return
-                if registration_name in cls._registry:
+                if registration_name in cls._registry:  # type: ignore
                     raise ValueError(
                         f"There is already a registered subclass of {name} named "
                         f"{registration_name}"
                     )
-                cls._registry[registration_name] = cls
+                cls._registry[registration_name] = cls  # type: ignore
 
         # Doing it this way makes mypy happier.
         registry: Dict[str, Type[klass]] = {}  # type: ignore

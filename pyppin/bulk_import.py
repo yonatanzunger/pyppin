@@ -1,16 +1,22 @@
 import importlib.machinery
-from types import ModuleType
 import importlib.util
 import re
 import sys
 from pathlib import Path
-from typing import List, Optional, Union, Dict
+from types import ModuleType
+from typing import Dict, List, Optional, Union
 
 from pyppin.list_files import list_files
 
 DEFAULT_EXCLUDE = [
+    # Ignore dotfiles, and more importantly, dot directories.
     "\\..*",
+
+    # Don't try to recurse into the Python build cache.
     "__pycache__",
+
+    # Don't import underscore files; they're not part of the API of a directory.
+    "_.*",
 ]
 
 
@@ -35,9 +41,10 @@ def bulk_import(
         root: If given, modules will be named as dotted components starting from this
             path. By default, it is the same as path.
 
-    Returns: A dict of all the modules found.
+    Returns:
+        A dict of all the modules found.
 
-    Example: If you have the structure
+    Example: If you have the structure::
 
         impls/
             class1.py
@@ -45,9 +52,9 @@ def bulk_import(
             foo/
                 class3.py
 
-    then bulkImport('impls') would create the modules class1, class2, and foo.class3, while
-    bulkImport(Path('impls'), root=Path('impls').parent) would instead load the same files
-    as impls.class1, impls.class2, and impls.foo.class3.
+    then `bulk_import('impls')` would create the modules `class1`, `class2`, and `foo.class3`,
+    while `bulk_import(Path('impls'), root=Path('impls').parent)` would instead load the same
+    files as `impls.class1`, `impls.class2`, and `impls.foo.class3`.
     """
     if isinstance(path, str):
         path = Path(path)
@@ -97,6 +104,6 @@ def bulk_import(
         except Exception as e:
             del sys.modules[name]
             del found[name]
-            raise ImportError(f"While importing {file}: {e}")
+            raise ImportError(f"While importing {file}: {e}") from e
 
     return found

@@ -1,1 +1,1 @@
-docs_src/license.md
+docs_src/contributing/license.md

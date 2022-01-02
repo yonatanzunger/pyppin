@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pyppin.interact &mdash; pyppin  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pyppin.lazyinit" href="pyppin.lazyinit.html" />
+    <link rel="prev" title="pyppin.cache" href="pyppin.cache.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> pyppin
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../readme.html">pyppin: A toolkit of Python basics</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="pyppin.html">pyppin</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="pyppin.bulk_import.html">pyppin.bulk_import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.cache.html">pyppin.cache</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">pyppin.interact</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.lazyinit.html">pyppin.lazyinit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.list_files.html">pyppin.list_files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.registered_class.html">pyppin.registered_class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.zipper.html">pyppin.zipper</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Using &amp; Contributing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pyppin</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../api.html">API</a> &raquo;</li>
+          <li><a href="pyppin.html">pyppin</a> &raquo;</li>
+      <li>pyppin.interact</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/generated/pyppin.interact.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-pyppin.interact">
+<span id="pyppin-interact"></span><h1>pyppin.interact<a class="headerlink" href="#module-pyppin.interact" title="Permalink to this headline">¶</a></h1>
+<p class="rubric">Functions</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pyppin.interact.interact" title="pyppin.interact.interact"><code class="xref py py-obj docutils literal notranslate"><span class="pre">interact</span></code></a>([banner, _test_commands])</p></td>
+<td><p>Open an interactive REPL at any given point in your code.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyppin.interact.interact">
+<span class="sig-prename descclassname"><span class="pre">pyppin.interact.</span></span><span class="sig-name descname"><span class="pre">interact</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">banner</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_test_commands</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pyppin.interact.interact" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open an interactive REPL at any given point in your code.</p>
+<p>This REPL will be able to see, but not modify, any local and global variables visible from the
+point at which you invoke it. (If you <em>do</em> modify them, these modifications will be thrown out
+when the REPL exits.) That means that it gives you a lot of the flexibility and power of
+a debugger without the overhead of running your entire program in a debugging environment.</p>
+<p>For example, your code might compute some value in a complicated way, and then use it. Rather
+than using printf debugging, you can use interactive debugging:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>def someFunction(…):</dt><dd><p># … Compute foo
+interact()  # Instead of print(f”Foo: {foo}”)
+# … Use foo</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>When the code reaches interact(), it will stop and pop open a Python shell, from which you
+can simply examine the value of foo (by typing ‘foo’), or even <em>change</em> it (“foo = 1”).</p>
+<p>If you exit the shell with a ^D, your program will resume executing. If you exit the shell by
+calling quit() or exit(), it will abort the entire program (by raising SystemExit).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>banner</strong> – If given, a banner to show at the start of the interactive environment.</p></li>
+<li><p><strong>_test_commands</strong> – UNITTESTING ARGUMENT ONLY! Simulates user input as a list of commands.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Helpful tip: If you’re running a test under tox and are getting an error that stdin can’t be
+read, but want to interact() to debug something from inside a unittest, change your tox.ini
+so that the test command is ‘pytest -s’. That’s not what you usually want – it disables stdout
+capture as well – but it will let you interactively probe your tests!</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pyppin.cache.html" class="btn btn-neutral float-left" title="pyppin.cache" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pyppin.lazyinit.html" class="btn btn-neutral float-right" title="pyppin.lazyinit" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Yonatan Zunger.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

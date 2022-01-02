@@ -1,22 +1,95 @@
+"""Caching decorators for functions and methods
+
+This file provides two decorators, `@cache` (for functions) and `@cachemethod` (for methods),
+which can be used to memoize the return values of the function. For example,::
+
+    class MyClass(object):
+        @cachemethod(key=lambda self, val1, val2: val1)
+        def mymethod(self, val1: string, val2: int) -> bool:
+            ....
+
+will cause `mymethod` to automatically cache its results in a dedicated dict, keyed only by
+`val1` -- that is, calls with different values of `val2` will be assumed to always yield the same
+result.
+
+The decorators share most of their arguments and behavior:
+
+    **cache:** The cache to use for this method. Valid values are:
+
+        * A class (such as `dict`, `weakref.WeakValueDictionary`, or any of the cache classes
+          from `cachetools`); create a separate cache of this type for just this method. Any
+          `**kwargs` passed to the decorator will be forwarded on to the cache's constructor.
+        * An explicit object to use as a cache. (Careful! ``@cachemethod(cache={})`` will
+          create a per-*class* dict and use it for every *instance*, which is rarely what
+          you want!)
+        * `None` to simply not cache.
+        * (`@cachemethod` only) The (string) name of an instance variable of the class whose
+          method is being decorated; this variable should usually be set up in the object
+          `__init__` method.
+
+        The default is dict, i.e. to use a per-method unbounded cache.
+
+    **lock:** The mutex to use to guard the cache. Valid values are:
+
+        * A class (such as threading.Lock) to use for the lock.
+        * An explicit lock object (typically a threading.Lock).
+        * True (equivalent to the class threading.Lock, the most common value to pass)
+        * False (to not lock the cache)
+        * `@cachemethod` only: The (string) name of an instance variable containing the lock.
+
+        The default is False, i.e. to not lock the cache.
+
+    **key:** A function that maps the decorated function's argument to the cache key.
+
+        This function should take the same arguments (including `self` if appropriate) as the
+        decorated function or method, and returns a cache key to use given those values. The default
+        is to infer a key function based on all function arguments and the id of self. Note that
+        this default only works if all the arguments are hashable, and calls will raise
+        `ExplicitKeyNeeded` if this is not true; you will very often want to override this default!
+
+    cache_exceptions: Whether exceptions raised by the function should also be cached.
+
+        If True and the function raises an exception, we will cache the *exception*, so that
+        future calls to the function will get a cache hit and the response to that hit will
+        be to re-raise the exception. The default is not to do this.
+
+Skipping the Cache
+==================
+
+The resulting function will be a wrapped version of the original, but will have an additional
+keyword argument ``_skip: Union[bool, str, CacheFlags, None]=None``, which can be used to control
+caching behavior when invoking it. Some particular useful arguments:
+
+* ``wrappedfn(..., _skip=True)`` will completely skip the cache.
+* ``wrappedfn(..., _skip='r')`` will always re-evaluate the function, and update the cache, so
+  this can be used to forcibly refresh the cache entry for these arguments.
+* ``wrappedfn(..., _skip='w')`` will check, but not update, the cache; this is good if it's a
+  value that would be expensive to store in cache, or otherwise a scenario where
+  updating the cache would be bad. (e.g., if there are two paths that hit a function,
+  one of which is performance-critical and the other isn't, and the second would have
+  very different key distributions, you can pass this for the non-critical one so it
+  will get the benefits of the cache when possible, but not pollute the cache for the
+  first one)
+
+Checking cache presence
+=======================
+
+In addition, the wrapped function has an incache() method of its own:
+
+* ``wrappedfn.incache(...)`` has the same signature as the function itself, but returns a bool:
+  True if the given arguments would lead to a cache hit, False otherwise.
+"""
+
 import functools
 import threading
 from contextlib import AbstractContextManager, nullcontext
-from typing import (
-    Any,
-    Callable,
-    Hashable,
-    Mapping,
-    NamedTuple,
-    Optional,
-    Type,
-    TypeVar,
-    Union,
-)
+from typing import (Any, Callable, Generic, Hashable, MutableMapping,
+                    NamedTuple, Optional, Type, TypeVar, Union)
 
 ValueType = TypeVar("ValueType")
 KeyType = TypeVar("KeyType")
 
-CacheType = Mapping[KeyType, ValueType]
+CacheType = MutableMapping[KeyType, ValueType]
 WrappedFunctionType = Callable[..., ValueType]
 
 # The types you can pass in order to select the cache and its lock when decorating a method or a
@@ -32,13 +105,15 @@ FunctionLockArgument = Union[AbstractContextManager, Type[AbstractContextManager
 class CacheFlags(NamedTuple):
     """These flags indicate how the cache should be consulted on a given call."""
 
-    # If read is true, we should see if the value is in the cache before the function call, and if
-    # so, return the cached value. Setting it to false means we ignore the cached value.
     read: bool
+    """If read is true, we should see if the value is in the cache before the function call,
+    and if so, return the cached value. Setting it to false means we ignore the cached value.
+    """
 
-    # If write is true, then if we didn't get the value from the cache (either because read=False
-    # or because of a cache miss), we should update the cache with the new value.
     write: bool
+    """If write is true, then if we didn't get the value from the cache (either because
+    `read=False` or because of a cache miss), we should update the cache with the new value.
+    """
 
     @classmethod
     def from_skip_arg(cls, arg: "CacheSkipArgument") -> "CacheFlags":
@@ -77,6 +152,8 @@ CacheSkipArgument = Union[bool, str, CacheFlags, None]
 
 
 class ExplicitKeyNeeded(Exception):
+    """Error: You used the default `key` argument in a place where it doesn't work."""
+
     pass
 
 
@@ -85,65 +162,9 @@ def cachemethod(
     lock: MethodLockArgument = False,
     key: Optional[Callable[..., KeyType]] = None,
     cache_exceptions: bool = False,
-    **kwargs,
+    **kwargs: Any,
 ) -> Callable[[WrappedFunctionType], "_WrappedDescriptor"]:
-    """A decorator to memoize (cache) the results of a class or instance method.
-
-    For ordinary functions, use @cache (below) instead.
-
-    Args:
-        cache: The cache to use for this method. Valid values are:
-            * A class (such as dict, weakref.WeakValueDictionary, or any of the cache classes
-              from cachetools); create a separate cache of this type for just this method. Any
-              **kwargs passed to @cachemethod will be forwarded on to the cache's constructor.
-            * The (string) name of an instance variable of the class whose method is being
-              decorated; this variable should usually be set up in the object __init__ method.
-            * An explicit object to use as a cache. (Careful! @cachemethod(cache={}) will create
-              a per-*class* dict and use it for every *instance*, which is rarely what you want!)
-            * None to simply not cache.
-
-            The default is dict, i.e. to use a per-method unbounded cache.
-
-        lock: The mutex to use to guard the cache. Valid values are:
-            * A class (such as threading.Lock) to use for the lock.
-            * The (string) name of an instance variable containing the lock.
-            * An explicit lock object (typically a threading.Lock).
-            * True (equivalent to the class threading.Lock, the most common value to pass)
-            * False (to not lock the cache)
-
-            The default is False, i.e. to not lock the cache.
-
-        key: A function that takes the same arguments as the decorated function, and returns
-            a cache key to use for those values.
-
-            The default is to infer a key function based on all function arguments and the id of
-            self. Note that this default only works if all the arguments are hashable; you will
-            very often want to override this default!
-
-        cache_exceptions: If True and the function raises an exception, we will cache the
-            *exception*, so that future calls to the function will get a cache hit and the response
-            to that hit will be to re-raise the exception. The default is not to do this.
-
-    The resulting function will be a wrapped version of the original, but will have an additional
-    keyword argument _skip: Union[bool, str, CacheFlags, None]=None, which can be used to control
-    caching behavior when invoking it. Some particular useful arguments:
-
-        wrappedfn(..., _skip=True) will completely skip the cache.
-        wrappedfn(..., _skip='r') will always re-evaluate the function, and update the cache, so
-            this can be used to forcibly refresh the cache entry for these arguments.
-        wrappedfn(..., _skip='w') will check, but not update, the cache; this is good if it's a
-            value that would be expensive to store in cache, or otherwise a scenario where
-            updating the cache would be bad. (e.g., if there are two paths that hit a function,
-            one of which is performance-critical and the other isn't, and the second would have
-            very different key distributions, you can pass this for the non-critical one so it
-            will get the benefits of the cache when possible, but not pollute the cache for the
-            first one)
-
-    In addition, the wrapped function has an incache() method of its own:
-
-        wrappedfn.incache(...) has the same signature as the function itself, but returns a bool:
-            True if the given arguments would lead to a cache hit, False otherwise.
-    """
+    """A decorator to memoize (cache) the results of a class or instance method."""
 
     def wrapper(function: WrappedFunctionType) -> _WrappedDescriptor:
         # Our wrapper function will return a non-data descriptor whose __get__ returns a callable
@@ -158,7 +179,7 @@ def cachemethod(
                 function=function,
                 cache=cache,
                 lock=lock,
-                key=key or _defaultMethodCacheKey,
+                key=key or _default_method_cache_key,
                 cache_exceptions=cache_exceptions,
                 **kwargs,
             )
@@ -172,13 +193,9 @@ def cache(
     lock: FunctionLockArgument = False,
     key: Optional[Callable[..., KeyType]] = None,
     cache_exceptions: bool = False,
-    **kwargs,
+    **kwargs: Any,
 ) -> Callable[[WrappedFunctionType], "_WrappedFunction"]:
     """A decorator to memoize (cache) the results of a function call.
-
-    This works identically to @cachemethod, except that you can't pass strings for cache or lock
-    to refer to instance variables, for obvious reasons. See the documentation of that decorator for
-    all the other options and their meanings.
     """
 
     def wrapper(function: WrappedFunctionType) -> _WrappedFunction:
@@ -187,7 +204,7 @@ def cache(
                 function=function,
                 cache=cache,
                 lock=lock,
-                key=key or _defaultFunctionCacheKey,
+                key=key or _default_function_cache_key,
                 cache_exceptions=cache_exceptions,
                 **kwargs,
             )
@@ -201,10 +218,16 @@ def cache(
 
 
 # All the cache-related stuff for a single operation.
-class _CacheState(NamedTuple):
-    cache: CacheType
-    lock: AbstractContextManager
-    key: KeyType
+class _CacheState(Generic[KeyType, ValueType]):
+    def __init__(
+        self,
+        cache: CacheType[KeyType, ValueType],
+        lock: AbstractContextManager,
+        key: KeyType,
+    ) -> None:
+        self.cache = cache
+        self.lock = lock
+        self.key = key
 
     def get(self) -> ValueType:
         # Either return the value or raise a KeyError
@@ -224,7 +247,7 @@ class _CacheCore(object):
         lock: MethodLockArgument,
         key: Callable[..., KeyType],
         cache_exceptions: bool,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         """This class encapsulates all the logic which is common between methods and functions --
         the actual meat of invoke() and incache().
@@ -257,19 +280,19 @@ class _CacheCore(object):
         self.function = function
         self.cache_exceptions = cache_exceptions
 
-    def get_cache_state(self, *args, **kwargs) -> Optional[_CacheState]:
+    def get_cache_state(self, *args: Any, **kwargs: Any) -> Optional[_CacheState]:
         cache = self.cache(*args, **kwargs)
         return (
             _CacheState(
                 cache=cache,
                 lock=self.lock(*args, **kwargs),
-                key=self.key(*args, **kwargs),
+                key=self.key(*args, **kwargs),  # type: ignore
             )
             if cache is not None
             else None
         )
 
-    def invoke(self, skip: CacheSkipArgument, *args, **kwargs) -> ValueType:
+    def invoke(self, skip: CacheSkipArgument, *args: Any, **kwargs: Any) -> ValueType:
         """The inner meat of a memoized function, the actual wrapped function!"""
         cacheFlags = CacheFlags.from_skip_arg(skip)
         # Fast path if we're skipping cache completely.
@@ -284,7 +307,7 @@ class _CacheCore(object):
         # Read
         if cacheFlags.read:
             try:
-                result = cache.get()
+                result: ValueType = cache.get()
             except KeyError:
                 pass
             else:
@@ -309,10 +332,13 @@ class _CacheCore(object):
 
         return value
 
-    def incache(self, *args, **kwargs) -> bool:
+    def incache(self, *args: Any, **kwargs: Any) -> bool:
+        state = self.get_cache_state(*args, **kwargs)
+        if not state:
+            return False
         try:
-            self.get_cache_state(*args, **kwargs).get()
-        except (KeyError, AttributeError):
+            state.get()
+        except KeyError:
             return False
         else:
             return True
@@ -322,7 +348,7 @@ class _CacheCore(object):
 
 
 def _attribute_getter(name: str) -> Callable:
-    def getAttribute(*args, **kwargs) -> Any:
+    def get_attribute(*args: Any, **kwargs: Any) -> Any:
         try:
             return getattr(args[0], name)
         except IndexError:
@@ -337,14 +363,14 @@ def _attribute_getter(name: str) -> Callable:
                 f"value to @cachemethod or forget to define the variable?"
             )
 
-    return getAttribute
+    return get_attribute
 
 
 def _constant_getter(value: Any) -> Callable:
-    def getConstant(*args, **kwargs) -> Any:
+    def get_constant(*args: Any, **kwargs: Any) -> Any:
         return value
 
-    return getConstant
+    return get_constant
 
 
 class _WrappedMethod(object):
@@ -363,14 +389,16 @@ class _WrappedMethod(object):
         self.core = core
         self.instance = instance
 
-    def __call__(self, *args, _skip: CacheSkipArgument = None, **kwargs) -> ValueType:
+    def __call__(
+        self, *args: Any, _skip: CacheSkipArgument = None, **kwargs: Any
+    ) -> ValueType:
         # Note how we curry self.wrappedSelf as a fake "argument zero," just like if this were a
         # true instance method. We do this manually (rather than having Python do it) so that
         # WrappedMethod can implement more than just __call__ -- the built-in trick only works
         # for instance methods, not arbitrary callables.
         return self.core.invoke(_skip, self.instance, *args, **kwargs)
 
-    def incache(self, *args, **kwargs) -> bool:
+    def incache(self, *args: Any, **kwargs: Any) -> bool:
         return self.core.incache(self.instance, *args, **kwargs)
 
 
@@ -399,21 +427,23 @@ class _WrappedFunction(object):
         self.core = core
         functools.update_wrapper(self, core.function)
 
-    def __call__(self, *args, _skip: CacheSkipArgument = None, **kwargs) -> ValueType:
+    def __call__(
+        self, *args: Any, _skip: CacheSkipArgument = None, **kwargs: Any
+    ) -> ValueType:
         return self.core.invoke(_skip, *args, **kwargs)
 
-    def incache(self, *args, **kwargs) -> bool:
+    def incache(self, *args: Any, **kwargs: Any) -> bool:
         return self.core.incache(*args, **kwargs)
 
 
-def _defaultMethodCacheKey(self, *args, **kwargs) -> Hashable:
+def _default_method_cache_key(self: object, *args: Any, **kwargs: Any) -> Hashable:
     """The default cache key function we use for instance/class methods. Note that we treat "self"
     as an argument here, and pass it differently to the underlying cache function!
     """
-    return _defaultFunctionCacheKey(id(self), *args, **kwargs)
+    return _default_function_cache_key(id(self), *args, **kwargs)
 
 
-def _defaultFunctionCacheKey(*args, **kwargs) -> int:
+def _default_function_cache_key(*args: Any, **kwargs: Any) -> int:
     try:
         return hash(args + tuple(sorted(kwargs.items())))
     except TypeError:

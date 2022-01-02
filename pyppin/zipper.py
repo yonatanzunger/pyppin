@@ -1,24 +1,50 @@
-from typing import (Callable, Generic, Iterable, Iterator, List, NamedTuple,
-                    Optional, Tuple, TypeVar, Union)
+from typing import (Callable, Generic, Iterable, Iterator, List, Optional,
+                    Tuple, TypeVar, Union)
 
 ValueType = TypeVar("ValueType")
 KeyType = TypeVar("KeyType")
 YieldedType = TypeVar("YieldedType")
 
 
-class ZipSource(NamedTuple):
-    """A ZipSource is a flexible input for a Zipper, providing an iterable plus extra options.
+class ZipSource(Generic[KeyType, ValueType, YieldedType]):
+    def __init__(
+        self,
+        source: Iterable[ValueType],
+        key: Optional[Callable[[ValueType], KeyType]] = None,
+        value: Optional[Callable[[ValueType], YieldedType]] = None,
+        name: Optional[str] = None,
+        required: bool = False,
+        missing: Optional[Callable[[KeyType], YieldedType]] = None,
+        missing_value: Optional[YieldedType] = None,
+    ) -> None:
+        """A wrapper around an `Iterable` to give per-source options.
 
-    See the documentation of zipper() for the meanings of these options.
-    """
+        Args:
+            source: The underlying iterable.
+            key: A function that transforms the raw thing yielded from the iterator into the key
+                which should be compared. The iterator must be sorted by key. The default is to
+                use the raw value itself as the key.
+            value: A function that transforms the raw thing yielded from the iterator into the
+                value which should be yielded by the zipper. The default is to use the raw value
+                as the output value.
+            name: An optional label for this iterator, used to generate nicer error messages.
+            required: If set, this iterator is required: skip the entire output if this iterator
+                didn't provide a value for the given key.
+            missing: If given, call this function (with the key as argument) to generate a synthetic
+                default value for keys not present in this iterator.
+            missing_value: If neither required nor missing is set, return this value for missing
+                keys.
 
-    source: Iterable[ValueType]
-    key: Optional[Callable[[ValueType], KeyType]] = None
-    value: Optional[Callable[[ValueType], YieldedType]] = None
-    name: Optional[str] = None
-    required: bool = False
-    missing: Optional[Callable[[KeyType], YieldedType]] = None
-    missing_value: Optional[YieldedType] = None
+        Only one of `required`, `missing`, and `missing_value` may be given. The default values will
+        return `None` as the missing value.
+        """
+        self.source = source
+        self.key = key
+        self.value = value
+        self.name = name
+        self.required = required
+        self.missing = missing
+        self.missing_value = missing_value
 
     @classmethod
     def aux(
@@ -27,12 +53,12 @@ class ZipSource(NamedTuple):
         """Return a ZipSource that contains *just* default values; you can use this to add per-key
         annotations to your yielded output easily.
 
-        For example, zipper([1, 2, 3, 4, 5], ZipSource.aux(lambda x: x*x), yield_keys=False) will
-        yield (1, 1), (2, 4), (3, 9), (4, 16), and (5, 25); the second value is the "auxiliary
+        For example, ``zipper([1, 2, 3, 4, 5], ZipSource.aux(lambda x: x*x), yield_keys=False)``
+        will yield (1, 1), (2, 4), (3, 9), (4, 16), and (5, 25); the second value is the "auxiliary
         source."
 
         Note that auxiliary sources will only yield when *other* iterators are yielding; if you pass
-        only auxiliary sources to zipper(), you'll get back the empty sequence.
+        only auxiliary sources to `zipper()`, you'll get back the empty sequence.
         """
         return ZipSource(source=tuple(), name=name, missing=value)
 
@@ -40,10 +66,8 @@ class ZipSource(NamedTuple):
 def zipper(
     *sources: Union[ZipSource, Iterable],
     yield_keys: bool = True,
-) -> Iterator[Tuple]:
+) -> Iterator[Union[YieldedType, Tuple[YieldedType, ...]]]:
     """Combine N sorted iterators into a single iterator that yields merged tuples.
-
-    This is a sort of souped-up version of heapq.merge.
 
     In the simplest use, if the sources are N iterators that yield values that are already strictly
     sorted (i.e., if one yields a then b, then a < b), then this function will yield tuples of
@@ -54,27 +78,9 @@ def zipper(
     The fun comes from the extra options you can provide per-source or overall. You can provide
     options for each source by wrapping it in a ZipSource.
 
-    Per-Source Args:
-        key: A function that transforms the raw thing yielded from the iterator into the key which
-            should be compared. The iterator must be sorted by key. The default is to use the raw
-            value itself as the key.
-        value: A function that transforms the raw thing yielded from the iterator into the value
-            which should be yielded by the zipper. The default is to use the raw value as the output
-            value.
-        name: An optional label for this iterator, used to generate nicer error messages.
-
-    The next three per-source arguments control what happens when this iterator *doesn't* have a
-    value for the given key. No more than one of these may be given.
-        required: If set, this iterator is required: skip the entire output if this iterator
-            didn't provide a value for the given key.
-        missing: If given, call this function (with the key as argument) to generate a synthetic
-            default value for keys not present in this iterator.
-        missing_value: If neither required nor missing is set, return this value for missing keys.
-
-    (Note that the default behavior is thus to return None for missing keys)
-
     Args:
-        sources: The set of N source iterators to scan over.
+        sources: The set of N source iterators to scan over. These can either be simple iterators,
+            or be wrapped in a `ZipSource` to provide per-iterator options.
         yield_keys: If True, the tuples will have N+1 elements, and the first is the key. If false,
             the tuples will have N elements, and the key will not be separately yielded.
 
@@ -82,53 +88,55 @@ def zipper(
         IndexError if any of the lists is *not* actually sorted in the correct way.
         AssertionError if invalid options were passed for any source.
 
-    Example:
-        Say you have two sorted lists that you want to merge:
-            l1 = [1, 2, 3, 4, 5]
-            l2 = [(2, "two"), (5, "five"), (7, "seven")]
+    Example
+    =======
 
-        Then
+    Say you have two sorted lists that you want to merge::
 
-            zipper(l1, ZipSource(l2, key=lambda x: x[0]))
+        l1 = [1, 2, 3, 4, 5]
+        l2 = [(2, "two"), (5, "five"), (7, "seven")]
 
-        will yield
+    Then ``zipper(l1, ZipSource(l2, key=lambda x: x[0]))`` will yield::
 
-            (1, 1, None)
-            (2, 2, (2, "two"))
-            (3, 3, None)
-            (4, 4, None)
-            (5, 5, (5, "five"))
-            (7, None, (7, "seven"))
+        (1, 1, None)
+        (2, 2, (2, "two"))
+        (3, 3, None)
+        (4, 4, None)
+        (5, 5, (5, "five"))
+        (7, None, (7, "seven"))
 
-        What happened here? The first item in each tuple is the key, which is the same for
-        everything in that tuple. The remaining items in the tuple are the values of l1 and l2,
-        respectively, where None appears whenever an item is missing. (e.g., l2 has no value for the
-        key 3)
+    What happened here? The first item in each tuple is the key, which is the same for
+    everything in that tuple. The remaining items in the tuple are the values of l1 and l2,
+    respectively, where None appears whenever an item is missing. (e.g., l2 has no value for the
+    key 3)
 
-    Fancier example:
-        Let's say instead you have
-            squares = [1, 4, 9, 16, 25]
+    Fancier example
+    ===============
 
-        You want to get, for each  number in l2, its printed name and its square.
+    Let's say instead you have::
 
-            zipper(
-                ZipSource(l1, key=lambda x: int(sqrt(x))),
-                ZipSource(l2, key=lambda x: x[0], value=lambda x: x[1], required=True),
-            )
+        squares = [1, 4, 9, 16, 25]
 
-        This will yield
+    You want to get, for each  number in l2, its printed name and its square.::
 
-            (2, 4, "two")
-            (5, 25, "five")
-            (7, None, "seven"))
+        zipper(
+            ZipSource(l1, key=lambda x: int(sqrt(x))),
+            ZipSource(l2, key=lambda x: x[0], value=lambda x: x[1], required=True),
+        )
 
-        What happened here?
-            => For l1, the key is the square root of the value, and the (default) value is just
-               the element of l1.
-            => For l2, the key is the first element of the tuple, the yielded value is the
-               second element, and because required=True, all items that don't show up in l2
-               are dropped outright.
-            => Because l1 *isn't* required, we get one yielded item that has no value for l1!
+    This will yield::
+
+        (2, 4, "two")
+        (5, 25, "five")
+        (7, None, "seven"))
+
+    What happened here?
+    * For l1, the key is the square root of the value, and the (default) value is just the
+    element of l1.
+    * For l2, the key is the first element of the tuple, the yielded value is the
+    second element, and because required=True, all items that don't show up in l2
+    are dropped outright.
+    * Because l1 *isn't* required, we get one yielded item that has no value for l1!
     """
     # Surprise! We aren't going to use a heap in here. It turns out that this is more efficient if
     # we just do a sequence of linear scans over all the arrays, because we always need to hit all
@@ -145,11 +153,11 @@ def zipper(
         return
 
     # An array that we'll reuse.
-    result = [None] * (len(sources) + (1 if yield_keys else 0))
+    result: List[Optional[YieldedType]] = [None] * (len(sources) + (1 if yield_keys else 0))
 
     assert len(result) > 0
 
-    def _set(index: int, value: YieldedType) -> None:
+    def _set(index: int, value: Optional[YieldedType]) -> None:
         result[index + 1 if yield_keys else index] = value
 
     while True:
@@ -191,7 +199,7 @@ def zipper(
 
         # print(f"Loop finished: skip {skip} minkey {minkey} yielded {result}")
         if not skip:
-            yield tuple(result) if len(result) > 1 else result[0]
+            yield tuple(result) if len(result) > 1 else result[0]  # type: ignore
 
         if minkey == -1:
             # Nothing left! We're done.
@@ -233,8 +241,8 @@ class _Pointer(Generic[KeyType, ValueType, YieldedType]):
     def __lt__(self, other: "_Pointer") -> bool:
         return self.key < other.key
 
-    def __eq__(self, other: "_Pointer") -> bool:
-        return self.key == other.key
+    def __eq__(self, other: object) -> bool:
+        return isinstance(other, _Pointer) and self.key == other.key
 
     def __str__(self) -> str:
         if not self.active:

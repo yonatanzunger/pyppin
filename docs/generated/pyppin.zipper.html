@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pyppin.zipper &mdash; pyppin  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Using &amp; Contributing" href="../contributing/index.html" />
+    <link rel="prev" title="pyppin.registered_class" href="pyppin.registered_class.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> pyppin
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../readme.html">pyppin: A toolkit of Python basics</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="pyppin.html">pyppin</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="pyppin.bulk_import.html">pyppin.bulk_import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.cache.html">pyppin.cache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.interact.html">pyppin.interact</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.lazyinit.html">pyppin.lazyinit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.list_files.html">pyppin.list_files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.registered_class.html">pyppin.registered_class</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">pyppin.zipper</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Using &amp; Contributing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pyppin</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../api.html">API</a> &raquo;</li>
+          <li><a href="pyppin.html">pyppin</a> &raquo;</li>
+      <li>pyppin.zipper</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/generated/pyppin.zipper.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-pyppin.zipper">
+<span id="pyppin-zipper"></span><h1>pyppin.zipper<a class="headerlink" href="#module-pyppin.zipper" title="Permalink to this headline">¶</a></h1>
+<p class="rubric">Functions</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pyppin.zipper.zipper" title="pyppin.zipper.zipper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">zipper</span></code></a>(*sources[, yield_keys])</p></td>
+<td><p>Combine N sorted iterators into a single iterator that yields merged tuples.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Classes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pyppin.zipper.ZipSource" title="pyppin.zipper.ZipSource"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ZipSource</span></code></a>(source[, key, value, name, ...])</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyppin.zipper.ZipSource">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyppin.zipper.</span></span><span class="sig-name descname"><span class="pre">ZipSource</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">pyppin.zipper.ValueType</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">pyppin.zipper.ValueType</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">pyppin.zipper.KeyType</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">pyppin.zipper.ValueType</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">pyppin.zipper.YieldedType</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">required</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">missing</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">pyppin.zipper.KeyType</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">pyppin.zipper.YieldedType</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">missing_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">pyppin.zipper.YieldedType</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyppin.zipper.ZipSource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Generic</span></code>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.zipper.KeyType</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.zipper.ValueType</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.zipper.YieldedType</span></code>]</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.zipper.ZipSource.aux">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">aux</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">pyppin.zipper.KeyType</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">pyppin.zipper.YieldedType</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pyppin.zipper.ZipSource" title="pyppin.zipper.ZipSource"><span class="pre">pyppin.zipper.ZipSource</span></a></span></span><a class="headerlink" href="#pyppin.zipper.ZipSource.aux" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a ZipSource that contains <em>just</em> default values; you can use this to add per-key
+annotations to your yielded output easily.</p>
+<p>For example, <code class="docutils literal notranslate"><span class="pre">zipper([1,</span> <span class="pre">2,</span> <span class="pre">3,</span> <span class="pre">4,</span> <span class="pre">5],</span> <span class="pre">ZipSource.aux(lambda</span> <span class="pre">x:</span> <span class="pre">x*x),</span> <span class="pre">yield_keys=False)</span></code>
+will yield (1, 1), (2, 4), (3, 9), (4, 16), and (5, 25); the second value is the “auxiliary
+source.”</p>
+<p>Note that auxiliary sources will only yield when <em>other</em> iterators are yielding; if you pass
+only auxiliary sources to <cite>zipper()</cite>, you’ll get back the empty sequence.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyppin.zipper.zipper">
+<span class="sig-prename descclassname"><span class="pre">pyppin.zipper.</span></span><span class="sig-name descname"><span class="pre">zipper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">sources</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyppin.zipper.ZipSource" title="pyppin.zipper.ZipSource"><span class="pre">pyppin.zipper.ZipSource</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yield_keys</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">pyppin.zipper.YieldedType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">pyppin.zipper.YieldedType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#pyppin.zipper.zipper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combine N sorted iterators into a single iterator that yields merged tuples.</p>
+<p>In the simplest use, if the sources are N iterators that yield values that are already strictly
+sorted (i.e., if one yields a then b, then a &lt; b), then this function will yield tuples of
+N+1 items, with each entry being (key, val1, val2…), in sorted order. The key is the common
+key for all of the items in the row, and the individual values are the corresponding values from
+each source (if present) or None (if that iterator didn’t have a value for this key).</p>
+<p>The fun comes from the extra options you can provide per-source or overall. You can provide
+options for each source by wrapping it in a ZipSource.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sources</strong> – The set of N source iterators to scan over. These can either be simple iterators,
+or be wrapped in a <cite>ZipSource</cite> to provide per-iterator options.</p></li>
+<li><p><strong>yield_keys</strong> – If True, the tuples will have N+1 elements, and the first is the key. If false,
+the tuples will have N elements, and the key will not be separately yielded.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>IndexError if any of the lists is not actually sorted in the correct way.</strong> – </p></li>
+<li><p><strong>AssertionError if invalid options were passed for any source.</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Say you have two sorted lists that you want to merge:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">l1</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+<span class="n">l2</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;two&quot;</span><span class="p">),</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;five&quot;</span><span class="p">),</span> <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="s2">&quot;seven&quot;</span><span class="p">)]</span>
+</pre></div>
+</div>
+<p>Then <code class="docutils literal notranslate"><span class="pre">zipper(l1,</span> <span class="pre">ZipSource(l2,</span> <span class="pre">key=lambda</span> <span class="pre">x:</span> <span class="pre">x[0]))</span></code> will yield:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;two&quot;</span><span class="p">))</span>
+<span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;five&quot;</span><span class="p">))</span>
+<span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="s2">&quot;seven&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>What happened here? The first item in each tuple is the key, which is the same for
+everything in that tuple. The remaining items in the tuple are the values of l1 and l2,
+respectively, where None appears whenever an item is missing. (e.g., l2 has no value for the
+key 3)</p>
+<p>Let’s say instead you have:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">squares</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">25</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>You want to get, for each  number in l2, its printed name and its square.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">zipper</span><span class="p">(</span>
+    <span class="n">ZipSource</span><span class="p">(</span><span class="n">l1</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="p">))),</span>
+    <span class="n">ZipSource</span><span class="p">(</span><span class="n">l2</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">value</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>This will yield:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;two&quot;</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="s2">&quot;five&quot;</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;seven&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>What happened here?
+* For l1, the key is the square root of the value, and the (default) value is just the
+element of l1.
+* For l2, the key is the first element of the tuple, the yielded value is the
+second element, and because required=True, all items that don’t show up in l2
+are dropped outright.
+* Because l1 <em>isn’t</em> required, we get one yielded item that has no value for l1!</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pyppin.registered_class.html" class="btn btn-neutral float-left" title="pyppin.registered_class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../contributing/index.html" class="btn btn-neutral float-right" title="Using &amp; Contributing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Yonatan Zunger.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

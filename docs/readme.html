@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pyppin: A toolkit of Python basics &mdash; pyppin  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API" href="api.html" />
+    <link rel="prev" title="pyppin: A toolkit of Python basics" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> pyppin
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">pyppin: A toolkit of Python basics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#debugging-tools">Debugging Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#better-class-definition">Better class definition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#iteration">Iteration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scanning-directories">Scanning directories</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing/index.html">Using &amp; Contributing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pyppin</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>pyppin: A toolkit of Python basics</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/readme.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pyppin-a-toolkit-of-python-basics">
+<h1>pyppin: A toolkit of Python basics<a class="headerlink" href="#pyppin-a-toolkit-of-python-basics" title="Permalink to this headline">¶</a></h1>
+<p>pyppin is a library of “basic components” that can be used in a wide range of contexts – things
+that could hypothetically live in a standard library, only there’s no particular reason to put them
+in there. It is essentially a box of tools that are slightly less common than the basics, but are
+nonetheless damned useful in practice. If the main argument against adding something to the standard
+library is “why does it need to be in there, as opposed to elsewhere?” and it’s not big enough to
+merit its own standalone package, this is a perfectly reasonable place to put it.</p>
+<p>The current catalogue is:</p>
+<section id="debugging-tools">
+<h2>Debugging Tools<a class="headerlink" href="#debugging-tools" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">interact</span></code> lets you pop open a REPL at any point in your code, with access to all the local and
+global variables, so you can easily do interactive debugging.</p></li>
+</ul>
+</section>
+<section id="better-class-definition">
+<h2>Better class definition<a class="headerlink" href="#better-class-definition" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&#64;cache</span></code> and <code class="docutils literal notranslate"><span class="pre">&#64;cachemethod</span></code> are decorators that allow fancier (but still one-line) caching of
+function and method results.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&#64;lazyinit</span></code> lets you defer expensive variable initializations like server connnections until and
+unless you need them.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RegisteredClass</span></code> lets you automatically register, iterate over, and fetch by name all subclasses
+of an abstract class you define.</p></li>
+</ul>
+</section>
+<section id="iteration">
+<h2>Iteration<a class="headerlink" href="#iteration" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">zipper</span></code> flexibly merges multiple sorted iterators into a single, efficient, parallel iterator.</p></li>
+</ul>
+</section>
+<section id="scanning-directories">
+<h2>Scanning directories<a class="headerlink" href="#scanning-directories" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">list_files</span></code> lets you list all files recursively in a given directory, managing all the subtle
+corner cases for you.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bulk_import</span></code> lets you (recursively or not) import all the Python files in a given directory,
+which is especially useful with registered classes.</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="pyppin: A toolkit of Python basics" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="api.html" class="btn btn-neutral float-right" title="API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Yonatan Zunger.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

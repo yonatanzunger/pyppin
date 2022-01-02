@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contribution Guidelines &mdash; pyppin  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Apache License" href="license.html" />
+    <link rel="prev" title="Using &amp; Contributing" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> pyppin
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../readme.html">pyppin: A toolkit of Python basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Using &amp; Contributing</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Contribution Guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="license.html">Apache License</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code_of_conduct.html">Contributor Covenant Code of Conduct</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pyppin</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Using &amp; Contributing</a> &raquo;</li>
+      <li>Contribution Guidelines</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/contributing/guidelines.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="contribution-guidelines">
+<h1>Contribution Guidelines<a class="headerlink" href="#contribution-guidelines" title="Permalink to this headline">¶</a></h1>
+<p>pyppin is very open to contributions to the library. In general, a good function to add to pyppin
+should be something broadly applicable to Python development (rather than specific to a narrow range
+of uses), and not have substantial external dependencies. As a good rule of thumb, if the only
+reason the thing you’re adding isn’t a good candidate for the Python standard library is that
+there’s no strong reason to add the maintenance burden of adding it _to_ the standard library, and
+the thing isn’t big enough to merit its own pip package, this is probably a good place for it.</p>
+<p>pyppin does not make any attempt to support Python 2, but it does not make assertions about specific
+versions beyond that.</p>
+<p>All code within pyppin should be thoroughly unittested and fully type-annotated. Both tests and the
+linter can be invoked using <code class="docutils literal notranslate"><span class="pre">tox</span></code>; you can manually invoke the lint autoformatter by running
+<code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">tools/lint.py</span> <span class="pre">--fix</span></code>. The lint pass includes mypy and must run without errors.</p>
+<p>Code should be extensively commented. Functions and classes should generally have docstrings in
+RST-compatible (<cite>PEP 287&lt;https://www.python.org/dev/peps/pep-0287/&gt;</cite>) format. Within the code,
+implementation comments should err on the side of detail: good pyppin code should be usable as
+teaching examples, illustrating good Python style and clear explanations of nuance.</p>
+<p>If you update the documentation (either anything in <code class="docutils literal notranslate"><span class="pre">docs_src/</span></code> or any docstrings), you can
+regenerate the actual docs by running <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">tools/docs.py</span></code>. This requires that you have the
+requirements in <code class="docutils literal notranslate"><span class="pre">tools/</span></code> and <code class="docutils literal notranslate"><span class="pre">docs_src</span></code> installed in your Python environment; the resulting
+files should be part of your changelist.</p>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Using &amp; Contributing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="license.html" class="btn btn-neutral float-right" title="Apache License" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Yonatan Zunger.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
