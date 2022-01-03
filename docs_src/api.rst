@@ -5,4 +5,6 @@ API
    :recursive:
    :toctree: generated
 
-   pyppin
+   pyppin.base
+   pyppin.os
+   pyppin.test
