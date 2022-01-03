@@ -5,21 +5,25 @@ Tasks before release:
 * Finalize name
 * Decide if we'll release it via Twitter's OSS program!
 * See if Humu is actually interested in open sourcing some of their libraries.
-* Maybe split pyppin into subdirectories?
 
 Other classes to maybe add:
-* semaphore
-* rate limiter
-* turn-taker for tests
-* periodic thread
-* watchdog alarm
-* resettable bell
-* histogram
-* expression tree
-* nowandthen
-* siprefix
-* lazyimport
-* StreamingBuffer + memblock
+* threading/
+  * semaphore
+  * rate limiter
+  * watchdog alarm
+  * resettable bell
+  * periodic thread
+* test/
+  * turn-taker for tests
+* base/
+  * lazyimport
+  * StreamingBuffer + memblock
+* struct/
+  * histogram
+  * expression tree
+* text/
+  * nowandthen
+  * siprefix
 
 Names
 pyrexia (you give me fever...)
@@ -35,3 +39,6 @@ X pythia
 X pyxie
 shamash
 hyrax
+ursus
+arctos
+arktos
