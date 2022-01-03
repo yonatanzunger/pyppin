@@ -1,7 +1,7 @@
-﻿pyppin
-======
+pyppin.test
+===========
 
-.. automodule:: pyppin
+.. automodule:: pyppin.test
 
    
    
@@ -27,7 +27,5 @@
    :toctree:
    :recursive:
 
-   pyppin.base
-   pyppin.os
-   pyppin.test
+   pyppin.test.interact
 

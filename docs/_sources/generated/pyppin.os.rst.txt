@@ -1,7 +1,7 @@
-﻿pyppin
-======
+pyppin.os
+=========
 
-.. automodule:: pyppin
+.. automodule:: pyppin.os
 
    
    
@@ -27,7 +27,6 @@
    :toctree:
    :recursive:
 
-   pyppin.base
-   pyppin.os
-   pyppin.test
+   pyppin.os.bulk_import
+   pyppin.os.list_files
 

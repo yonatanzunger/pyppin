@@ -8,8 +8,8 @@ from _common import REPO_ROOT
 if REPO_ROOT not in sys.path:
     sys.path.append(REPO_ROOT)
 
-from pyppin.bulk_import import bulk_import  # noqa
-from pyppin.list_files import list_files  # noqa
+from pyppin.os.bulk_import import bulk_import  # noqa
+from pyppin.os.list_files import list_files  # noqa
 
 from tools.linters.common import LINTERS  # noqa
 

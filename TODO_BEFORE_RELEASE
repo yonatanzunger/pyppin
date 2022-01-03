@@ -1,0 +1,37 @@
+Tasks before release:
+* Finalize license
+* Create maintainer aliases and repoint code of conduct etc.
+* Clean up documentation ToC etc for aesthetics.
+* Finalize name
+* Decide if we'll release it via Twitter's OSS program!
+* See if Humu is actually interested in open sourcing some of their libraries.
+* Maybe split pyppin into subdirectories?
+
+Other classes to maybe add:
+* semaphore
+* rate limiter
+* turn-taker for tests
+* periodic thread
+* watchdog alarm
+* resettable bell
+* histogram
+* expression tree
+* nowandthen
+* siprefix
+* lazyimport
+* StreamingBuffer + memblock
+
+Names
+pyrexia (you give me fever...)
+pyppin
+pyrrho (like the skeptic philosopher)
+X pyrene (as in the stone of a fruit)
+X pyrite
+X pyrogen
+X pyromancy
+X pyrope (old term for a ruby or garnet)
+X pyrus (the pear-tree)
+X pythia
+X pyxie
+shamash
+hyrax

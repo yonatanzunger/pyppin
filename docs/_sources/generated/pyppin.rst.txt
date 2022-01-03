@@ -9,12 +9,6 @@
 
    
    
-   .. rubric:: Functions
-
-   .. autosummary::
-   
-      assert_not_none
-   
    
 
    
@@ -33,11 +27,7 @@
    :toctree:
    :recursive:
 
-   pyppin.bulk_import
-   pyppin.cache
-   pyppin.interact
-   pyppin.lazyinit
-   pyppin.list_files
-   pyppin.registered_class
-   pyppin.zipper
+   pyppin.base
+   pyppin.os
+   pyppin.test
 
