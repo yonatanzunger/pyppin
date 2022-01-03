@@ -99,7 +99,13 @@ class ZipperTest(unittest.TestCase):
     def testPureAuxSources(self) -> None:
         # Just aux sources yields nothing.
         self.assertEqual(
-            [], list(zip_by_key(ZipSource.aux(lambda x: x), ZipSource.aux(lambda x: x * x)))
+            [],
+            list(
+                zip_by_key(
+                    ZipSource.aux(lambda x: x),  # type: ignore
+                    ZipSource.aux(lambda x: x * x),  # type: ignore
+                )
+            ),
         )
 
     def testWithOptions(self) -> None:
@@ -136,7 +142,7 @@ class ZipperTest(unittest.TestCase):
             ],
             list(
                 zip_by_key(
-                    ZipSource.aux(lambda x: x * x),
+                    ZipSource.aux(lambda x: x * x),  # type: ignore
                     ZipSource(
                         [
                             (2, "two"),

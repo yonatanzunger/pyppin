@@ -15,16 +15,17 @@ import sys
 
 import sphinx_rtd_theme
 from recommonmark.transform import AutoStructify
+from sphinx.application import Sphinx
 
-sys.path.insert(0, os.path.abspath('../pyppin'))
-sys.path.insert(0, os.path.abspath('.'))
+sys.path.insert(0, os.path.abspath("../pyppin"))
+sys.path.insert(0, os.path.abspath("."))
 
 
 # -- Project information -----------------------------------------------------
 
-project = 'pyppin'
-copyright = '2022, Yonatan Zunger'
-author = 'Yonatan Zunger'
+project = "pyppin"
+copyright = "2022, Yonatan Zunger"
+author = "Yonatan Zunger"
 
 
 # -- General configuration ---------------------------------------------------
@@ -33,22 +34,22 @@ author = 'Yonatan Zunger'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.autosummary',
-    'sphinx.ext.coverage',
+    "sphinx.ext.autodoc",
+    "sphinx.ext.autosummary",
+    "sphinx.ext.coverage",
     # This allows it to parse normal indentation in docstrings.
-    'sphinx.ext.napoleon',
+    "sphinx.ext.napoleon",
     # This allows it to parse .md files as inputs.
-    'recommonmark',
+    "recommonmark",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+templates_path = ["_templates"]
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 
 # -- Options for HTML output -------------------------------------------------
@@ -56,25 +57,25 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
-html_theme = 'sphinx_rtd_theme'
+html_theme = "sphinx_rtd_theme"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = ["_static"]
 
 autodoc_default_options = {
-    'members': True,
-    'member-order': 'bysource',
-    'undoc-members': True,
-    'show-inheritance': True,
+    "members": True,
+    "member-order": "bysource",
+    "undoc-members": True,
+    "show-inheritance": True,
 }
 
 
-def setup(app):
+def setup(app: Sphinx) -> None:
     app.add_config_value(
-        'recommonmark_config',
-        {'enable_auto_toc_tree': True, 'auto_toc_tree_section': 'Contents'},
+        "recommonmark_config",
+        {"enable_auto_toc_tree": True, "auto_toc_tree_section": "Contents"},
         True,
     )
     app.add_transform(AutoStructify)

@@ -1,3 +1,4 @@
+import os
 import subprocess
 import sys
 from typing import Callable, Dict, List, NamedTuple, Optional
@@ -49,13 +50,31 @@ def run_command(*command: str, verbose: bool = False) -> bool:
     """Helper for linters: Run a command and return whether it succeeded."""
     if verbose:
         print(" ".join(command))
-    python_path = ":".join(sys.path)
-    try:
-        subprocess.check_call(
-            [f'PYTHONPATH="{python_path}"', *command], cwd=REPO_ROOT, shell=True
-        )
-        return True
-    except subprocess.CalledProcessError:
+
+    # Propagate our sys.path
+    env = dict(os.environ)
+    env["PYTHONPATH"] = ":".join(sys.path)
+
+    completed = subprocess.run(
+        command,
+        cwd=REPO_ROOT,
+        env=env,
+        capture_output=True,
+        text=True,
+    )
+    if completed.returncode != 0:
         if verbose:
-            print("Failed!")
+            print("FAILURE")
+        else:
+            print(f"FAILURE in {' '.join(command)}")
+        print()
+        print(completed.stdout)
+        print(completed.stderr)
         return False
+
+    if verbose:
+        print("Command succeeded")
+        print(completed.stdout)
+        print(completed.stderr)
+
+    return True

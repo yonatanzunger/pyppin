@@ -1,5 +1,5 @@
 """An instance method decorator to make initializers execute once, on demand."""
-from typing import Callable, Generic, Optional, TypeVar, Any
+from typing import Any, Callable, Generic, Optional, TypeVar
 
 T = TypeVar("T")
 PREFIX = "__lazyinit_"

@@ -10,7 +10,6 @@ if REPO_ROOT not in sys.path:
 
 from pyppin.os.bulk_import import bulk_import  # noqa
 from pyppin.os.list_files import list_files  # noqa
-
 from tools.linters.common import LINTERS  # noqa
 
 EXCLUDE_NAMES = {"build", "dist", "__pycache__", "docs", "lib"}
@@ -72,7 +71,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # Grab the linters
-    bulk_import(f'{REPO_ROOT}/tools/linters', verbose=args.verbose, root=REPO_ROOT)
+    bulk_import(f"{REPO_ROOT}/tools/linters", verbose=args.verbose, root=REPO_ROOT)
 
     # Grab the files to lint
     files = LintableFiles()

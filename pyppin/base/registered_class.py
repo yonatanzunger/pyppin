@@ -56,10 +56,10 @@ class RegisteredClass(type):
 
     # Type signature to make mypy happy: All types that use this as a metaclass will have this
     # as a class variable.
-    _registry: Dict[str, Type]
+    _registry: Dict[str, "RegisteredClass"]
 
     @staticmethod
-    def get(superclass: "RegisteredClass", name: str) -> Type:
+    def get(superclass: "RegisteredClass", name: str) -> "RegisteredClass":
         """Get a named subclass of superclass.
 
         Args:
@@ -77,7 +77,7 @@ class RegisteredClass(type):
         return result
 
     @staticmethod
-    def subclasses(superclass: "RegisteredClass") -> Dict[str, Type]:
+    def subclasses(superclass: "RegisteredClass") -> Dict[str, "RegisteredClass"]:
         """Return all the subclasses of a given registered class."""
         if not hasattr(superclass, "_registry"):
             raise TypeError(f"The class {superclass} is not a registered class.")
@@ -86,9 +86,9 @@ class RegisteredClass(type):
         # means that if the caller passes a *subclass* of a registered class -- e.g., a partial
         # implementation -- we correctly return its subclasses!
         return {
-            name: klass
-            for name, klass in superclass._registry.items()
-            if issubclass(klass, superclass) and klass != superclass
+            name: class_
+            for name, class_ in superclass._registry.items()
+            if issubclass(class_, superclass) and class_ != superclass
         }
 
     def __new__(
@@ -101,7 +101,7 @@ class RegisteredClass(type):
     ) -> Any:
         # This function gets called when a new registered class (ie one whose metaclass is
         # RegisteredClass) is declared. We set up its registry and its subclass initializer.
-        klass = type(name, bases, namespace)
+        class_ = type(name, bases, namespace)
 
         def init_subclass(
             cls: type, register: bool = True, registration_name: Optional[str] = None
@@ -119,22 +119,20 @@ class RegisteredClass(type):
                 cls._registry[registration_name] = cls  # type: ignore
 
         # Doing it this way makes mypy happier.
-        registry: Dict[str, Type[klass]] = {}  # type: ignore
-        setattr(klass, "_registry", registry)
-        setattr(klass, "__init_subclass__", classmethod(init_subclass))
+        registry: Dict[str, Type[class_]] = {}  # type: ignore
+        setattr(class_, "_registry", registry)
+        setattr(class_, "__init_subclass__", classmethod(init_subclass))
 
         # Also define some class implementations of the static functions. Alas, using these makes
         # mypy freak out, so if you do use them, you'll have to mark it # type: ignore.
 
-        @classmethod  # type: ignore
-        def get_subclass(superclass, name: str) -> Type[klass]:  # type: ignore
+        def get_subclass(superclass: "RegisteredClass", name: str) -> "RegisteredClass":
             return RegisteredClass.get(superclass, name)
 
-        @classmethod  # type: ignore
-        def subclasses(superclass) -> Dict[str, Type[klass]]:  # type: ignore
+        def subclasses(superclass: "RegisteredClass") -> Dict[str, "RegisteredClass"]:
             return RegisteredClass.subclasses(superclass)
 
-        setattr(klass, "get_subclass", get_subclass)
-        setattr(klass, "subclasses", subclasses)
+        setattr(class_, "get_subclass", classmethod(get_subclass))
+        setattr(class_, "subclasses", classmethod(subclasses))
 
-        return klass
+        return class_

@@ -1,7 +1,16 @@
 """Merge multiple sorted iterators into a single iterator over sorted tuples."""
 
-from typing import (Callable, Generic, Iterable, Iterator, List, Optional,
-                    Tuple, TypeVar, Union)
+from typing import (
+    Callable,
+    Generic,
+    Iterable,
+    Iterator,
+    List,
+    Optional,
+    Tuple,
+    TypeVar,
+    Union,
+)
 
 ValueType = TypeVar("ValueType")
 KeyType = TypeVar("KeyType")
@@ -155,7 +164,9 @@ def zip_by_key(
         return
 
     # An array that we'll reuse.
-    result: List[Optional[YieldedType]] = [None] * (len(sources) + (1 if yield_keys else 0))
+    result: List[Optional[YieldedType]] = [None] * (
+        len(sources) + (1 if yield_keys else 0)
+    )
 
     assert len(result) > 0
 

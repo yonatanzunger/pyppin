@@ -83,8 +83,18 @@ In addition, the wrapped function has an incache() method of its own:
 import functools
 import threading
 from contextlib import AbstractContextManager, nullcontext
-from typing import (Any, Callable, Generic, Hashable, MutableMapping,
-                    NamedTuple, Optional, Type, TypeVar, Union)
+from typing import (
+    Any,
+    Callable,
+    Generic,
+    Hashable,
+    MutableMapping,
+    NamedTuple,
+    Optional,
+    Type,
+    TypeVar,
+    Union,
+)
 
 ValueType = TypeVar("ValueType")
 KeyType = TypeVar("KeyType")
@@ -195,8 +205,7 @@ def cache(
     cache_exceptions: bool = False,
     **kwargs: Any,
 ) -> Callable[[WrappedFunctionType], "_WrappedFunction"]:
-    """A decorator to memoize (cache) the results of a function call.
-    """
+    """A decorator to memoize (cache) the results of a function call."""
 
     def wrapper(function: WrappedFunctionType) -> _WrappedFunction:
         return _WrappedFunction(

@@ -10,12 +10,12 @@ TEST_PATH = Path(__file__).parent
 
 class BulkImportTest(unittest.TestCase):
     def testBulkImport(self) -> None:
-        self.assertEqual({}, ImportableThing.subclasses())
+        self.assertEqual({}, ImportableThing.subclasses())  # type: ignore
 
         bulk_import(TEST_PATH.joinpath("bulk_import_test_data"), root=TEST_PATH)
 
         self.assertEqual(
-            ["Class1", "Class2"], sorted(list(ImportableThing.subclasses()))
+            ["Class1", "Class2"], sorted(list(ImportableThing.subclasses()))  # type: ignore
         )
 
 
