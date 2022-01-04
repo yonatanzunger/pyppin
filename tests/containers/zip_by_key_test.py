@@ -1,6 +1,6 @@
 import unittest
 
-from pyppin.base.zip_by_key import ZipSource, zip_by_key
+from pyppin.containers.zip_by_key import ZipSource, zip_by_key
 
 
 class ZipperTest(unittest.TestCase):

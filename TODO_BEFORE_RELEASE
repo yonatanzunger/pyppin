@@ -15,7 +15,10 @@ Other classes to maybe add:
   * periodic thread
 * base/
   * lazyimport
+* os/
   * StreamingBuffer + memblock
+* containers/
+  * Ring buffer
 * struct/
   * histogram
   * expression tree

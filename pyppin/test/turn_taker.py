@@ -70,11 +70,11 @@ class TurnTaker(object):
         """
         raise NotImplementedError()
 
-    def pass_and_wait(self, to: Union[str, "TurnTaker"]) -> None:
+    def pass_and_wait(self, to: Union[str, Type["TurnTaker"]]) -> None:
         """Pass the ball to another player and wait for my next turn."""
         self._game.pass_to(self, to, wait=True)
 
-    def pass_and_finish(self, to: Union[str, "TurnTaker"]) -> None:
+    def pass_and_finish(self, to: Union[str, Type["TurnTaker"]]) -> None:
         """Pass the ball to another player and don't wait for your next turn; you're done.
 
         Every player, except the last one, must call this immediately before returning from their
@@ -146,10 +146,17 @@ class _Game(object):
     # Functions which are called by TurnTakers. These functions may raise exceptions like ordinary
     # functions.
 
-    def name(self, player: Union[str, "TurnTaker"]) -> str:
-        return player.name if isinstance(player, TurnTaker) else player
+    def name(self, player: Union[str, TurnTaker, Type[TurnTaker]]) -> str:
+        if isinstance(player, type):
+            return player.__name__
+        elif isinstance(player, TurnTaker):
+            return player.name
+        else:
+            return player
 
-    def wait_for_turn_locked(self, player: Union[str, "TurnTaker"]) -> None:
+    def wait_for_turn_locked(
+        self, player: Union[str, TurnTaker, Type[TurnTaker]]
+    ) -> None:
         """Block until it is player's turn. Requires that self.lock be held."""
         player = self.name(player)
         self.waiters.add(player)
@@ -163,8 +170,8 @@ class _Game(object):
 
     def pass_to(
         self,
-        from_: Union[str, "TurnTaker"],
-        to: Union[str, "TurnTaker"],
+        from_: Union[str, TurnTaker, Type[TurnTaker]],
+        to: Union[str, TurnTaker, Type[TurnTaker]],
         wait: bool,
     ) -> None:
         """Pass to another player, and optionally wait for from_'s next turn."""

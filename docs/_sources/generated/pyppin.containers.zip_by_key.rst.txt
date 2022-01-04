@@ -1,7 +1,7 @@
-pyppin.base.zip\_by\_key
-========================
+pyppin.containers.zip\_by\_key
+==============================
 
-.. automodule:: pyppin.base.zip_by_key
+.. automodule:: pyppin.containers.zip_by_key
 
    
    
