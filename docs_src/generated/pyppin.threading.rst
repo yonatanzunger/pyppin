@@ -1,7 +1,7 @@
-﻿pyppin
-======
+﻿pyppin.threading
+================
 
-.. automodule:: pyppin
+.. automodule:: pyppin.threading
 
    
    
@@ -27,7 +27,5 @@
    :toctree:
    :recursive:
 
-   pyppin.base
-   pyppin.os
-   pyppin.test
+   pyppin.threading.semaphore
 

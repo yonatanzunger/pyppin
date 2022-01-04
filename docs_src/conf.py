@@ -41,6 +41,7 @@ extensions = [
     "sphinx.ext.napoleon",
     # This allows it to parse .md files as inputs.
     "recommonmark",
+    "sphinx.ext.napoleon",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -70,6 +71,14 @@ autodoc_default_options = {
     "undoc-members": True,
     "show-inheritance": True,
 }
+
+# Obnoxiously, you have to tell sphinx about any sections you want ahead of time,
+# or it will just reject them.
+napoleon_custom_sections = [
+    "Basic Usage",
+    "Useful Ways to Use It",
+    "Fancier Example",
+]
 
 
 def setup(app: Sphinx) -> None:

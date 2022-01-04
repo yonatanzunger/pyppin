@@ -8,3 +8,4 @@ API
    pyppin.base
    pyppin.os
    pyppin.test
+   pyppin.threading

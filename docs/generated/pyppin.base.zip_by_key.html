@@ -38,9 +38,21 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../readme.html">pyppin: A toolkit of Python basics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../api.html">API</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="pyppin.base.html">pyppin.base</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="pyppin.base.cache.html">pyppin.base.cache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.base.lazyinit.html">pyppin.base.lazyinit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.base.registered_class.html">pyppin.base.registered_class</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">pyppin.base.zip_by_key</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyppin.os.html">pyppin.os</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyppin.test.html">pyppin.test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyppin.threading.html">pyppin.threading</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Using &amp; Contributing</a></li>
 </ul>
 
@@ -161,6 +173,7 @@ the tuples will have N elements, and the key will not be separately yielded.</p>
 everything in that tuple. The remaining items in the tuple are the values of l1 and l2,
 respectively, where None appears whenever an item is missing. (e.g., l2 has no value for the
 key 3)</p>
+<p class="rubric">Fancier Example</p>
 <p>Let’s say instead you have:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">squares</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">25</span><span class="p">]</span>
 </pre></div>

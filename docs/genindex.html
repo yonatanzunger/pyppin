@@ -80,6 +80,7 @@
  | <a href="#P"><strong>P</strong></a>
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
+ | <a href="#T"><strong>T</strong></a>
  | <a href="#W"><strong>W</strong></a>
  | <a href="#Z"><strong>Z</strong></a>
  
@@ -87,10 +88,14 @@
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="generated/pyppin.base.html#pyppin.base.assert_not_none">assert_not_none() (in module pyppin.base)</a>
+      <li><a href="generated/pyppin.threading.semaphore.html#pyppin.threading.semaphore.Semaphore.acquire">acquire() (pyppin.threading.semaphore.Semaphore method)</a>
+</li>
+      <li><a href="generated/pyppin.threading.semaphore.html#pyppin.threading.semaphore.Semaphore.acquire_checked">acquire_checked() (pyppin.threading.semaphore.Semaphore method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/pyppin.base.html#pyppin.base.assert_not_none">assert_not_none() (in module pyppin.base)</a>
+</li>
       <li><a href="generated/pyppin.base.zip_by_key.html#pyppin.base.zip_by_key.ZipSource.aux">aux() (pyppin.base.zip_by_key.ZipSource class method)</a>
 </li>
   </ul></td>
@@ -109,11 +114,15 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="generated/pyppin.base.cache.html#pyppin.base.cache.cache">cache() (in module pyppin.base.cache)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="generated/pyppin.base.cache.html#pyppin.base.cache.CacheFlags">CacheFlags (class in pyppin.base.cache)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="generated/pyppin.base.cache.html#pyppin.base.cache.cachemethod">cachemethod() (in module pyppin.base.cache)</a>
+</li>
+      <li><a href="generated/pyppin.threading.semaphore.html#pyppin.threading.semaphore.Semaphore.Status.capacity">capacity (pyppin.threading.semaphore.Semaphore.Status attribute)</a>
+</li>
+      <li><a href="generated/pyppin.threading.semaphore.html#pyppin.threading.semaphore.Semaphore.Status.current">current (pyppin.threading.semaphore.Semaphore.Status attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -138,7 +147,11 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="generated/pyppin.base.registered_class.html#pyppin.base.registered_class.RegisteredClass.get">get() (pyppin.base.registered_class.RegisteredClass static method)</a>
+
+      <ul>
+        <li><a href="generated/pyppin.threading.semaphore.html#pyppin.threading.semaphore.Semaphore.get">(pyppin.threading.semaphore.Semaphore method)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -169,8 +182,6 @@
     module
 
       <ul>
-        <li><a href="generated/pyppin.html#module-pyppin">pyppin</a>
-</li>
         <li><a href="generated/pyppin.base.html#module-pyppin.base">pyppin.base</a>
 </li>
         <li><a href="generated/pyppin.base.cache.html#module-pyppin.base.cache">pyppin.base.cache</a>
@@ -191,6 +202,10 @@
 </li>
         <li><a href="generated/pyppin.test.interact.html#module-pyppin.test.interact">pyppin.test.interact</a>
 </li>
+        <li><a href="generated/pyppin.threading.html#module-pyppin.threading">pyppin.threading</a>
+</li>
+        <li><a href="generated/pyppin.threading.semaphore.html#module-pyppin.threading.semaphore">pyppin.threading.semaphore</a>
+</li>
       </ul></li>
   </ul></td>
 </tr></table>
@@ -198,13 +213,6 @@
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li>
-    pyppin
-
-      <ul>
-        <li><a href="generated/pyppin.html#module-pyppin">module</a>
-</li>
-      </ul></li>
       <li>
     pyppin.base
 
@@ -240,8 +248,6 @@
         <li><a href="generated/pyppin.base.zip_by_key.html#module-pyppin.base.zip_by_key">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     pyppin.os
 
@@ -249,6 +255,8 @@
         <li><a href="generated/pyppin.os.html#module-pyppin.os">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     pyppin.os.bulk_import
 
@@ -277,6 +285,20 @@
         <li><a href="generated/pyppin.test.interact.html#module-pyppin.test.interact">module</a>
 </li>
       </ul></li>
+      <li>
+    pyppin.threading
+
+      <ul>
+        <li><a href="generated/pyppin.threading.html#module-pyppin.threading">module</a>
+</li>
+      </ul></li>
+      <li>
+    pyppin.threading.semaphore
+
+      <ul>
+        <li><a href="generated/pyppin.threading.semaphore.html#module-pyppin.threading.semaphore">module</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -285,9 +307,11 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="generated/pyppin.base.cache.html#pyppin.base.cache.CacheFlags.read">read (pyppin.base.cache.CacheFlags attribute)</a>
 </li>
+      <li><a href="generated/pyppin.base.registered_class.html#pyppin.base.registered_class.RegisteredClass">RegisteredClass (class in pyppin.base.registered_class)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="generated/pyppin.base.registered_class.html#pyppin.base.registered_class.RegisteredClass">RegisteredClass (class in pyppin.base.registered_class)</a>
+      <li><a href="generated/pyppin.threading.semaphore.html#pyppin.threading.semaphore.Semaphore.release">release() (pyppin.threading.semaphore.Semaphore method)</a>
 </li>
       <li><a href="generated/pyppin.base.lazyinit.html#pyppin.base.lazyinit.reset_all">reset_all() (in module pyppin.base.lazyinit)</a>
 </li>
@@ -297,7 +321,37 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/pyppin.threading.semaphore.html#pyppin.threading.semaphore.Semaphore">Semaphore (class in pyppin.threading.semaphore)</a>
+</li>
+      <li><a href="generated/pyppin.threading.semaphore.html#pyppin.threading.semaphore.Semaphore.AcquireResult">Semaphore.AcquireResult (class in pyppin.threading.semaphore)</a>
+</li>
+      <li><a href="generated/pyppin.threading.semaphore.html#pyppin.threading.semaphore.Semaphore.Resource">Semaphore.Resource (class in pyppin.threading.semaphore)</a>
+</li>
+      <li><a href="generated/pyppin.threading.semaphore.html#pyppin.threading.semaphore.Semaphore.Status">Semaphore.Status (class in pyppin.threading.semaphore)</a>
+</li>
+      <li><a href="generated/pyppin.threading.semaphore.html#pyppin.threading.semaphore.Semaphore.set_capacity">set_capacity() (pyppin.threading.semaphore.Semaphore method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/pyppin.threading.semaphore.html#pyppin.threading.semaphore.Semaphore.status">status() (pyppin.threading.semaphore.Semaphore method)</a>
+</li>
+      <li><a href="generated/pyppin.threading.semaphore.html#pyppin.threading.semaphore.Semaphore.stop">stop() (pyppin.threading.semaphore.Semaphore method)</a>
+</li>
+      <li><a href="generated/pyppin.threading.semaphore.html#pyppin.threading.semaphore.Semaphore.AcquireResult.STOPPED">STOPPED (pyppin.threading.semaphore.Semaphore.AcquireResult attribute)</a>
+</li>
+      <li><a href="generated/pyppin.threading.semaphore.html#pyppin.threading.semaphore.Semaphore.Status.stopped">stopped (pyppin.threading.semaphore.Semaphore.Status attribute)</a>
+</li>
       <li><a href="generated/pyppin.base.registered_class.html#pyppin.base.registered_class.RegisteredClass.subclasses">subclasses() (pyppin.base.registered_class.RegisteredClass static method)</a>
+</li>
+      <li><a href="generated/pyppin.threading.semaphore.html#pyppin.threading.semaphore.Semaphore.AcquireResult.SUCCESS">SUCCESS (pyppin.threading.semaphore.Semaphore.AcquireResult attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="T">T</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/pyppin.threading.semaphore.html#pyppin.threading.semaphore.Semaphore.AcquireResult.TIMEOUT">TIMEOUT (pyppin.threading.semaphore.Semaphore.AcquireResult attribute)</a>
 </li>
   </ul></td>
 </tr></table>

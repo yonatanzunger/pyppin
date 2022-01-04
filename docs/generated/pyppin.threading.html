@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyppin &mdash; pyppin  documentation</title>
+  <title>pyppin.threading &mdash; pyppin  documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -17,7 +17,9 @@
         <script src="../_static/doctools.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pyppin.threading.semaphore" href="pyppin.threading.semaphore.html" />
+    <link rel="prev" title="pyppin.test.interact" href="pyppin.test.interact.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -36,9 +38,18 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../readme.html">pyppin: A toolkit of Python basics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../api.html">API</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="pyppin.base.html">pyppin.base</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyppin.os.html">pyppin.os</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyppin.test.html">pyppin.test</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">pyppin.threading</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.threading.semaphore.html">pyppin.threading.semaphore</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Using &amp; Contributing</a></li>
 </ul>
 
@@ -56,9 +67,10 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>pyppin</li>
+          <li><a href="../api.html">API</a> &raquo;</li>
+      <li>pyppin.threading</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/generated/pyppin.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/generated/pyppin.threading.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -66,8 +78,9 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-pyppin">
-<span id="pyppin"></span><h1>pyppin<a class="headerlink" href="#module-pyppin" title="Permalink to this headline">¶</a></h1>
+  <section id="module-pyppin.threading">
+<span id="pyppin-threading"></span><h1>pyppin.threading<a class="headerlink" href="#module-pyppin.threading" title="Permalink to this headline">¶</a></h1>
+<p>Tools for multithreaded code.</p>
 <p class="rubric">Modules</p>
 <table class="longtable docutils align-default">
 <colgroup>
@@ -75,14 +88,8 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyppin.base.html#module-pyppin.base" title="pyppin.base"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.base</span></code></a></p></td>
-<td><p>Basic language extensions.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyppin.os.html#module-pyppin.os" title="pyppin.os"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.os</span></code></a></p></td>
-<td><p>OS and file utilities.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyppin.test.html#module-pyppin.test" title="pyppin.test"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.test</span></code></a></p></td>
-<td><p>Testing and debugging utilities.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyppin.threading.semaphore.html#module-pyppin.threading.semaphore" title="pyppin.threading.semaphore"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.threading.semaphore</span></code></a></p></td>
+<td><p>A smarter semaphore that can do things like wait for tasks to finish.</p></td>
 </tr>
 </tbody>
 </table>
@@ -91,7 +98,10 @@
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pyppin.test.interact.html" class="btn btn-neutral float-left" title="pyppin.test.interact" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pyppin.threading.semaphore.html" class="btn btn-neutral float-right" title="pyppin.threading.semaphore" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 

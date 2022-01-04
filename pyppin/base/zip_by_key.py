@@ -121,7 +121,7 @@ def zip_by_key(
     respectively, where None appears whenever an item is missing. (e.g., l2 has no value for the
     key 3)
 
-    Fancier example
+    Fancier Example
     ===============
 
     Let's say instead you have::

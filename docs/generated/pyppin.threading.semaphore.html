@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pyppin.threading.semaphore &mdash; pyppin  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Using &amp; Contributing" href="../contributing/index.html" />
+    <link rel="prev" title="pyppin.threading" href="pyppin.threading.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> pyppin
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../readme.html">pyppin: A toolkit of Python basics</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="pyppin.base.html">pyppin.base</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyppin.os.html">pyppin.os</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyppin.test.html">pyppin.test</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="pyppin.threading.html">pyppin.threading</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">pyppin.threading.semaphore</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Using &amp; Contributing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pyppin</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../api.html">API</a> &raquo;</li>
+          <li><a href="pyppin.threading.html">pyppin.threading</a> &raquo;</li>
+      <li>pyppin.threading.semaphore</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/generated/pyppin.threading.semaphore.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-pyppin.threading.semaphore">
+<span id="pyppin-threading-semaphore"></span><h1>pyppin.threading.semaphore<a class="headerlink" href="#module-pyppin.threading.semaphore" title="Permalink to this headline">¶</a></h1>
+<p>A smarter semaphore that can do things like wait for tasks to finish.</p>
+<p class="rubric">Classes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pyppin.threading.semaphore.Semaphore" title="pyppin.threading.semaphore.Semaphore"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Semaphore</span></code></a>([capacity])</p></td>
+<td><p>A semaphore, aka a shared reservoir of (integer) capacity.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyppin.threading.semaphore.Semaphore">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyppin.threading.semaphore.</span></span><span class="sig-name descname"><span class="pre">Semaphore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">capacity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyppin.threading.semaphore.Semaphore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A semaphore, aka a shared reservoir of (integer) capacity.</p>
+<p>This is a more sophisticated version of <a class="reference external" href="https://docs.python.org/3/library/threading.html#semaphore-objects">threading.Semaphore</a> and
+<a class="reference external" href="https://docs.python.org/3/library/threading.html#threading.BoundedSemaphore">threading.BoundedSemaphore</a>: unlike
+those classes, this class has a <code class="docutils literal notranslate"><span class="pre">stop()</span></code> method, which (irreversibly) prevents further
+resource acquisition and blocks until all resources have been released. This lets you do
+things like wait until all tasks have completed!</p>
+<p class="rubric">Basic Usage</p>
+<p>Think of a semaphore as a reservoir of “resource,” with some total amount of resource
+(optionally infinity) available. You <code class="docutils literal notranslate"><span class="pre">acquire()</span></code> some resource at the start of an
+operation, blocking until that much of the resource is available; when you’re done, you
+<code class="docutils literal notranslate"><span class="pre">release()</span></code> it. This guarantees that you never use more than the available capacity at
+once, which makes this an effective throttling tool. You can also change the total available
+capacity with <code class="docutils literal notranslate"><span class="pre">set_capacity()</span></code>, and shut down the entire semaphore with <code class="docutils literal notranslate"><span class="pre">stop()</span></code>.</p>
+<p>Because releasing what you’ve acquired is so important, Semaphore provides two context
+manager API’s:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">semaphore</span><span class="p">:</span>
+    <span class="o">...</span> <span class="n">do</span> <span class="n">something</span> <span class="o">...</span>
+
+<span class="k">with</span> <span class="n">semaphore</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">amount</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span> <span class="k">as</span> <span class="n">resource</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">resource</span><span class="p">:</span>
+        <span class="o">...</span> <span class="n">do</span> <span class="n">something</span> <span class="o">...</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="o">...</span> <span class="n">you</span> <span class="n">couldn</span><span class="s1">&#39;t get the capacity! ...</span>
+</pre></div>
+</div>
+<p>The first syntax grabs one unit of resource, blocking indefinitely, and raises an exception
+(BrokenPipeError) if the semaphore somehow got shut down before you could get any. The
+second one is a more flexible syntax that lets you control all of these behaviors; with this
+syntax, you need to check whether the resource was successfully acquired.</p>
+<p>This class is thread-safe.</p>
+<p class="rubric">Useful Ways to Use It</p>
+<p>One common use is to <strong>limit concurrent use of a resource</strong>, such as an RPC server. In this
+case, you can create a semaphore with some finite capacity, and have each use grab some
+capacity; for example, the program might set <code class="docutils literal notranslate"><span class="pre">throttle</span> <span class="pre">=</span> <span class="pre">Semaphore(5)</span></code> and then have
+each worker thread call:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">throttle</span><span class="p">:</span>
+    <span class="o">...</span> <span class="n">do</span> <span class="n">the</span> <span class="n">expensive</span> <span class="n">operation</span> <span class="o">...</span>
+</pre></div>
+</div>
+<p>Another common use is as a way to make sure all tasks have finished in a situation where you
+don’t know how many tasks will happen ahead of time – for example, an RPC server might
+want to enter a “lame-duck” mode where it stops accepting new requests and waits for pending
+ones to finish before shutdown, or a batch job might issue a lot of asynchronous requests
+and want to wait for them to finish (and yield their respective outputs) before ending
+the job. A semaphore with no concurrency limit (<code class="docutils literal notranslate"><span class="pre">capacity</span> <span class="pre">=</span> <span class="pre">None</span></code>) does the trick nicely:
+simply have every task <code class="docutils literal notranslate"><span class="pre">acquire()</span></code> when it starts and <code class="docutils literal notranslate"><span class="pre">release()</span></code> when it finishes, and
+when you want to end the job as a whole (stop allowing new requests and wait for existing
+ones to finish), the thread that wants to wait for things to finish simply calls
+<code class="docutils literal notranslate"><span class="pre">Semaphore.stop()</span></code>. You can think of this use of a semaphore as being like a
+<a class="reference external" href="https://docs.python.org/3/library/threading.html#barrier-objects">threading.Barrier</a>
+that doesn’t require you to know the number of parties ahead of time.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If a code unit (e.g. a thread, or a worker object that can move between threads) acquires some
+units of resource, it <strong>must not</strong> acquire again until it has first released what it
+holds. Otherwise you will get a thread-starvation deadlock,¹ which is notoriously hard to
+catch via static analysis or unittests, and only manifests in production under high load,
+when your program suddenly comes to a halt. If a code flow might need more capacity later,
+acquire the maximum amount of capacity you might need up front.</p>
+<p>¹ The exact mechanism: Say a worker holds one unit of capacity, and wants to grab one more
+unit of capacity, do something, then release both. Now imagine that many identical workers
+are active at once, so that the semaphore is at capacity. Every one of the workers could
+release some capacity, allowing things to continue, if it could <em>just</em> get one unit of
+capacity – but there is none, and nobody can release any! The program deadlocks. This is
+especially insidious because the most common reason someone might accidentally do this is if
+workers only <em>sometimes</em> need that second unit of capacity. In that case, normally things
+work fine: even if one worker needs an extra unit, some other worker will soon finish its
+task (without needing that) and release capacity. Things only go wrong once there are enough
+workers simultaneously in that special state, which tends to happen in unpredictable
+circumstances but generally at peak traffic, in the middle of the night, or during a
+highly-visible public event. Don’t let this happen to you. Release before you acquire.</p>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyppin.threading.semaphore.Semaphore.AcquireResult">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AcquireResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyppin.threading.semaphore.Semaphore.AcquireResult" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>The result of an acquire() operation on a semaphore.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyppin.threading.semaphore.Semaphore.AcquireResult.SUCCESS">
+<span class="sig-name descname"><span class="pre">SUCCESS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#pyppin.threading.semaphore.Semaphore.AcquireResult.SUCCESS" title="Permalink to this definition">¶</a></dt>
+<dd><p>The operation succeeded; you own the resource and must release it.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyppin.threading.semaphore.Semaphore.AcquireResult.TIMEOUT">
+<span class="sig-name descname"><span class="pre">TIMEOUT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#pyppin.threading.semaphore.Semaphore.AcquireResult.TIMEOUT" title="Permalink to this definition">¶</a></dt>
+<dd><p>The operation failed because of a timeout; you don’t have it, but can try again.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyppin.threading.semaphore.Semaphore.AcquireResult.STOPPED">
+<span class="sig-name descname"><span class="pre">STOPPED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#pyppin.threading.semaphore.Semaphore.AcquireResult.STOPPED" title="Permalink to this definition">¶</a></dt>
+<dd><p>The operation failed because the semaphore has been shut down.</p>
+<p>This is a non-retriable error; future calls will always fail.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.threading.semaphore.Semaphore.acquire">
+<span class="sig-name descname"><span class="pre">acquire</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">amount</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pyppin.threading.semaphore.Semaphore.AcquireResult" title="pyppin.threading.semaphore.Semaphore.AcquireResult"><span class="pre">pyppin.threading.semaphore.Semaphore.AcquireResult</span></a></span></span><a class="headerlink" href="#pyppin.threading.semaphore.Semaphore.acquire" title="Permalink to this definition">¶</a></dt>
+<dd><p>Acquire (take ownership of) some capacity within the semaphore.</p>
+<p>If this function returns SUCCESS, the capacity was successfully acquired; the caller now
+owns <cite>amount</cite> of resource and <strong>must</strong> release it, by calling <code class="docutils literal notranslate"><span class="pre">release()</span></code>, when they are
+done using it. If the function returns any other value, the capacity was not acquired, and
+the caller owns nothing and should release nothing.</p>
+<p>It is guaranteed that if the timeout is zero or negative, this function will not block.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>amount</strong> – The amount of capacity to acquire.</p></li>
+<li><p><strong>timeout</strong> – How long we should block, in seconds. None (the default) means to wait
+forever. Zero means that we should never block; if we can’t instantly get
+the capacity, return immediately.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>SUCCESS if the capacity was successfully acquired.
+TIMEOUT if the acquisition failed because time ran out.
+STOPPED if the acquisition failed because the semaphore has stopped. (This is a
+non-transient error!)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.threading.semaphore.Semaphore.acquire_checked">
+<span class="sig-name descname"><span class="pre">acquire_checked</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">amount</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pyppin.threading.semaphore.Semaphore.acquire_checked" title="Permalink to this definition">¶</a></dt>
+<dd><p>Acquire, raising an exception on failure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>amount</strong> – The amount of capacity to get.</p></li>
+<li><p><strong>timeout</strong> – How long we should block, in seconds. None (the default) means to wait
+forever. Zero means that we should never block; if we can’t instantly get
+the capacity, return immediately.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>TimeoutError</strong> – If check=True, timeout != None, and the request timed out. This is a
+    retriable error.</p></li>
+<li><p><strong>BrokenPipeError</strong> – If check=True and the semaphore was stopped before the acquisition
+    could complete. This is a non-retriable error.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.threading.semaphore.Semaphore.release">
+<span class="sig-name descname"><span class="pre">release</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">amount</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pyppin.threading.semaphore.Semaphore.release" title="Permalink to this definition">¶</a></dt>
+<dd><p>Release capacity acquired via <code class="docutils literal notranslate"><span class="pre">acquire()</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.threading.semaphore.Semaphore.stop">
+<span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pyppin.threading.semaphore.Semaphore.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shut down the semaphore.</p>
+<p>All pending and future calls to get will fail immediately. This function will then
+block until either the timeout elapses, or all active resources have been released by their
+holders.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>timeout</strong> – How long to wait for a full shutdown, or None to wait forever.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if the semaphore has been shut down, False for a timeout.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.threading.semaphore.Semaphore.set_capacity">
+<span class="sig-name descname"><span class="pre">set_capacity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">capacity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pyppin.threading.semaphore.Semaphore.set_capacity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modify the capacity of the semaphore.</p>
+<p>Note that the current usage of the semaphore may be transiently greater than its capacity,
+if you reduce the capacity with this mechanism!</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyppin.threading.semaphore.Semaphore.Status">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">capacity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stopped</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyppin.threading.semaphore.Semaphore.Status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">NamedTuple</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyppin.threading.semaphore.Semaphore.Status.capacity">
+<span class="sig-name descname"><span class="pre">capacity</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyppin.threading.semaphore.Semaphore.Status.capacity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyppin.threading.semaphore.Semaphore.Status.current">
+<span class="sig-name descname"><span class="pre">current</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pyppin.threading.semaphore.Semaphore.Status.current" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyppin.threading.semaphore.Semaphore.Status.stopped">
+<span class="sig-name descname"><span class="pre">stopped</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pyppin.threading.semaphore.Semaphore.Status.stopped" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 2</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.threading.semaphore.Semaphore.status">
+<span class="sig-name descname"><span class="pre">status</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pyppin.threading.semaphore.Semaphore.Status" title="pyppin.threading.semaphore.Semaphore.Status"><span class="pre">pyppin.threading.semaphore.Semaphore.Status</span></a></span></span><a class="headerlink" href="#pyppin.threading.semaphore.Semaphore.status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetch the current capacity, usage, and stop state.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyppin.threading.semaphore.Semaphore.Resource">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Resource</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pyppin.threading.semaphore.Semaphore" title="pyppin.threading.semaphore.Semaphore"><span class="pre">pyppin.threading.semaphore.Semaphore</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">amount</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyppin.threading.semaphore.Semaphore.Resource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">contextlib.AbstractContextManager</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.threading.semaphore.Semaphore.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">amount</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pyppin.threading.semaphore.Semaphore.Resource" title="pyppin.threading.semaphore.Semaphore.Resource"><span class="pre">pyppin.threading.semaphore.Semaphore.Resource</span></a></span></span><a class="headerlink" href="#pyppin.threading.semaphore.Semaphore.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Context manager API to acquire capacity from the semaphore.</p>
+<p>This function works just like <code class="docutils literal notranslate"><span class="pre">acquire()</span></code> or <code class="docutils literal notranslate"><span class="pre">acquire_checked()</span></code>, but (if it doesn’t
+raise) returns a context manager which releases the resources on exit.</p>
+<p>If you call this with check=False, note that you <strong>must</strong> check whether the acquire
+succeeded (with <code class="docutils literal notranslate"><span class="pre">resource.status</span></code>) before using it!</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>amount</strong> – The amount of capacity to acquire, which must be &gt;= 0.</p></li>
+<li><p><strong>timeout</strong> – How long we should block, in seconds, or None (the default) to wait forever.
+If the argument is zero, it is guaranteed that this function will not block.</p></li>
+<li><p><strong>check</strong> – If True, this function will raise an exception on failure. If False, returns
+a resource with a nonzero status.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>A context manager whose bool value indicates whether the resource was successfully</dt><dd><p>acquired or not. If check is True, this value is guaranteed to always be True.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>TimeoutError</strong> – If check=True, timeout != None, and the request timed out. This is a
+    retriable error.</p></li>
+<li><p><strong>BrokenPipeError</strong> – If check=True and the semaphore was stopped before the acquisition
+    could complete. This is a non-retriable error.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pyppin.threading.html" class="btn btn-neutral float-left" title="pyppin.threading" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../contributing/index.html" class="btn btn-neutral float-right" title="Using &amp; Contributing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Yonatan Zunger.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
