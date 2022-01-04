@@ -13,8 +13,6 @@ Other classes to maybe add:
   * watchdog alarm
   * resettable bell
   * periodic thread
-* test/
-  * turn-taker for tests
 * base/
   * lazyimport
   * StreamingBuffer + memblock

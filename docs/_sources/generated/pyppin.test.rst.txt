@@ -1,4 +1,4 @@
-pyppin.test
+﻿pyppin.test
 ===========
 
 .. automodule:: pyppin.test
@@ -28,4 +28,5 @@ pyppin.test
    :recursive:
 
    pyppin.test.interact
+   pyppin.test.turn_taker
 

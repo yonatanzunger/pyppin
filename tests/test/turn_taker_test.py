@@ -27,7 +27,7 @@ class TurnTakerTest(unittest.TestCase):
                 # On player 2's second turn, it ends the game.
                 result.append("player 2 turn 2")
 
-        TurnTaker.play(Player1, Player2, first_player=Player1)
+        TurnTaker.play(Player1, Player2)
 
         self.assertEqual(
             [
@@ -52,11 +52,17 @@ class TurnTakerTest(unittest.TestCase):
                 result.append("player 2 turn 1")
 
         with self.assertRaises(
-            AssertionError,
+            TurnTaker.PlayerExitedWithoutPassing,
             msg="There were errors: Player Player1 finished execution without passing while "
             "other players (Player2) were still waiting!",
         ):
-            TurnTaker.play(Player1, Player2, first_player=Player1)
+            TurnTaker.play(Player1, Player2)
 
     def testPlayerRaisesException(self) -> None:
-        pass
+        # Test that exceptions are correctly propagated out to the unittest.
+        class Player1(TurnTaker):
+            def run(self) -> None:
+                raise ValueError("My hovercraft is full of eels!")
+
+        with self.assertRaises(ValueError):
+            TurnTaker.play(Player1)

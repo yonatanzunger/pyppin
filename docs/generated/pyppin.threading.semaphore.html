@@ -208,7 +208,7 @@ the caller owns nothing and should release nothing.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>amount</strong> – The amount of capacity to acquire.</p></li>
+<li><p><strong>amount</strong> – The amount of capacity to acquire. Must be &gt;= 0.</p></li>
 <li><p><strong>timeout</strong> – How long we should block, in seconds. None (the default) means to wait
 forever. Zero means that we should never block; if we can’t instantly get
 the capacity, return immediately.</p></li>

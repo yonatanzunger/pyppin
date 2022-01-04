@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pyppin.test.turn_taker &mdash; pyppin  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pyppin.threading" href="pyppin.threading.html" />
+    <link rel="prev" title="pyppin.test.interact" href="pyppin.test.interact.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> pyppin
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../readme.html">pyppin: A toolkit of Python basics</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="pyppin.base.html">pyppin.base</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyppin.os.html">pyppin.os</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="pyppin.test.html">pyppin.test</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="pyppin.test.interact.html">pyppin.test.interact</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">pyppin.test.turn_taker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyppin.threading.html">pyppin.threading</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Using &amp; Contributing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pyppin</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../api.html">API</a> &raquo;</li>
+          <li><a href="pyppin.test.html">pyppin.test</a> &raquo;</li>
+      <li>pyppin.test.turn_taker</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/generated/pyppin.test.turn_taker.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-pyppin.test.turn_taker">
+<span id="pyppin-test-turn-taker"></span><h1>pyppin.test.turn_taker<a class="headerlink" href="#module-pyppin.test.turn_taker" title="Permalink to this headline">¶</a></h1>
+<p>A tool to manage “turn taking” in multithreaded unittests.</p>
+<p class="rubric">Classes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pyppin.test.turn_taker.TurnTaker" title="pyppin.test.turn_taker.TurnTaker"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TurnTaker</span></code></a>(game)</p></td>
+<td><p>A tool to manage &quot;turn taking&quot; in multithreaded unittests.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyppin.test.turn_taker.TurnTaker">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyppin.test.turn_taker.</span></span><span class="sig-name descname"><span class="pre">TurnTaker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">game</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyppin.test.turn_taker._Game</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyppin.test.turn_taker.TurnTaker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A tool to manage “turn taking” in multithreaded unittests.</p>
+<p>This class makes it easy to handle multithreaded unittests, where you expect that one thread
+will do X, then another thread will do Y, and so on. It doesn’t help you test for unexpected
+races, but it does help you test that expected sequences of behavior – even complicated ones –
+happen as you want.</p>
+<p>It works by modeling “turn taking” as a game where the players (i.e., the threads) pass each
+other a ball. Only the player currently holding the ball can act; once they’re done acting,
+they can pass the ball to someone else and either wait for their next turn or decide they’re
+done with their part in the game. Once everyone has decided they’re done, the game ends.</p>
+<p>The easiest way to illustrate how it works is with an example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">testSomething</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">class</span> <span class="nc">Player1</span><span class="p">(</span><span class="n">TurnTaker</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># This thread will go first. It does some initial prep work, then</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pass_and_wait</span><span class="p">(</span><span class="s1">&#39;Player2&#39;</span><span class="p">)</span>
+
+            <span class="c1"># Now it waits until player2 passes back to it, and it does some other things.</span>
+
+            <span class="c1"># Finally, it passes back to player2 and doesn&#39;t wait for anything else.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pass_and_finish</span><span class="p">(</span><span class="s1">&#39;Player2&#39;</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Player2</span><span class="p">(</span><span class="n">TurnTaker</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># This thread will wait until it gets passed the ball by player 1, then</span>
+            <span class="c1"># does some initial stuff, and passes back to player 1.</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">pass_and_wait</span><span class="p">(</span><span class="s1">&#39;Player1&#39;</span><span class="p">)</span>
+
+            <span class="c1"># Player 1 will finish up and then pass back to us. We wrap up and don&#39;t need</span>
+            <span class="c1"># to pass to anyone else; when we finish, nobody else is waiting!</span>
+
+    <span class="c1"># The unittest then runs the game as follows:</span>
+    <span class="n">TestTaker</span><span class="o">.</span><span class="n">play</span><span class="p">(</span><span class="n">Player1</span><span class="p">,</span> <span class="n">Player2</span><span class="p">,</span> <span class="n">first_player</span><span class="o">=</span><span class="n">Player1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Any exceptions raised by one of the players will be raised by the call to <code class="docutils literal notranslate"><span class="pre">play()</span></code>. Errors
+in the structure of the test itself (e.g., a player exiting without passing while others are
+waiting, or someone trying to act while it isn’t their turn) are raised as the exceptions
+indicated below.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="pyppin.test.turn_taker.TurnTaker.PlayerExitedWithoutPassing">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PlayerExitedWithoutPassing</span></span><a class="headerlink" href="#pyppin.test.turn_taker.TurnTaker.PlayerExitedWithoutPassing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Raised if a player exited without passing, while other players were waiting.</p>
+<p>This usually means a bug in your unittest!</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="pyppin.test.turn_taker.TurnTaker.PlayerActedWhenNotTheirTurn">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PlayerActedWhenNotTheirTurn</span></span><a class="headerlink" href="#pyppin.test.turn_taker.TurnTaker.PlayerActedWhenNotTheirTurn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Raised if a player acts when it isn’t their turn.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.test.turn_taker.TurnTaker.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pyppin.test.turn_taker.TurnTaker.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>The basic method which subclasses implement: Actually do this thread’s job in the test!</p>
+<p>This method will be called during this player’s first turn, and can control the flow of
+the game by calling various instance methods.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.test.turn_taker.TurnTaker.pass_and_wait">
+<span class="sig-name descname"><span class="pre">pass_and_wait</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">to</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#pyppin.test.turn_taker.TurnTaker" title="pyppin.test.turn_taker.TurnTaker"><span class="pre">pyppin.test.turn_taker.TurnTaker</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pyppin.test.turn_taker.TurnTaker.pass_and_wait" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pass the ball to another player and wait for my next turn.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.test.turn_taker.TurnTaker.pass_and_finish">
+<span class="sig-name descname"><span class="pre">pass_and_finish</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">to</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#pyppin.test.turn_taker.TurnTaker" title="pyppin.test.turn_taker.TurnTaker"><span class="pre">pyppin.test.turn_taker.TurnTaker</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pyppin.test.turn_taker.TurnTaker.pass_and_finish" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pass the ball to another player and don’t wait for your next turn; you’re done.</p>
+<p>Every player, except the last one, must call this immediately before returning from their
+run method.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.test.turn_taker.TurnTaker.play">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">play</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">players</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyppin.test.turn_taker.TurnTaker" title="pyppin.test.turn_taker.TurnTaker"><span class="pre">pyppin.test.turn_taker.TurnTaker</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">first_player</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyppin.test.turn_taker.TurnTaker" title="pyppin.test.turn_taker.TurnTaker"><span class="pre">pyppin.test.turn_taker.TurnTaker</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">final_timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pyppin.test.turn_taker.TurnTaker.play" title="Permalink to this definition">¶</a></dt>
+<dd><p>The main function you call to play a game.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>players</strong> – The set of player classes that you want to play. During the game, you
+can refer to any player by the name of the class.</p></li>
+<li><p><strong>first_player</strong> – Who goes first. If not given, the first player in the list does.</p></li>
+<li><p><strong>final_timeout</strong> – How long, in seconds, to wait for the game to finish before erroring
+out.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>KeyError</strong> – If first_player is not one of the players.</p></li>
+<li><p><a class="reference internal" href="#pyppin.test.turn_taker.TurnTaker.PlayerExitedWithoutPassing" title="pyppin.test.turn_taker.TurnTaker.PlayerExitedWithoutPassing"><strong>TurnTaker.PlayerExitedWithoutPassing</strong></a> – If some player returned from their run method
+    without passing while other players were still waiting.</p></li>
+<li><p><a class="reference internal" href="#pyppin.test.turn_taker.TurnTaker.PlayerActedWhenNotTheirTurn" title="pyppin.test.turn_taker.TurnTaker.PlayerActedWhenNotTheirTurn"><strong>TurnTaker.PlayerActedWhenNotTheirTurn</strong></a> – What it says on the tin.</p></li>
+<li><p><strong>TimeoutError</strong> – If final_timeout expires while there are active threads.</p></li>
+<li><p><strong>Any other exception</strong> – If raised by the players themselves!</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pyppin.test.turn_taker.TurnTaker.name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pyppin.test.turn_taker.TurnTaker.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the name of the player, which is the same as the name of the class.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pyppin.test.interact.html" class="btn btn-neutral float-left" title="pyppin.test.interact" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pyppin.threading.html" class="btn btn-neutral float-right" title="pyppin.threading" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Yonatan Zunger.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
