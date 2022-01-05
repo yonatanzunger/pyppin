@@ -75,8 +75,6 @@ autodoc_default_options = {
 # Obnoxiously, you have to tell sphinx about any sections you want ahead of time,
 # or it will just reject them.
 napoleon_custom_sections = [
-    "Basic Usage",
-    "Useful Ways to Use It",
     "Fancier Example",
 ]
 

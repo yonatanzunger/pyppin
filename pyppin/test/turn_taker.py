@@ -82,6 +82,25 @@ class TurnTaker(object):
         """
         self._game.pass_to(self, to, wait=False)
 
+    def pass_without_waiting(self, to: Union[str, Type["TurnTaker"]]) -> None:
+        """Pass the ball *without* waiting, but not necessarily finishing my function.
+
+        If you call this, you had better call wait_for_my_turn() before trying to do anything
+        else with the ball! This function is primarily useful when you need to start a blocking
+        operation, like trying to grab a mutex that you know won't be available until another
+        player does something.
+        """
+        self._game.pass_to(self, to, wait=False)
+
+    def wait_for_my_turn(self) -> None:
+        """Block until it's my next turn.
+
+        You usually don't need to call this explicitly, unless you called pass_without_waiting.
+        A player's run method isn't called until their first turn, and pass_and_wait calls this
+        internally.
+        """
+        self._game.wait_for_turn(self)
+
     @staticmethod
     def play(
         *players: Type["TurnTaker"],
@@ -167,6 +186,10 @@ class _Game(object):
         # because we'll silently absorb it.
         if self.error:
             raise _AlreadyAborted()
+
+    def wait_for_turn(self, player: Union[str, TurnTaker, Type[TurnTaker]]) -> None:
+        with self.lock:
+            self.wait_for_turn_locked(player)
 
     def pass_to(
         self,

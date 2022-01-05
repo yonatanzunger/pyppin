@@ -1,4 +1,90 @@
-"""A smarter semaphore that can do things like wait for tasks to finish."""
+"""A smarter semaphore that can do things like wait for tasks to finish.
+
+A semaphore is a shared reservior of (integer) capacity.
+
+This is a more sophisticated version of `threading.Semaphore
+<https://docs.python.org/3/library/threading.html#semaphore-objects>`_ and
+`threading.BoundedSemaphore
+<https://docs.python.org/3/library/threading.html#threading.BoundedSemaphore>`_: unlike
+those classes, this class has a ``stop()`` method, which (irreversibly) prevents further
+resource acquisition and blocks until all resources have been released. This lets you do
+things like wait until all tasks have completed! It also generalizes a `threading.Barrier
+<https://docs.python.org/3/library/threading.html#threading.Barrier>`_, since unlike a barrier, you
+don't have to know ahead of time how many tasks need to be waited for.
+
+Basic Usage
+===========
+
+Think of a semaphore as a reservoir of "resource," with some total amount of resource
+(optionally infinity) available. You ``acquire()`` some resource at the start of an
+operation, blocking until that much of the resource is available; when you're done, you
+``release()`` it. This guarantees that you never use more than the available capacity at
+once, which makes this an effective throttling tool. You can also change the total available
+capacity with ``set_capacity()``, and shut down the entire semaphore with ``stop()``.
+
+Because releasing what you've acquired is so important, Semaphore provides two context
+manager API's::
+
+    with semaphore:
+        ... do something ...
+
+    with semaphore.get(amount=N, timeout=X, check=bool) as resource:
+        if resource:
+            ... do something ...
+        else:
+            ... you couldn't get the capacity! ...
+
+The first syntax grabs one unit of resource, blocking indefinitely, and raises an exception
+(BrokenPipeError) if the semaphore somehow got shut down before you could get any. The
+second one is a more flexible syntax that lets you control all of these behaviors; with this
+syntax, you need to check whether the resource was successfully acquired.
+
+This class is thread-safe.
+
+Useful Ways to Use It
+=====================
+One common use is to **limit concurrent use of a resource**, such as an RPC server. In this
+case, you can create a semaphore with some finite capacity, and have each use grab some
+capacity; for example, the program might set ``throttle = Semaphore(5)`` and then have
+each worker thread call::
+
+    with throttle:
+        ... do the expensive operation ...
+
+Another common use is as a way to make sure all tasks have finished in a situation where you
+don't know how many tasks will happen ahead of time -- for example, an RPC server might
+want to enter a "lame-duck" mode where it stops accepting new requests and waits for pending
+ones to finish before shutdown, or a batch job might issue a lot of asynchronous requests
+and want to wait for them to finish (and yield their respective outputs) before ending
+the job. A semaphore with no concurrency limit (``capacity = None``) does the trick nicely:
+simply have every task ``acquire()`` when it starts and ``release()`` when it finishes, and
+when you want to end the job as a whole (stop allowing new requests and wait for existing
+ones to finish), the thread that wants to wait for things to finish simply calls
+``Semaphore.stop()``.
+
+Warning
+=======
+If a code unit (e.g. a thread, or a worker object that can move between threads) acquires some
+units of resource, it **must not** acquire again until it has first released what it
+holds. Otherwise you will get a thread-starvation deadlock,¹ which is notoriously hard to
+catch via static analysis or unittests, and only manifests in production under high load,
+when your program suddenly comes to a halt. If a code flow might need more capacity later,
+acquire the maximum amount of capacity you might need up front.
+
+¹ The exact mechanism: Say a worker holds one unit of capacity, and wants to grab one more
+unit of capacity, do something, then release both. Now imagine that many identical workers
+are active at once, so that the semaphore is at capacity. Every one of the workers could
+release some capacity, allowing things to continue, if it could *just* get one unit of
+capacity -- but there is none, and nobody can release any! The program deadlocks. This is
+especially insidious because the most common reason someone might accidentally do this is if
+workers only *sometimes* need that second unit of capacity. In that case, normally things
+work fine: even if one worker needs an extra unit, some other worker will soon finish its
+task (without needing that) and release capacity. Things only go wrong once there are enough
+workers simultaneously in that special state, which tends to happen in unpredictable
+circumstances but generally at peak traffic, in the middle of the night, or during a
+highly-visible public event. Don't let this happen to you. Release before you acquire.
+"""
+
 
 from contextlib import AbstractContextManager
 from enum import Enum
@@ -9,91 +95,6 @@ from typing import NamedTuple, Optional, Type
 
 
 class Semaphore(object):
-    """A semaphore, aka a shared reservoir of (integer) capacity.
-
-    This is a more sophisticated version of `threading.Semaphore
-    <https://docs.python.org/3/library/threading.html#semaphore-objects>`_ and
-    `threading.BoundedSemaphore
-    <https://docs.python.org/3/library/threading.html#threading.BoundedSemaphore>`_: unlike
-    those classes, this class has a ``stop()`` method, which (irreversibly) prevents further
-    resource acquisition and blocks until all resources have been released. This lets you do
-    things like wait until all tasks have completed!
-
-    Basic Usage
-    ===========
-
-    Think of a semaphore as a reservoir of "resource," with some total amount of resource
-    (optionally infinity) available. You ``acquire()`` some resource at the start of an
-    operation, blocking until that much of the resource is available; when you're done, you
-    ``release()`` it. This guarantees that you never use more than the available capacity at
-    once, which makes this an effective throttling tool. You can also change the total available
-    capacity with ``set_capacity()``, and shut down the entire semaphore with ``stop()``.
-
-    Because releasing what you've acquired is so important, Semaphore provides two context
-    manager API's::
-
-        with semaphore:
-            ... do something ...
-
-        with semaphore.get(amount=N, timeout=X, check=bool) as resource:
-            if resource:
-                ... do something ...
-            else:
-                ... you couldn't get the capacity! ...
-
-    The first syntax grabs one unit of resource, blocking indefinitely, and raises an exception
-    (BrokenPipeError) if the semaphore somehow got shut down before you could get any. The
-    second one is a more flexible syntax that lets you control all of these behaviors; with this
-    syntax, you need to check whether the resource was successfully acquired.
-
-    This class is thread-safe.
-
-    Useful Ways to Use It
-    =====================
-    One common use is to **limit concurrent use of a resource**, such as an RPC server. In this
-    case, you can create a semaphore with some finite capacity, and have each use grab some
-    capacity; for example, the program might set ``throttle = Semaphore(5)`` and then have
-    each worker thread call::
-
-        with throttle:
-            ... do the expensive operation ...
-
-    Another common use is as a way to make sure all tasks have finished in a situation where you
-    don't know how many tasks will happen ahead of time -- for example, an RPC server might
-    want to enter a "lame-duck" mode where it stops accepting new requests and waits for pending
-    ones to finish before shutdown, or a batch job might issue a lot of asynchronous requests
-    and want to wait for them to finish (and yield their respective outputs) before ending
-    the job. A semaphore with no concurrency limit (``capacity = None``) does the trick nicely:
-    simply have every task ``acquire()`` when it starts and ``release()`` when it finishes, and
-    when you want to end the job as a whole (stop allowing new requests and wait for existing
-    ones to finish), the thread that wants to wait for things to finish simply calls
-    ``Semaphore.stop()``. You can think of this use of a semaphore as being like a
-    `threading.Barrier <https://docs.python.org/3/library/threading.html#barrier-objects>`_
-    that doesn't require you to know the number of parties ahead of time.
-
-    Warning
-    =======
-    If a code unit (e.g. a thread, or a worker object that can move between threads) acquires some
-    units of resource, it **must not** acquire again until it has first released what it
-    holds. Otherwise you will get a thread-starvation deadlock,¹ which is notoriously hard to
-    catch via static analysis or unittests, and only manifests in production under high load,
-    when your program suddenly comes to a halt. If a code flow might need more capacity later,
-    acquire the maximum amount of capacity you might need up front.
-
-    ¹ The exact mechanism: Say a worker holds one unit of capacity, and wants to grab one more
-    unit of capacity, do something, then release both. Now imagine that many identical workers
-    are active at once, so that the semaphore is at capacity. Every one of the workers could
-    release some capacity, allowing things to continue, if it could *just* get one unit of
-    capacity -- but there is none, and nobody can release any! The program deadlocks. This is
-    especially insidious because the most common reason someone might accidentally do this is if
-    workers only *sometimes* need that second unit of capacity. In that case, normally things
-    work fine: even if one worker needs an extra unit, some other worker will soon finish its
-    task (without needing that) and release capacity. Things only go wrong once there are enough
-    workers simultaneously in that special state, which tends to happen in unpredictable
-    circumstances but generally at peak traffic, in the middle of the night, or during a
-    highly-visible public event. Don't let this happen to you. Release before you acquire.
-    """
-
     def __init__(self, capacity: Optional[int] = None) -> None:
         """Create a semaphore.
 
@@ -191,6 +192,17 @@ class Semaphore(object):
         elif result == self.AcquireResult.STOPPED:
             raise BrokenPipeError()
 
+    def try_acquire(self, amount: int = 1) -> bool:
+        """Try to acquire without blocking.
+
+        Args:
+            amount: The amount of capacity to acquire.
+
+        Returns:
+            True if the capacity was acquired, false otherwise.
+        """
+        return self.acquire(amount=amount, timeout=0) == self.AcquireResult.SUCCESS
+
     def release(self, amount: int = 1) -> None:
         """Release capacity acquired via ``acquire()``."""
         if amount == 0:
@@ -250,6 +262,7 @@ class Semaphore(object):
         current: int
         stopped: bool
 
+    @property
     def status(self) -> Status:
         """Fetch the current capacity, usage, and stop state."""
         with self._lock:

@@ -142,11 +142,12 @@ def zip_by_key(
         (7, None, "seven"))
 
     What happened here?
+
     * For l1, the key is the square root of the value, and the (default) value is just the
-    element of l1.
+      element of l1.
     * For l2, the key is the first element of the tuple, the yielded value is the
-    second element, and because required=True, all items that don't show up in l2
-    are dropped outright.
+      second element, and because required=True, all items that don't show up in l2
+      are dropped outright.
     * Because l1 *isn't* required, we get one yielded item that has no value for l1!
     """
     # Surprise! We aren't going to use a heap in here. It turns out that this is more efficient if

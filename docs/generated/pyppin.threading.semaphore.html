@@ -46,7 +46,11 @@
 <li class="toctree-l2"><a class="reference internal" href="pyppin.os.html">pyppin.os</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.test.html">pyppin.test</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="pyppin.threading.html">pyppin.threading</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">pyppin.threading.semaphore</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">pyppin.threading.semaphore</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#basic-usage">Basic Usage</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#useful-ways-to-use-it">Useful Ways to Use It</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -83,29 +87,15 @@
   <section id="module-pyppin.threading.semaphore">
 <span id="pyppin-threading-semaphore"></span><h1>pyppin.threading.semaphore<a class="headerlink" href="#module-pyppin.threading.semaphore" title="Permalink to this headline">¶</a></h1>
 <p>A smarter semaphore that can do things like wait for tasks to finish.</p>
-<p class="rubric">Classes</p>
-<table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pyppin.threading.semaphore.Semaphore" title="pyppin.threading.semaphore.Semaphore"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Semaphore</span></code></a>([capacity])</p></td>
-<td><p>A semaphore, aka a shared reservoir of (integer) capacity.</p></td>
-</tr>
-</tbody>
-</table>
-<dl class="py class">
-<dt class="sig sig-object py" id="pyppin.threading.semaphore.Semaphore">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyppin.threading.semaphore.</span></span><span class="sig-name descname"><span class="pre">Semaphore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">capacity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyppin.threading.semaphore.Semaphore" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>A semaphore, aka a shared reservoir of (integer) capacity.</p>
+<p>A semaphore is a shared reservior of (integer) capacity.</p>
 <p>This is a more sophisticated version of <a class="reference external" href="https://docs.python.org/3/library/threading.html#semaphore-objects">threading.Semaphore</a> and
 <a class="reference external" href="https://docs.python.org/3/library/threading.html#threading.BoundedSemaphore">threading.BoundedSemaphore</a>: unlike
 those classes, this class has a <code class="docutils literal notranslate"><span class="pre">stop()</span></code> method, which (irreversibly) prevents further
 resource acquisition and blocks until all resources have been released. This lets you do
-things like wait until all tasks have completed!</p>
-<p class="rubric">Basic Usage</p>
+things like wait until all tasks have completed! It also generalizes a <a class="reference external" href="https://docs.python.org/3/library/threading.html#threading.Barrier">threading.Barrier</a>, since unlike a barrier, you
+don’t have to know ahead of time how many tasks need to be waited for.</p>
+<section id="basic-usage">
+<h2>Basic Usage<a class="headerlink" href="#basic-usage" title="Permalink to this headline">¶</a></h2>
 <p>Think of a semaphore as a reservoir of “resource,” with some total amount of resource
 (optionally infinity) available. You <code class="docutils literal notranslate"><span class="pre">acquire()</span></code> some resource at the start of an
 operation, blocking until that much of the resource is available; when you’re done, you
@@ -129,7 +119,9 @@ manager API’s:</p>
 second one is a more flexible syntax that lets you control all of these behaviors; with this
 syntax, you need to check whether the resource was successfully acquired.</p>
 <p>This class is thread-safe.</p>
-<p class="rubric">Useful Ways to Use It</p>
+</section>
+<section id="useful-ways-to-use-it">
+<h2>Useful Ways to Use It<a class="headerlink" href="#useful-ways-to-use-it" title="Permalink to this headline">¶</a></h2>
 <p>One common use is to <strong>limit concurrent use of a resource</strong>, such as an RPC server. In this
 case, you can create a semaphore with some finite capacity, and have each use grab some
 capacity; for example, the program might set <code class="docutils literal notranslate"><span class="pre">throttle</span> <span class="pre">=</span> <span class="pre">Semaphore(5)</span></code> and then have
@@ -147,9 +139,7 @@ the job. A semaphore with no concurrency limit (<code class="docutils literal no
 simply have every task <code class="docutils literal notranslate"><span class="pre">acquire()</span></code> when it starts and <code class="docutils literal notranslate"><span class="pre">release()</span></code> when it finishes, and
 when you want to end the job as a whole (stop allowing new requests and wait for existing
 ones to finish), the thread that wants to wait for things to finish simply calls
-<code class="docutils literal notranslate"><span class="pre">Semaphore.stop()</span></code>. You can think of this use of a semaphore as being like a
-<a class="reference external" href="https://docs.python.org/3/library/threading.html#barrier-objects">threading.Barrier</a>
-that doesn’t require you to know the number of parties ahead of time.</p>
+<code class="docutils literal notranslate"><span class="pre">Semaphore.stop()</span></code>.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>If a code unit (e.g. a thread, or a worker object that can move between threads) acquires some
@@ -171,6 +161,22 @@ workers simultaneously in that special state, which tends to happen in unpredict
 circumstances but generally at peak traffic, in the middle of the night, or during a
 highly-visible public event. Don’t let this happen to you. Release before you acquire.</p>
 </div>
+<p class="rubric">Classes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pyppin.threading.semaphore.Semaphore" title="pyppin.threading.semaphore.Semaphore"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Semaphore</span></code></a>([capacity])</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyppin.threading.semaphore.Semaphore">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyppin.threading.semaphore.</span></span><span class="sig-name descname"><span class="pre">Semaphore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">capacity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyppin.threading.semaphore.Semaphore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyppin.threading.semaphore.Semaphore.AcquireResult">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AcquireResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyppin.threading.semaphore.Semaphore.AcquireResult" title="Permalink to this definition">¶</a></dt>
@@ -249,6 +255,20 @@ the capacity, return immediately.</p></li>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="pyppin.threading.semaphore.Semaphore.try_acquire">
+<span class="sig-name descname"><span class="pre">try_acquire</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">amount</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pyppin.threading.semaphore.Semaphore.try_acquire" title="Permalink to this definition">¶</a></dt>
+<dd><p>Try to acquire without blocking.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>amount</strong> – The amount of capacity to acquire.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if the capacity was acquired, false otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="pyppin.threading.semaphore.Semaphore.release">
 <span class="sig-name descname"><span class="pre">release</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">amount</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pyppin.threading.semaphore.Semaphore.release" title="Permalink to this definition">¶</a></dt>
 <dd><p>Release capacity acquired via <code class="docutils literal notranslate"><span class="pre">acquire()</span></code>.</p>
@@ -303,9 +323,9 @@ if you reduce the capacity with this mechanism!</p>
 
 </dd></dl>
 
-<dl class="py method">
+<dl class="py property">
 <dt class="sig sig-object py" id="pyppin.threading.semaphore.Semaphore.status">
-<span class="sig-name descname"><span class="pre">status</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pyppin.threading.semaphore.Semaphore.Status" title="pyppin.threading.semaphore.Semaphore.Status"><span class="pre">pyppin.threading.semaphore.Semaphore.Status</span></a></span></span><a class="headerlink" href="#pyppin.threading.semaphore.Semaphore.status" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">status</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pyppin.threading.semaphore.Semaphore.Status" title="pyppin.threading.semaphore.Semaphore.Status"><span class="pre">pyppin.threading.semaphore.Semaphore.Status</span></a></em><a class="headerlink" href="#pyppin.threading.semaphore.Semaphore.status" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fetch the current capacity, usage, and stop state.</p>
 </dd></dl>
 
@@ -353,6 +373,7 @@ a resource with a nonzero status.</p></li>
 
 </dd></dl>
 
+</section>
 </section>
 
 

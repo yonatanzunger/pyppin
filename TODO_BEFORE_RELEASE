@@ -3,15 +3,17 @@ Tasks before release:
 * Create maintainer aliases and repoint code of conduct etc.
 * Clean up documentation ToC etc for aesthetics.
 * Finalize name
-* Decide if we'll release it via Twitter's OSS program!
-* See if Humu is actually interested in open sourcing some of their libraries.
+* Better name for semaphore?
+* Decide on relationship with Twitter
+* Decide on relationship with Humu
+* Create "clean" repo
+* Write up release instructions
+* Wire up CI testing
 
 Other classes to maybe add:
 * threading/
-  * semaphore
   * rate limiter
   * watchdog alarm
-  * resettable bell
   * periodic thread
 * base/
   * lazyimport

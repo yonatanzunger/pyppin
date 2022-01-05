@@ -189,13 +189,15 @@ key 3)</p>
 <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;seven&quot;</span><span class="p">))</span>
 </pre></div>
 </div>
-<p>What happened here?
-* For l1, the key is the square root of the value, and the (default) value is just the
-element of l1.
-* For l2, the key is the first element of the tuple, the yielded value is the
+<p>What happened here?</p>
+<ul class="simple">
+<li><p>For l1, the key is the square root of the value, and the (default) value is just the
+element of l1.</p></li>
+<li><p>For l2, the key is the first element of the tuple, the yielded value is the
 second element, and because required=True, all items that don’t show up in l2
-are dropped outright.
-* Because l1 <em>isn’t</em> required, we get one yielded item that has no value for l1!</p>
+are dropped outright.</p></li>
+<li><p>Because l1 <em>isn’t</em> required, we get one yielded item that has no value for l1!</p></li>
+</ul>
 </dd></dl>
 
 </section>
