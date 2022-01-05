@@ -47,6 +47,9 @@ class TurnTaker(object):
     in the structure of the test itself (e.g., a player exiting without passing while others are
     waiting, or someone trying to act while it isn't their turn) are raised as the exceptions
     indicated below.
+
+    (You can find many examples of how this class is used in `pyppin's own unittests
+    <https://github.com/yonatanzunger/pyppin/tree/master/tests/threading>`_.)
     """
 
     class PlayerExitedWithoutPassing(Exception):

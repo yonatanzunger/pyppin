@@ -47,7 +47,9 @@ def bulk_import(
     Returns:
         A dict of all the modules found.
 
-    Example: Say your repository looks like this::
+    Example
+    =======
+    Say your repository looks like this::
 
         src/
             common/
@@ -62,8 +64,9 @@ def bulk_import(
     Then `all_types.py` might find its `REPO_ROOT` using `__file__`, and call
     ``bulk_import(f'{REPO_ROOT}/impls', root=REPO_ROOT)``. This would load the modules
     `impls.class1`, `impls.class2`, and `impls.foo.class3`. If those classes were (for example)
-    registered using `RegisteredClass`, you would then be able to grab all of them at once, without
-    having to maintain a directory in-code of all the implementations.
+    registered using :class:`~pyppin.base.registered_class.RegisteredClass`, you would then be
+    able to grab all of them at
+    once, without having to maintain a directory in-code of all the implementations.
     """
     if isinstance(path, str):
         path = Path(path)

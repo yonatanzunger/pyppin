@@ -120,7 +120,8 @@ with your repository structure as a whole.</p></li>
 <dd class="field-even"><p>A dict of all the modules found.</p>
 </dd>
 </dl>
-<p>Example: Say your repository looks like this:</p>
+<p class="rubric">Example</p>
+<p>Say your repository looks like this:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">src</span><span class="o">/</span>
     <span class="n">common</span><span class="o">/</span>
         <span class="n">superclass</span><span class="o">.</span><span class="n">py</span>
@@ -135,8 +136,9 @@ with your repository structure as a whole.</p></li>
 <p>Then <cite>all_types.py</cite> might find its <cite>REPO_ROOT</cite> using <cite>__file__</cite>, and call
 <code class="docutils literal notranslate"><span class="pre">bulk_import(f'{REPO_ROOT}/impls',</span> <span class="pre">root=REPO_ROOT)</span></code>. This would load the modules
 <cite>impls.class1</cite>, <cite>impls.class2</cite>, and <cite>impls.foo.class3</cite>. If those classes were (for example)
-registered using <cite>RegisteredClass</cite>, you would then be able to grab all of them at once, without
-having to maintain a directory in-code of all the implementations.</p>
+registered using <a class="reference internal" href="pyppin.base.registered_class.html#pyppin.base.registered_class.RegisteredClass" title="pyppin.base.registered_class.RegisteredClass"><code class="xref py py-class docutils literal notranslate"><span class="pre">RegisteredClass</span></code></a>, you would then be
+able to grab all of them at
+once, without having to maintain a directory in-code of all the implementations.</p>
 </dd></dl>
 
 </section>
