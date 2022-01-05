@@ -27,5 +27,6 @@
    :toctree:
    :recursive:
 
+   pyppin.threading.periodic_task
    pyppin.threading.semaphore
 
