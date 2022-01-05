@@ -1,3 +1,5 @@
+"""Run a function periodically in a background thread."""
+
 import signal
 import sys
 import threading
