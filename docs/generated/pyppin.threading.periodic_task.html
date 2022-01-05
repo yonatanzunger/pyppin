@@ -92,7 +92,7 @@
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#pyppin.threading.periodic_task.PeriodicTask" title="pyppin.threading.periodic_task.PeriodicTask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PeriodicTask</span></code></a>(function, period[, name, ...])</p></td>
-<td><p></p></td>
+<td><p>Execute <code class="docutils literal notranslate"><span class="pre">function()</span></code> at regular intervals in a background thread.</p></td>
 </tr>
 </tbody>
 </table>
@@ -100,6 +100,27 @@
 <dt class="sig sig-object py" id="pyppin.threading.periodic_task.PeriodicTask">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyppin.threading.periodic_task.</span></span><span class="sig-name descname"><span class="pre">PeriodicTask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">function</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime.timedelta</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wait_for_first</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">die_on_exception</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">death_signal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Signals.SIGTERM</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_test_clock</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyppin.threading.periodic_task.PeriodicTask" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">threading.Thread</span></code></p>
+<p>Execute <code class="docutils literal notranslate"><span class="pre">function()</span></code> at regular intervals in a background thread.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>function</strong> – The function to be called.</p></li>
+<li><p><strong>period</strong> – The interval between successive calls to the function, either as a timedelta
+or in seconds. Note that this is measured from the <em>start</em> of one call to the
+<em>start</em> of the next.</p></li>
+<li><p><strong>name</strong> – The name for the thread, defaulting to the function name.</p></li>
+<li><p><strong>wait_for_first</strong> – If true, the constructor will block until the first call to the
+function has finished.</p></li>
+<li><p><strong>die_on_exception</strong> – If function raises an uncaught exception, we will always print
+the stack trace to stderr – but what should we do next? Python doesn’t propagate
+exceptions in child threads to the parent thread. If this flag is False, we do
+nothing, and simply call the function again next time. If it is True, we will
+instead kill the parent process on exception, providing a sort of simulacrum
+of what would have happened had this failed in the main thread.</p></li>
+<li><p><strong>death_signal</strong> – The signal we will use to kill this process if die_on_exception is True.</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyppin.threading.periodic_task.PeriodicTask.set_period">
 <span class="sig-name descname"><span class="pre">set_period</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">period</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime.timedelta</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pyppin.threading.periodic_task.PeriodicTask.set_period" title="Permalink to this definition">¶</a></dt>
@@ -116,11 +137,7 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="pyppin.threading.periodic_task.PeriodicTask.run">
 <span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pyppin.threading.periodic_task.PeriodicTask.run" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method representing the thread’s activity.</p>
-<p>You may override this method in a subclass. The standard run() method
-invokes the callable object passed to the object’s constructor as the
-target argument, if any, with sequential and keyword arguments taken
-from the args and kwargs arguments, respectively.</p>
+<dd><p>Implementation of the periodic thread.</p>
 </dd></dl>
 
 </dd></dl>

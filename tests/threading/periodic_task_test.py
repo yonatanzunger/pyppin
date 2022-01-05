@@ -43,4 +43,6 @@ class PeriodicTaskTest(unittest.TestCase):
         task.cancel()
         self.assertEqual(["Ran at 100", "Ran at 120", "Ran at 145"], ops)
 
+    # TODO test outputs and exceptions -- after file libraries are ready!
     # TODO test set_period
+    # TODO test death signals

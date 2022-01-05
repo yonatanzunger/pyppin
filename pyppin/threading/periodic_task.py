@@ -10,6 +10,25 @@ from typing import Callable, Optional, Union
 
 
 class PeriodicTask(threading.Thread):
+    """Execute ``function()`` at regular intervals in a background thread.
+
+    Args:
+        function: The function to be called.
+        period: The interval between successive calls to the function, either as a timedelta
+            or in seconds. Note that this is measured from the *start* of one call to the
+            *start* of the next.
+        name: The name for the thread, defaulting to the function name.
+        wait_for_first: If true, the constructor will block until the first call to the
+            function has finished.
+        die_on_exception: If function raises an uncaught exception, we will always print
+            the stack trace to stderr -- but what should we do next? Python doesn't propagate
+            exceptions in child threads to the parent thread. If this flag is False, we do
+            nothing, and simply call the function again next time. If it is True, we will
+            instead kill the parent process on exception, providing a sort of simulacrum
+            of what would have happened had this failed in the main thread.
+        death_signal: The signal we will use to kill this process if die_on_exception is True.
+    """
+
     def __init__(
         self,
         function: Callable[[], None],
@@ -20,25 +39,6 @@ class PeriodicTask(threading.Thread):
         death_signal: int = signal.SIGTERM,
         _test_clock: Optional[Callable[[], float]] = None,
     ) -> None:
-        """Execute function() at regular intervals in a background thread.
-
-        Args:
-            function: The function to be called.
-            period: The interval between successive calls to the function, either as a timedelta
-                or in seconds. Note that this is measured from the *start* of one call to the
-                *start* of the next.
-            name: The name for the thread, defaulting to the function name.
-            wait_for_first: If true, the constructor will block until the first call to the
-                function has finished.
-            die_on_exception: If function raises an uncaught exception, we will always print
-                the stack trace to stderr -- but what should we do next? Python doesn't propagate
-                exceptions in child threads to the parent thread. If this flag is False, we do
-                nothing, and simply call the function again next time. If it is True, we will
-                instead kill the parent process on exception, providing a sort of simulacrum
-                of what would have happened had this failed in the main thread.
-            death_signal: The signal we will use to kill this process if die_on_exception is True.
-        """
-
         super().__init__(name=name or getattr(function, "__name__", None), daemon=True)
         self.function = function
         self.die_on_exception = die_on_exception
@@ -88,6 +88,7 @@ class PeriodicTask(threading.Thread):
     # Implementation details
 
     def run(self) -> None:
+        """Implementation of the periodic thread."""
         while True:
             with self.lock:
                 if self.stop:
