@@ -1,7 +1,7 @@
-pyppin.test.turn\_taker
-=======================
+pyppin.testing.turn\_taker
+==========================
 
-.. automodule:: pyppin.test.turn_taker
+.. automodule:: pyppin.testing.turn_taker
 
    
    

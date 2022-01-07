@@ -1,7 +1,7 @@
-﻿pyppin.test
-===========
+﻿pyppin.testing
+==============
 
-.. automodule:: pyppin.test
+.. automodule:: pyppin.testing
 
    
    
@@ -27,6 +27,6 @@
    :toctree:
    :recursive:
 
-   pyppin.test.interact
-   pyppin.test.turn_taker
+   pyppin.testing.interact
+   pyppin.testing.turn_taker
 

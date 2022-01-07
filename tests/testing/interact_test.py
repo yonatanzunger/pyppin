@@ -1,7 +1,7 @@
 import unittest
 from typing import List
 
-from pyppin.test.interact import interact
+from pyppin.testing.interact import interact
 
 global_variable = 1
 

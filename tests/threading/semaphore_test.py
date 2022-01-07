@@ -2,7 +2,7 @@ import threading
 import unittest
 from typing import List
 
-from pyppin.test.turn_taker import TurnTaker
+from pyppin.testing.turn_taker import TurnTaker
 from pyppin.threading.semaphore import Semaphore
 
 

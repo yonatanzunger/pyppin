@@ -1,7 +1,7 @@
-pyppin.test.interact
-====================
+pyppin.testing.interact
+=======================
 
-.. automodule:: pyppin.test.interact
+.. automodule:: pyppin.testing.interact
 
    
    

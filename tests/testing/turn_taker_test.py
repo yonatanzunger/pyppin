@@ -1,7 +1,7 @@
 import unittest
 from typing import List
 
-from pyppin.test.turn_taker import TurnTaker
+from pyppin.testing.turn_taker import TurnTaker
 
 
 class TurnTakerTest(unittest.TestCase):
