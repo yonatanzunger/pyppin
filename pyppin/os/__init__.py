@@ -1,1 +1,1 @@
-"""OS and file utilities."""
+"""OS and directory utilities."""

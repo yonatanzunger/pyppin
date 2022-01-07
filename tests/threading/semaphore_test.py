@@ -146,21 +146,24 @@ class SemaphoreTest(unittest.TestCase):
             "Thread 1 acquired one unit",  # 0
             "Thread 2 failed to acquire",  # 1
             "Thread 3 stops the semaphore",  # 2
-            # Then the next two, intermingled in arbitrary order with the third of them
-            # i.e. sequence 3 4 5, 3 5 4, or 4 5 3
+            # Then the next three, with the fourth one ("Thread 2...") intermingled in
+            # arbitrary order relative to them.
+            # i.e. sequence 3 4 5 6, 3 4 6 5, 3 6 4 5, 6 3 4 5.
             "It became thread 1's turn",
             "Thread 1 released one unit",
+            "The semaphore has stopped",
             "Thread 2 acquire interrupted",
             # And finally this one
-            "The semaphore has stopped",
         ]
         indices = [ops.index(text) for text in expectation]
         if not (
             indices == [0, 1, 2, 3, 4, 5, 6]
-            or indices == [0, 1, 2, 3, 5, 4, 6]
-            or indices == [0, 1, 2, 4, 5, 3, 6]
+            or indices == [0, 1, 2, 3, 4, 6, 5]
+            or indices == [0, 1, 2, 3, 6, 4, 5]
+            or indices == [0, 1, 2, 6, 3, 4, 5]
         ):
             indented = "\n".join(["  " + line for line in ops])
+            print(indices)
             raise AssertionError("Got operations in an unexpected order:\n" + indented)
 
 

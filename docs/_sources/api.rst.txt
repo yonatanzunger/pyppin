@@ -7,6 +7,7 @@ API
 
    pyppin.base
    pyppin.containers
+   pyppin.file
    pyppin.os
    pyppin.test
    pyppin.threading

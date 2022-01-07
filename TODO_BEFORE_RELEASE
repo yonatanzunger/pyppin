@@ -14,10 +14,13 @@ Other classes to maybe add:
 * threading/
   * rate limiter
   * watchdog alarm
+  * periodic task => finish unittest
+  * semaphore => finish unittest (and fix)
 * base/
   * lazyimport
-* os/
-  * StreamingBuffer + memblock
+* file/
+  * File system, mountable system
+    => In another library: GCS, AWS, etc file systems.
 * containers/
   * Ring buffer
 * struct/
