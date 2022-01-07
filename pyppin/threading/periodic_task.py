@@ -6,7 +6,8 @@ import threading
 import time
 import traceback
 from datetime import timedelta
-from typing import Callable, Optional, Union
+from types import TracebackType
+from typing import Callable, Optional, Type, Union
 
 
 class PeriodicTask(threading.Thread):
@@ -27,6 +28,9 @@ class PeriodicTask(threading.Thread):
             instead kill the parent process on exception, providing a sort of simulacrum
             of what would have happened had this failed in the main thread.
         death_signal: The signal we will use to kill this process if die_on_exception is True.
+
+    This class can also be used as a context manager, in which case it will cancel the periodic
+    task once you exit the context.
     """
 
     def __init__(
@@ -83,6 +87,17 @@ class PeriodicTask(threading.Thread):
             self.stop = True
             self.cond.notify()
         self.join()
+
+    def __enter__(self) -> "PeriodicTask":
+        return self
+
+    def __exit__(
+        self,
+        exc_type: Optional[Type[BaseException]],
+        exc_value: Optional[BaseException],
+        tb: Optional[TracebackType],
+    ) -> None:
+        self.cancel()
 
     #######################################################################################
     # Implementation details

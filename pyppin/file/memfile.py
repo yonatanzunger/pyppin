@@ -22,11 +22,16 @@ class MemFile(FileLikeObject):
     """
 
     def __init__(self, name: str = "memfile") -> None:
-        self.name = name
-        self.data = bytearray()
+        self._name = name
+        self._data = bytearray()
 
     def __str__(self) -> str:
-        return self.name
+        return self._name
+
+    @property
+    def bytes(self) -> bytearray:
+        """Raw access to the underlying byte array."""
+        return self._data
 
     @property
     def readable(self) -> bool:
@@ -37,7 +42,7 @@ class MemFile(FileLikeObject):
         return True
 
     def size(self) -> int:
-        return len(self.data)
+        return len(self._data)
 
     def pread(
         self, offset: int, size: int, buffer: Optional[MutableBytesLikeObject] = None
@@ -59,19 +64,19 @@ class MemFile(FileLikeObject):
             buffer = bytearray()
 
         read_size = max(0, min(size, self.size() - offset))
-        buffer[0:read_size] = self.data[offset : offset + read_size]
+        buffer[0:read_size] = self._data[offset : offset + read_size]
         return read_size, buffer
 
     def pwrite(self, offset: int, data: BytesLikeObject) -> int:
         data = memoryview(data).cast("B")
         size = len(data)
-        if offset >= len(self.data):
-            self.data = self.data + bytes(offset - len(self.data)) + data
+        if offset >= len(self._data):
+            self._data = self._data + bytes(offset - len(self._data)) + data
         else:
-            self.data[offset : offset + size] = data
+            self._data[offset : offset + size] = data
         return size
 
     def truncate(self, length: int) -> int:
         if length < self.size():
-            self.data = self.data[:length]
+            self._data = self._data[:length]
         return self.size()
