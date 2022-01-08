@@ -155,7 +155,7 @@ class SemaphoreTest(unittest.TestCase):
             "Thread 2 acquire interrupted",
             # And finally this one
         ]
-        indices = [ops.index(text) for text in expectation]
+        indices = [expectation.index(text) for text in ops]
         if not (
             indices == [0, 1, 2, 3, 4, 5, 6]
             or indices == [0, 1, 2, 3, 4, 6, 5]

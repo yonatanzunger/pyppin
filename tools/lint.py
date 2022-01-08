@@ -63,7 +63,7 @@ class LintableFiles(object):
         return ok
 
 
-if __name__ == "__main__":
+def main() -> None:
     parser = argparse.ArgumentParser("linter")
     parser.add_argument("--fix", action="store_true", help="Fix files in-place")
     parser.add_argument("-v", "--verbose", action="store_true", help="Be verbose")
@@ -91,3 +91,7 @@ if __name__ == "__main__":
 
     if not files.lint(verbose=args.verbose):
         sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()
