@@ -18,7 +18,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="pyppin.threading.semaphore" href="pyppin.threading.semaphore.html" />
+    <link rel="next" title="pyppin.threading.rate_limiter" href="pyppin.threading.rate_limiter.html" />
     <link rel="prev" title="pyppin.threading" href="pyppin.threading.html" /> 
 </head>
 
@@ -44,10 +44,12 @@
 <li class="toctree-l2"><a class="reference internal" href="pyppin.base.html">pyppin.base</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.containers.html">pyppin.containers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.file.html">pyppin.file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyppin.math.html">pyppin.math</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.os.html">pyppin.os</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.testing.html">pyppin.testing</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="pyppin.threading.html">pyppin.threading</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">pyppin.threading.periodic_task</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.threading.rate_limiter.html">pyppin.threading.rate_limiter</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyppin.threading.semaphore.html">pyppin.threading.semaphore</a></li>
 </ul>
 </li>
@@ -122,6 +124,8 @@ of what would have happened had this failed in the main thread.</p></li>
 </ul>
 </dd>
 </dl>
+<p>This class can also be used as a context manager, in which case it will cancel the periodic
+task once you exit the context.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyppin.threading.periodic_task.PeriodicTask.set_period">
 <span class="sig-name descname"><span class="pre">set_period</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">period</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime.timedelta</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pyppin.threading.periodic_task.PeriodicTask.set_period" title="Permalink to this definition">¶</a></dt>
@@ -150,7 +154,7 @@ of what would have happened had this failed in the main thread.</p></li>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="pyppin.threading.html" class="btn btn-neutral float-left" title="pyppin.threading" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="pyppin.threading.semaphore.html" class="btn btn-neutral float-right" title="pyppin.threading.semaphore" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="pyppin.threading.rate_limiter.html" class="btn btn-neutral float-right" title="pyppin.threading.rate_limiter" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

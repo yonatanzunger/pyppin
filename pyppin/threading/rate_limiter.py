@@ -79,10 +79,10 @@ class RateLimiter(object):
                         if next_release <= now:
                             self.previous = now
                             return now
-                        # TODO: Profile whether it would make more sense to call time.sleep(0) for
-                        # sufficiently small intervals. This makes a big difference in C++ where a
-                        # condvar wait is more expensive than sched_yield, but may not matter in
-                        # Python.
+                        # TODO: This underperforms really rapidly. We need to do a calibrate that
+                        # checks the time for spin and yield, and computes the input/output curve
+                        # for cond.wait(). If the numbers are too bad, we'll have to reimplement
+                        # this class in C++.
                         self.cond.wait(timeout=next_release - now)
 
     @property
@@ -97,3 +97,15 @@ class RateLimiter(object):
         with self.inner_lock:
             self.interval = 1.0 / rate if rate > 0 else None
             self.cond.notify()
+
+    @classmethod
+    def calibrate(self) -> None:
+        """Run a calibration to determine the tuning parameters for this machine.
+
+        Without calibration, the rate limiter may underperform at even fairly moderate (30qps)
+        rates. The calibration values will be a function of your Python interpreter, your hardware
+        platform, and pretty much anything else that affects the environment.
+
+        TODO: Add the calibration values as optional c'tor args and use them in wait().
+        """
+        # XXX We're going to need a histogram class to do this, aren't we.

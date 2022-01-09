@@ -17,7 +17,7 @@ def main() -> None:
             main = lint_main
             sys.argv = [sys.argv[0]] + sys.argv[2:]
         elif command == "test":
-            main = test_main
+            main = test_main  # type: ignore
             # Always insert -s when running pytests separately.
             sys.argv = [sys.argv[0], "-s"] + sys.argv[2:]
         else:

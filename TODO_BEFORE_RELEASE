@@ -12,9 +12,8 @@ Tasks before release:
 
 Other classes to maybe add:
 * threading/
-  * rate limiter
+  * rate limiter ==> finish test, once histogram is done.
   * watchdog alarm
-  * semaphore => finish unittest (and fix)
 * base/
   * lazyimport
 * file/
@@ -22,8 +21,9 @@ Other classes to maybe add:
     => In another library: GCS, AWS, etc file systems.
 * containers/
   * Ring buffer
-* struct/
-  * histogram
+* math/
+  * plot_ascii ==> finish tests, labeling function.
+  * histogram  ==> once plot_ascii is done.
   * expression tree
 * text/
   * nowandthen

@@ -28,5 +28,6 @@
    :recursive:
 
    pyppin.threading.periodic_task
+   pyppin.threading.rate_limiter
    pyppin.threading.semaphore
 
