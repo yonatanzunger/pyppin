@@ -48,7 +48,7 @@ class Interpolate(object):
         return left[1] + position * (right[1] - left[1])
 
 
-class Axis(NamedTuple):
+class AxisOptions(NamedTuple):
     """Information about an axis of the plot"""
 
     min: Optional[float] = None
@@ -63,9 +63,10 @@ def plot_ascii(
     data: Callable[[float], float],
     width: int,
     height: int,
-    x_axis: Optional[Axis] = None,
-    y_axis: Optional[Axis] = None,
+    x_axis: Optional[AxisOptions] = None,
+    y_axis: Optional[AxisOptions] = None,
     vfill: bool = False,
+    plot_symbol: str = "#",
 ) -> str:
     """Create an ASCII-art plot of some numerical data.
 
@@ -76,50 +77,60 @@ def plot_ascii(
         x_axis, y_axis: Options for the axes.
         vfill: If True, show a vertical fill (in the style of a bar chart) below each value.
             If False, show the values as points.
+        plot_symbol: The char to use when plotting it.
 
     Returns:
         Beautiful ASCII art.
     """
-    return _PlotInfo(data, width, height, x_axis or Axis(), y_axis or Axis()).plot(
-        vfill
+    canvas = Canvas.for_plot(
+        data, width=width, height=height, x_axis=x_axis, y_axis=y_axis
     )
+    canvas.plot(data, vfill=vfill, symbol=plot_symbol)
+    return canvas.render()
 
 
-#################################################################################################
-# Implementation details
-#
-# We work in three coordinate systems:
-# - Natural coordinates (float) are the X and Y values of the function itself, with the origin
-#   at the lower left.
-# - Image coordinates (int) are pixel positions relative to the image region of the output, i.e.
-#   the sub-box inside the axes, with the origin at the lower left.
-# - Screen coordinates (int) are pixel positions within the full width ⊗ height grid, with the
-#   origin at the upper left.
+class Canvas(object):
+    """A Canvas is an object for drawing ASCII plots.
 
+    It works in terms of three coordinate systems:
+    - Natural coordinates (float) are the X and Y values of the function itself, with the origin
+      at the lower left.
+    - Image coordinates (int) are pixel positions relative to the image region of the output, i.e.
+      the sub-box inside the axes, with the origin at the lower left.
+    - Screen coordinates (int) are pixel positions within the full width ⊗ height grid, with the
+      origin at the upper left.
 
-class _PlotInfo(object):
+    Args:
+        width, height: The dimensions in pixels (ie chars) of the output image.
+        x_range, y_range: The X and Y axis ranges, in natural coordinates.
+        x_labels, y_labels: Optional dicts from natural coordinate to label for the axes.
+
+    If the labels aren't given, they will be inferred. If you want no labels, pass an explicit empty
+    dict.
+    """
+
     def __init__(
         self,
-        data: Callable[[float], float],
         width: int,
         height: int,
-        x_axis: Axis,
-        y_axis: Axis,
+        x_range: Tuple[float, float],
+        y_range: Tuple[float, float],
+        x_labels: Optional[Dict[float, str]] = None,
+        y_labels: Optional[Dict[float, str]] = None,
     ) -> None:
-        self.data = data
         self.width = width
         self.height = height
-        self.xmin, self.xmax, self.ymin, self.ymax = _get_range(
-            data, width, height, x_axis, y_axis
-        )
+        self.xmin, self.xmax = x_range
+        self.ymin, self.ymax = y_range
 
-        print(f"X [{self.xmin}, {self.xmax}) Y [{self.ymin}, {self.ymax})")
+        assert self.xmin < self.xmax
+        assert self.ymin < self.ymax
 
         # Now we need to figure out the labels, which we'll use to compute the dimensions of the
         # image area (i.e., the total area minus the axes) The X-labels are easy: if we have them at
         # all (i.e., unless x_axis.labels was explicitly an empty dict) they take up one vertical
         # pixel, and the axis itself takes up one.
-        has_x_labels = x_axis.labels is None or x_axis.labels
+        has_x_labels = x_labels is None or x_labels
         self.x_axis_height = 2 if has_x_labels else 1
         self.image_height = height - self.x_axis_height
         if self.image_height < 1:
@@ -130,10 +141,10 @@ class _PlotInfo(object):
 
         # Using this, we can build out the set of Y-axis labels. This will be a map from screen
         # Y coordinate to label text.
-        if y_axis.labels is not None:
+        if y_labels is not None:
             self.y_labels = {
                 self.natural_to_screen_y(position): label
-                for position, label in y_axis.labels.items()
+                for position, label in y_labels.items()
                 if position >= self.ymin and position <= self.ymax
             }
         else:
@@ -146,8 +157,6 @@ class _PlotInfo(object):
                 )
                 for position in range(self.image_height - 1, -1, -5)
             }
-
-        print(self.y_labels)
 
         # The display width of the Y-axis labels, including the spacing char if required.
         y_label_width = (
@@ -172,10 +181,10 @@ class _PlotInfo(object):
         # two spaces between the narrowest gap between X values, so we're going to have to iterate a
         # bit.
         # Unlike y_labels, this will be a map from *image* X to value.
-        if x_axis.labels is not None:
+        if x_labels is not None:
             self.x_labels = {
                 self.natural_to_image_x(position): label
-                for position, label in x_axis.labels.items()
+                for position, label in x_labels.items()
                 if position >= self.xmin and position <= self.xmax
             }
         else:
@@ -193,6 +202,37 @@ class _PlotInfo(object):
                 if true_widest_label == widest_x_label:
                     break
                 widest_x_label = true_widest_label
+
+        # And finally, we can create the bitmap object for our image region.
+        self.image = array.array("u", " " * self.image_width * self.image_height)
+
+    @classmethod
+    def for_plot(
+        self,
+        data: Callable[[float], float],
+        width: int,
+        height: int,
+        x_axis: Optional[AxisOptions] = None,
+        y_axis: Optional[AxisOptions] = None,
+    ) -> "Canvas":
+        """Create a Canvas suited to displaying this plot on its own.
+
+        Args:
+            data: The function you are going to plot.
+            width, height: The dimensions of the output canvas.
+            x_axis, y_axis: Per-axis options.
+        """
+        x_axis = x_axis or AxisOptions()
+        y_axis = y_axis or AxisOptions()
+        xmin, xmax, ymin, ymax = _get_range(data, width, height, x_axis, y_axis)
+        return Canvas(
+            width=width,
+            height=height,
+            x_range=(xmin, xmax),
+            y_range=(ymin, ymax),
+            x_labels=x_axis.labels,
+            y_labels=y_axis.labels,
+        )
 
     def natural_to_image_x(self, arg: float) -> int:
         """Convert natural coordinates to image coordinates on the X axis."""
@@ -250,32 +290,36 @@ class _PlotInfo(object):
         """Convert natural coordinates to screen coordinates on the Y axis."""
         return self.image_to_screen_y(self.natural_to_image_y(arg))
 
-    def image_to_index(self, x: int, y: int) -> int:
-        """Convert image coordinates into a bitmap array index."""
-        return y * self.image_width + x
+    def plot(self, data: Callable[[float], float], vfill: bool, symbol: str) -> None:
+        """Add a function plot on top of the canvas.
 
-    def image_row(self, image: array.array, y: int) -> str:
-        """Fetch a row of a bitmap."""
-        start = self.image_to_index(0, y)
-        return image[start : start + self.image_width].tobytes().decode("ascii")
-
-    def plot(self, vfill: bool) -> str:
-        # Compute the output image grid. (Yes, we *could* do this in the opposite order and do
-        # everything in one pass, but it's a real PITA and not worth it.)
-        image = array.array("b", b" " * self.image_width * self.image_height)
+        Args:
+            data: The function to plot.
+            vfill: If true, add vertical "fill" lines (like in a bar graph) below the
+                curve.
+            symbol: The character to use for the plot line.
+        """
+        if len(symbol) != 1:
+            raise ValueError(
+                f'"{symbol}" is not a valid plot symbol; it needs to be one char.'
+            )
 
         for image_x in range(self.image_width):
-            image_y = self.natural_to_image_y(
-                self.data(self.image_to_natural_x(image_x))
-            )
-            # 35 is a hash mark.
+            natural_y = data(self.image_to_natural_x(image_x))
+            # Values that go off the grid
+            if natural_y < self.ymin:
+                continue
+            if natural_y > self.ymax and not vfill:
+                continue
+            image_y = self.natural_to_image_y(max(self.ymax, natural_y))
             if vfill:
                 for y in range(image_y):
-                    image[self.image_to_index(image_x, y)] = 35
+                    self.image[self._image_to_index(image_x, y)] = symbol
             else:
-                image[self.image_to_index(image_x, image_y)] = 35
+                self.image[self._image_to_index(image_x, image_y)] = symbol
 
-        # And now, let's generate our final output.
+    def render(self) -> str:
+        """Actually generate the output plot."""
         output = io.StringIO()
 
         for yscreen in range(self.height):
@@ -289,7 +333,7 @@ class _PlotInfo(object):
                     output.write("|")
 
                 # And now draw the row of the image.
-                output.write(self.image_row(image, self.screen_to_image_y(yscreen)))
+                output.write(self._image_row(self.screen_to_image_y(yscreen)))
 
             elif yscreen == self.image_height:
                 # Draw the X axis itself.
@@ -316,9 +360,22 @@ class _PlotInfo(object):
 
         return output.getvalue()
 
+    def _image_to_index(self, x: int, y: int) -> int:
+        """Convert image coordinates into a bitmap array index."""
+        return y * self.image_width + x
+
+    def _image_row(self, y: int) -> str:
+        """Fetch a row of a bitmap."""
+        start = self._image_to_index(0, y)
+        return self.image[start : start + self.image_width].tounicode()
+
 
 def _get_range(
-    data: Callable[[float], float], width: int, height: int, x_axis: Axis, y_axis: Axis
+    data: Optional[Callable[[float], float]],
+    width: int,
+    height: int,
+    x_axis: AxisOptions,
+    y_axis: AxisOptions,
 ) -> Tuple[float, float, float, float]:
     """Compute the X and Y ranges to plot.
 
@@ -348,9 +405,15 @@ def _get_range(
     # If we still don't have some of the Y-values, we'll have to do a quick evaluation. We don't
     # know exactly how many X pixels we'll have yet, so we'll do it at fairly high resolution to
     # maximize the chance of spotting local maxima.
-    est_ymin, est_ymax = _estimated_yrange(data, xmin, xmax, max(width, 500))
-    ymin = ymin if ymin is not None else est_ymin
-    ymax = ymax if ymax is not None else est_ymax
+    if ymin is None or ymax is None:
+        if data is None:
+            raise ValueError(
+                "No range was given for the Y-axis, and it cannot be derived from the data. "
+                "Please specify explicit values."
+            )
+        est_ymin, est_ymax = _estimated_yrange(data, xmin, xmax, max(width, 500))
+        ymin = ymin if ymin is not None else est_ymin
+        ymax = ymax if ymax is not None else est_ymax
 
     return (
         assert_not_none(xmin),
