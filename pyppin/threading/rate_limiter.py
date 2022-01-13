@@ -108,4 +108,4 @@ class RateLimiter(object):
 
         TODO: Add the calibration values as optional c'tor args and use them in wait().
         """
-        # XXX We're going to need a histogram class to do this, aren't we.
+        # TODO do this with multiple threads as well?

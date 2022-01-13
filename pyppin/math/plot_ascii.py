@@ -1,51 +1,10 @@
 import array
-import bisect
 import io
-from typing import Callable, Dict, List, NamedTuple, Optional, Tuple, Union
+from typing import Callable, Dict, List, NamedTuple, Optional, Tuple
 
 from pyppin.base import assert_not_none
-
-
-class Interpolate(object):
-    """Use this to turn a list or dict of (x, y) tuples into a function."""
-
-    def __init__(
-        self, data: Union[List[Tuple[float, float]], Dict[float, float]]
-    ) -> None:
-        if isinstance(data, dict):
-            self.data = sorted(list(data.items()))
-        else:
-            self.data = sorted(data)
-
-        if self.data:
-            self.xmin = self.data[0][0]
-            self.xmax = self.data[-1][0]
-            self.ymax = self.ymin = self.data[0][1]
-            prev_x = self.xmin
-            for point in self.data[1:]:
-                if prev_x == point[0]:
-                    raise ValueError(
-                        f"Multiple values provided for x={prev_x}; cannot interpolate."
-                    )
-                prev_x = point[0]
-                self.ymin = min(self.ymin, point[1])
-                self.ymax = max(self.ymax, point[1])
-        else:
-            self.xmin = self.xmax = self.ymin = self.ymax = 0.0
-
-    def __call__(self, arg: float) -> float:
-        """Evaluate using linear interpolation."""
-        if arg < self.xmin or arg > self.xmax:
-            raise ValueError(f"Argument {arg} out of range [{self.xmin}, {self.xmax}]")
-        # The index of the first entry with x > arg.
-        gt_index = bisect.bisect_right(self.data, (arg, 0))
-        # This *should* be guaranteed by the range check!
-        assert gt_index > 0 and gt_index < len(self.data)
-        left = self.data[gt_index - 1]
-        right = self.data[gt_index]
-
-        position = (arg - left[0]) / (right[0] - left[0])
-        return left[1] + position * (right[1] - left[1])
+from pyppin.math import cap
+from pyppin.math.functions import FunctionFromSortedData
 
 
 class AxisOptions(NamedTuple):
@@ -104,6 +63,7 @@ class Canvas(object):
         width, height: The dimensions in pixels (ie chars) of the output image.
         x_range, y_range: The X and Y axis ranges, in natural coordinates.
         x_labels, y_labels: Optional dicts from natural coordinate to label for the axes.
+        background: The background symbol for the plot.
 
     If the labels aren't given, they will be inferred. If you want no labels, pass an explicit empty
     dict.
@@ -117,6 +77,7 @@ class Canvas(object):
         y_range: Tuple[float, float],
         x_labels: Optional[Dict[float, str]] = None,
         y_labels: Optional[Dict[float, str]] = None,
+        background: str= ' ',
     ) -> None:
         self.width = width
         self.height = height
@@ -125,6 +86,7 @@ class Canvas(object):
 
         assert self.xmin < self.xmax
         assert self.ymin < self.ymax
+        assert len(background) == 1
 
         # Now we need to figure out the labels, which we'll use to compute the dimensions of the
         # image area (i.e., the total area minus the axes) The X-labels are easy: if we have them at
@@ -204,7 +166,7 @@ class Canvas(object):
                 widest_x_label = true_widest_label
 
         # And finally, we can create the bitmap object for our image region.
-        self.image = array.array("u", " " * self.image_width * self.image_height)
+        self.image = array.array("u", background * self.image_width * self.image_height)
 
     @classmethod
     def for_plot(
@@ -214,6 +176,7 @@ class Canvas(object):
         height: int,
         x_axis: Optional[AxisOptions] = None,
         y_axis: Optional[AxisOptions] = None,
+        background: str = ' ',
     ) -> "Canvas":
         """Create a Canvas suited to displaying this plot on its own.
 
@@ -221,6 +184,7 @@ class Canvas(object):
             data: The function you are going to plot.
             width, height: The dimensions of the output canvas.
             x_axis, y_axis: Per-axis options.
+            background: The background char for the plot.
         """
         x_axis = x_axis or AxisOptions()
         y_axis = y_axis or AxisOptions()
@@ -232,6 +196,7 @@ class Canvas(object):
             y_range=(ymin, ymax),
             x_labels=x_axis.labels,
             y_labels=y_axis.labels,
+            background=background,
         )
 
     def natural_to_image_x(self, arg: float) -> int:
@@ -284,11 +249,18 @@ class Canvas(object):
 
     def natural_to_screen_x(self, arg: float) -> int:
         """Convert natural coordinates to screen coordinates on the X axis."""
-        return self.image_to_screen_x(self.natural_to_screen_x(arg))
+        return self.image_to_screen_x(self.natural_to_image_x(arg))
 
     def natural_to_screen_y(self, arg: float) -> int:
         """Convert natural coordinates to screen coordinates on the Y axis."""
         return self.image_to_screen_y(self.natural_to_image_y(arg))
+
+    def pixel(self, image_x: int, image_y: int) -> str:
+        return self.image[self._image_to_index(image_x, image_y)]
+
+    def set_pixel(self, image_x: int, image_y: int, char: str) -> None:
+        assert len(char) == 1
+        self.image[self._image_to_index(image_x, image_y)] = char
 
     def plot(self, data: Callable[[float], float], vfill: bool, symbol: str) -> None:
         """Add a function plot on top of the canvas.
@@ -305,18 +277,35 @@ class Canvas(object):
             )
 
         for image_x in range(self.image_width):
-            natural_y = data(self.image_to_natural_x(image_x))
+            try:
+                natural_y = data(self.image_to_natural_x(image_x))
+            except ValueError:
+                continue
             # Values that go off the grid
             if natural_y < self.ymin:
                 continue
             if natural_y > self.ymax and not vfill:
                 continue
-            image_y = self.natural_to_image_y(max(self.ymax, natural_y))
+            image_y = self.natural_to_image_y(cap(natural_y, self.ymin, self.ymax))
             if vfill:
                 for y in range(image_y):
                     self.image[self._image_to_index(image_x, y)] = symbol
             else:
                 self.image[self._image_to_index(image_x, image_y)] = symbol
+
+    def scatter_plot(self, data: List[Tuple[float, float]], symbol: str) -> None:
+        """Add a scatter plot of (x, y) pairs."""
+        if len(symbol) != 1:
+            raise ValueError(
+                f'"{symbol}" is not a valid plot symbol; it needs to be one char.'
+            )
+
+        for x, y in data:
+            self.image[
+                self._image_to_index(
+                    self.natural_to_image_x(x), self.natural_to_image_y(y)
+                )
+            ] = symbol
 
     def render(self) -> str:
         """Actually generate the output plot."""
@@ -326,7 +315,7 @@ class Canvas(object):
             if yscreen < self.image_height:
                 # Draw the Y-axis, including its labels.
                 if yscreen in self.y_labels:
-                    output.write(self.y_labels[yscreen])
+                    output.write(self.y_labels[yscreen].rjust(self.y_axis_width - 2))
                     output.write(" +")
                 else:
                     output.write(self.y_axis_padding)
@@ -388,7 +377,7 @@ def _get_range(
 
     # First, let's get the true X range that we want.
     if xmin is None or xmax is None:
-        if not isinstance(data, Interpolate):
+        if not isinstance(data, FunctionFromSortedData):
             raise ValueError(
                 "No range was given for the X-axis, and it cannot be derived from the data. "
                 "Please specify explicit values."
@@ -398,7 +387,7 @@ def _get_range(
 
     # Now let's get the true Y range. We prefer the stuff from the options. If we don't have that
     # and this is interpolated data, fetch from there.
-    if (ymin is None or ymax is None) and isinstance(data, Interpolate):
+    if (ymin is None or ymax is None) and isinstance(data, FunctionFromSortedData):
         ymin = ymin if ymin is not None else data.ymin
         ymax = ymax if ymax is not None else data.ymax
 

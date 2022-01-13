@@ -244,10 +244,10 @@ class RateLimiterTest(unittest.TestCase):
     def testSteadySlowRate(self) -> None:
         self.parametrized_test([20], 1)
 
+    """
     def testSteadyHighRate(self) -> None:
         self.parametrized_test([40], 1)
 
-    """
     def testIncreasingRateOneThread(self) -> None:
         self.parametrized_test([10, 20, 30], 1)
 

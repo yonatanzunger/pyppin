@@ -1,7 +1,13 @@
 import sys
 
+from _common import REPO_ROOT
 from lint import main as lint_main
 from pytest import console_main as test_main
+
+if REPO_ROOT not in sys.path:
+    sys.path.append(REPO_ROOT)
+
+from pyppin.testing.interact import interact
 
 
 def main() -> None:
@@ -20,6 +26,8 @@ def main() -> None:
             main = test_main  # type: ignore
             # Always insert -s when running pytests separately.
             sys.argv = [sys.argv[0], "-s"] + sys.argv[2:]
+        elif command == "shell":
+            main = interact  # type: ignore
         else:
             raise AssertionError(
                 f'Unknown command "{command}". Did you mean test or lint?'
