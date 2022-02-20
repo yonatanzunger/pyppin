@@ -2,6 +2,12 @@ import threading
 import time
 from typing import Optional
 
+from pyppin.threading._rate_limiter_calibration import (
+    WILD_ASS_GUESS,
+    RateLimiterCalibration,
+    calibrate,
+)
+
 
 class RateLimiter(object):
     """A throttle that limits the number of events that happen per unit time, across threads.
@@ -13,9 +19,15 @@ class RateLimiter(object):
 
     Args:
         rate: The initial rate, in events per second.
+        calibration: Optional calibration parameters. Without these, the rate limiter should
+            function up to a rate of about 30, but will start to significantly underperform (i.e.,
+            release from wait()s at a slower rate than you requested) above this. These parameters
+            allow higher performance. See RateLimiter.calibrate() (below) for how to generate these.
     """
 
-    def __init__(self, rate: float = 0) -> None:
+    def __init__(
+        self, rate: float = 0, calibration: Optional[RateLimiterCalibration] = None
+    ) -> None:
         """Construct a rate limiter."""
 
         # IMPLEMENTATION EXPLANATION
@@ -60,6 +72,8 @@ class RateLimiter(object):
         # may expect!)
         self._clock = time.monotonic
 
+        self.calibration = calibration or WILD_ASS_GUESS
+
     def wait(self) -> float:
         """Block until it is safe to proceed.
 
@@ -79,11 +93,12 @@ class RateLimiter(object):
                         if next_release <= now:
                             self.previous = now
                             return now
-                        # TODO: This underperforms really rapidly. We need to do a calibrate that
-                        # checks the time for spin and yield, and computes the input/output curve
-                        # for cond.wait(). If the numbers are too bad, we'll have to reimplement
-                        # this class in C++.
-                        self.cond.wait(timeout=next_release - now)
+                        # The naive thing to do here would be to call self.cond.wait(), but this
+                        # underperforms rather radically for short time intervals; basically, if you
+                        # call that function with a short enough timeout, it will not time out
+                        # nearly as quickly as you might expect from the function signature. So we
+                        # use the calibrated delay function that is generally cleverer.
+                        self.calibration.delay(self.cond, timeout=next_release - now)
 
     @property
     def rate(self) -> float:
@@ -99,13 +114,16 @@ class RateLimiter(object):
             self.cond.notify()
 
     @classmethod
-    def calibrate(self) -> None:
+    def calibrate(self) -> RateLimiterCalibration:
         """Run a calibration to determine the tuning parameters for this machine.
 
         Without calibration, the rate limiter may underperform at even fairly moderate (30qps)
         rates. The calibration values will be a function of your Python interpreter, your hardware
         platform, and pretty much anything else that affects the environment.
 
-        TODO: Add the calibration values as optional c'tor args and use them in wait().
+        This function takes several seconds to run, but its values can be stored and reused for
+        later. Generally speaking, a good "cache key" for this would be a combination of
+        sys.implementation, the OS version, and the particular hardware configuration; any
+        change to one of those will require recalibration.
         """
-        # TODO do this with multiple threads as well?
+        return calibrate()

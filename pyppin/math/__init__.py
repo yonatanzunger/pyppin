@@ -1,4 +1,5 @@
 """Mathematical utilities."""
+from typing import Iterable, Tuple
 
 
 def round_up_to(value: float, multiple_of: float) -> float:
@@ -11,9 +12,15 @@ def round_up_to(value: float, multiple_of: float) -> float:
 
 
 def cap(value: float, min: float, max: float) -> float:
-    if value <= min:
-        return min
-    elif value >= max:
-        return max
-    else:
-        return value
+    """Cap a value to an interval."""
+    return min if value <= min else max if value >= max else value
+
+
+def minmax(data: Iterable[float]) -> Tuple[float, float]:
+    """Return (min, max) of data in one pass."""
+    low = float("inf")
+    hi = -float("inf")
+    for value in data:
+        low = min(low, value)
+        hi = max(hi, value)
+    return low, hi

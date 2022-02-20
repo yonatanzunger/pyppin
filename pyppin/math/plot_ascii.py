@@ -20,8 +20,8 @@ class AxisOptions(NamedTuple):
 
 def plot_ascii(
     data: Callable[[float], float],
-    width: int,
-    height: int,
+    width: int = 100,
+    height: int = 0,
     x_axis: Optional[AxisOptions] = None,
     y_axis: Optional[AxisOptions] = None,
     vfill: bool = False,
@@ -32,7 +32,8 @@ def plot_ascii(
     Args:
         data: The data to be plotted. If you have a list or a dict, use an Interpolate to
             turn it into a function.
-        width, height: The size, in characters, of the output to generate.
+        width, height: The size, in characters, of the output to generate. The height will
+            default to half the width.
         x_axis, y_axis: Options for the axes.
         vfill: If True, show a vertical fill (in the style of a bar chart) below each value.
             If False, show the values as points.
@@ -41,6 +42,7 @@ def plot_ascii(
     Returns:
         Beautiful ASCII art.
     """
+    height = height or width // 2
     canvas = Canvas.for_plot(
         data, width=width, height=height, x_axis=x_axis, y_axis=y_axis
     )
@@ -77,7 +79,7 @@ class Canvas(object):
         y_range: Tuple[float, float],
         x_labels: Optional[Dict[float, str]] = None,
         y_labels: Optional[Dict[float, str]] = None,
-        background: str= ' ',
+        background: str = " ",
     ) -> None:
         self.width = width
         self.height = height
@@ -176,7 +178,7 @@ class Canvas(object):
         height: int,
         x_axis: Optional[AxisOptions] = None,
         y_axis: Optional[AxisOptions] = None,
-        background: str = ' ',
+        background: str = " ",
     ) -> "Canvas":
         """Create a Canvas suited to displaying this plot on its own.
 

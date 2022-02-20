@@ -159,14 +159,23 @@ class Histogram(object):
 
     def plot_ascii(
         self,
-        width: int,
-        height: int,
+        width: int = 100,
+        height: int = 0,
         min_percentile: float = 0,
         max_percentile: float = 100,
-        as_pdf: bool = False,
+        raw_counts: bool = False,
     ) -> str:
+        """Generate an ASCII plot of the histogram.
+
+        Args:
+            width, height: The dimensions of the plot, in characters. The height defaults
+                to half the width.
+            min_percentile, max_percentile: The subrange of the histogram to include.
+            raw_counts: If True, plot the raw bucket counts. If False (the default), plot the
+                probability distribution function.
+        """
         return plot_ascii(
-            data=self.pdf() if as_pdf else self.histogram_values(),
+            data=self.histogram_values() if raw_counts else self.pdf(),
             width=width,
             height=height,
             x_axis=AxisOptions(
