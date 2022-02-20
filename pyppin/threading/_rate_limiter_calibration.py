@@ -67,7 +67,7 @@ class RateLimiterCalibration(NamedTuple):
         """
         if timeout >= self.wait_threshold:
             condition.wait(timeout=timeout)
-        elif timeout > self.yield_threshold:
+        elif timeout >= self.yield_threshold:
             sleep(0)
         # Otherwise spin by simply returning!
 
@@ -80,6 +80,21 @@ class RateLimiterCalibration(NamedTuple):
 
 WILD_ASS_GUESS = RateLimiterCalibration(
     spin_interval=1e-6, yield_threshold=2e-6, wait_threshold=2e-4
+)
+
+# A few special calibrations that we use while doing the calibrations themselves, so that we're
+# testing our "real" delay functions.
+
+_ALWAYS_SPIN = RateLimiterCalibration(
+    spin_interval=0, yield_threshold=1e9, wait_threshold=1e9
+)
+
+_ALWAYS_YIELD = RateLimiterCalibration(
+    spin_interval=0, yield_threshold=0, wait_threshold=1e9
+)
+
+_ALWAYS_WAIT = RateLimiterCalibration(
+    spin_interval=0, yield_threshold=0, wait_threshold=0
 )
 
 
@@ -140,6 +155,7 @@ def calibrate_spin(
         )
     )
     lock = threading.Lock()
+    cond = threading.Condition(lock)
     start = threading.Barrier(num_threads + 1)
 
     def calibrate_spin_thread() -> None:
@@ -151,6 +167,9 @@ def calibrate_spin(
         last = monotonic()
         for run in range(iterations):
             now = monotonic()
+            # Technically we don't need to call delay here, but we do it to simulate reality as
+            # closely as possible.
+            _ALWAYS_SPIN.delay(cond, 0)
             times.append(now - last)
             last = now
 
@@ -186,6 +205,7 @@ def calibrate_yield(
         )
     )
     lock = threading.Lock()
+    cond = threading.Condition(lock)
     start = threading.Barrier(num_threads + 1)
 
     def calibrate_yield_thread() -> None:
@@ -196,7 +216,7 @@ def calibrate_yield(
         start.wait()
         last = monotonic()
         for run in range(iterations):
-            sleep(0)
+            _ALWAYS_YIELD.delay(cond, 0)
             now = monotonic()
             times.append(now - last)
             last = now
@@ -292,8 +312,9 @@ def measure_wait(
                 log_timeout = random.uniform(log_min_duration, log_max_duration)
                 timeout = math.pow(10, log_timeout)
                 before = monotonic()
-                # NB that we are never calling cond.notify, so this will *always* time out.
-                cond.wait(timeout=timeout)
+                # NB that we are never calling cond.notify, so the underlying call to cond.wait()
+                # will *always* time out.
+                _ALWAYS_WAIT.delay(cond, timeout)
                 after = monotonic()
                 result.append((log_timeout, math.log10(after - before)))
 

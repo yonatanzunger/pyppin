@@ -1,14 +1,13 @@
 """A function to import an entire directory; useful with registered classes!"""
 
 import importlib.machinery
-import importlib.util
 import re
 import sys
 from pathlib import Path
 from types import ModuleType
 from typing import Dict, List, Optional, Union
 
-from pyppin.base import assert_not_none
+from pyppin.base.import_file import import_file
 from pyppin.os.list_files import list_files
 
 DEFAULT_EXCLUDE = [
@@ -105,17 +104,6 @@ def bulk_import(
         if verbose:
             print(f"Importing {name} from {file}")
 
-        # cf the documentation of importlib: it's important to insert the module into sys.modules
-        # *before* trying to exec its contents, but you need to clean that up afterwards!
-        spec = assert_not_none(importlib.util.spec_from_file_location(name, file))
-        module = importlib.util.module_from_spec(spec)
-        sys.modules[name] = module
-        found[name] = module
-        try:
-            assert_not_none(spec.loader).exec_module(module)
-        except Exception as e:
-            del sys.modules[name]
-            del found[name]
-            raise ImportError(f"While importing {file}: {e}") from e
+        found[name] = import_file(file, name)
 
     return found

@@ -4,18 +4,30 @@ from _common import REPO_ROOT
 from lint import main as lint_main
 from pytest import console_main as test_main
 
+from pyppin.base.import_file import import_file
+
 if REPO_ROOT not in sys.path:
     sys.path.append(REPO_ROOT)
 
 from pyppin.testing.interact import interact
 
 
+def import_remaining() -> None:
+    for file in sys.argv[2:]:
+        import_file(file)
+
+
 def main() -> None:
     """Main loop for our test harness.
 
-    If no arguments are given, run the tester followed by the linter.
-    If the first argument is either 'test' or 'lint', run just that, with
-    any remaining arguments passed to it.
+    This means that you can do 'tox <cmd>' to do various things in the exact same execution
+    environment that our unittests run, which is often handy.
+
+        tox                   Run the tests and linters (default behavior)
+        tox lint              Just run the linters; remaining arguments go to the linter.
+        tox test              Just run the tests; remaining arguments go to pytest.
+        tox py f1 f2...       Import the given files and stop.
+        tox shell [f1 f2...]  Import the given files then open an interactive shell.
     """
     if len(sys.argv) > 1:
         command = sys.argv[1]
@@ -26,7 +38,10 @@ def main() -> None:
             main = test_main  # type: ignore
             # Always insert -s when running pytests separately.
             sys.argv = [sys.argv[0], "-s"] + sys.argv[2:]
+        elif command == "py":
+            main = import_remaining
         elif command == "shell":
+            import_remaining()
             main = interact  # type: ignore
         else:
             raise AssertionError(

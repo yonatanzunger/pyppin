@@ -124,10 +124,68 @@ class RateLimiterTest(unittest.TestCase):
 
         return result
 
+    def _compute_smoothed_actual_rates(
+        self, events: List[WorkerEvent], smoothing_secs: float
+    ) -> List[RateChangeEvent]:
+        """Like _compute_actual_rates, but rates are smoothed as a moving average over the given
+        number of seconds.
+        """
+        assert smoothing_secs > 0
+
+        if len(events) < 2:
+            return []
+
+        result: List[RateLimiterTest.RateChangeEvent] = []
+        previous = events[0]
+        start = previous.time
+
+        window_start_index = 1
+        window_total_rate = 0.0
+
+        for index, event in enumerate(events[1:], 1):
+            dt = event.time - previous.time
+            rate = 1.0 / dt
+
+            # Add the new rate to the window, and prune off any events that have fallen off the
+            # averaging window.
+            window_total_rate += rate
+
+            window_start_time = event.time - smoothing_secs
+            while events[window_start_index].time < window_start_time:
+                # Get the rate for this event
+                old_dt = (
+                    events[window_start_index].time
+                    - events[window_start_index - 1].time
+                )
+                old_rate = 1.0 / old_dt
+                window_total_rate -= old_rate
+                window_start_index += 1
+
+            window_size = index - window_start_index + 1
+            average_rate = window_total_rate / window_size
+            result.append(
+                RateLimiterTest.RateChangeEvent(
+                    rate=average_rate, time=event.time - start
+                )
+            )
+
+            # Leaving some commented-out print statements because if you ever have a problem with
+            # this test, this is the debug statement you're really going to want.
+            # print(
+            #     f"At {event.time - start} rate {rate}; index {index} window start "
+            #     f"{window_start_index} gives window_total_rate {window_total_rate} avg "
+            #     f"{average_rate}"
+            # )
+
+            previous = event
+
+        return result
+
     def _verify_rates(
         self,
         expected: List[RateChangeEvent],
         actual: List[RateChangeEvent],
+        smoothed: List[RateChangeEvent],
         expected_decay_time: float,
     ) -> Tuple[bool, List[str]]:
         """Check that an actual set of rate changes matched the expectation.
@@ -135,6 +193,7 @@ class RateLimiterTest(unittest.TestCase):
         Return success, list of messages.
         """
         assert len(expected) >= 2
+        assert len(actual) == len(smoothed)
 
         failed = False
         messages: List[str] = []
@@ -152,8 +211,10 @@ class RateLimiterTest(unittest.TestCase):
             f"{window_end:0.2f}"
         )
 
-        for event in actual:
+        for event, smoothed_event in zip(actual, smoothed):
             assert event.rate is not None
+            assert smoothed_event.rate is not None
+            assert event.time == smoothed_event.time
 
             # Check if we need to move to a new window.
             if event.time > window_end:
@@ -188,8 +249,9 @@ class RateLimiterTest(unittest.TestCase):
                         f"At {event.time}: Rate {event.rate:0.2f} exceeded cap of "
                         f"{expected_max:0.2f} by {percent:0.1f}%"
                     )
-                # TODO check for transient undershoots?
             else:
+                # Check for overshoots against the true (unsmoothed) rate, because overshooting even
+                # on a single call to wait() is an error.
                 if event.rate > current_rate:
                     failed = True
                     percent = 100.0 * ((event.rate / current_rate) - 1)
@@ -197,12 +259,13 @@ class RateLimiterTest(unittest.TestCase):
                         f"At {event.time}: Rate {event.rate:0.2f} exceeded cap of "
                         f"{current_rate:0.2f} by {percent:0.1f}%"
                     )
-                # TODO check for undershoot
-                if event.rate < 0.9 * current_rate:
+                # Check for undershoots against the smoothed rate, because we allow occasional
+                # failures that way.
+                if smoothed_event.rate < 0.9 * current_rate:
                     failed = True
-                    percent = 100.0 * (1 - (event.rate / current_rate))
+                    percent = 100.0 * (1 - (smoothed_event.rate / current_rate))
                     messages.append(
-                        f"At {event.time}: Rate {event.rate:0.2f} undershot target of "
+                        f"At {event.time}: Rate {smoothed_event.rate:0.2f} undershot target of "
                         f"{current_rate:0.2f} by {percent:0.1f}%"
                     )
 
@@ -213,6 +276,7 @@ class RateLimiterTest(unittest.TestCase):
         rate: Union[float, List[float]],
         num_threads: int,
         equilibriation_padding_secs: float = 0.5,
+        max_undershot_secs: float = 0.1,
     ) -> None:
         """Run a single test run of the rate limiter.
 
@@ -222,6 +286,9 @@ class RateLimiterTest(unittest.TestCase):
             num_threads: The number of threads to simultaneously wait on the limiter.
             equilibriation_padding_secs: Whenever we change the rate to X, we wait 1/X + this
                 many seconds for the rate to reach equilibrium.
+            max_undershot_secss: The number of seconds over which we do averaging to make sure that
+                undershots we observe are "real." (We only do this for undershots: even a momentary
+                overshot is a true error!)
         """
         if isinstance(rate, float):
             rate = [rate]
@@ -235,8 +302,9 @@ class RateLimiterTest(unittest.TestCase):
         # TODO: Also use times.worker to make fairness checks.
 
         real_rates = self._compute_actual_rates(times)
+        smoothed_rates = self._compute_smoothed_actual_rates(times, max_undershot_secs)
         success, messages = self._verify_rates(
-            rates, real_rates, equilibriation_padding_secs
+            rates, real_rates, smoothed_rates, equilibriation_padding_secs
         )
         if not success:
             raise AssertionError("\n  ".join(messages))
@@ -244,7 +312,13 @@ class RateLimiterTest(unittest.TestCase):
     def testSteadySlowRate(self) -> None:
         self.parametrized_test([20], 1)
 
+    def testSteadyMediumRate(self) -> None:
+        self.parametrized_test([100], 1)
+
+    def testSteadyHighRate(self) -> None:
+        self.parametrized_test([1000], 1)
     """
+
     def testSteadyHighRate(self) -> None:
         self.parametrized_test([40], 1)
 

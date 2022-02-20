@@ -98,7 +98,9 @@ class RateLimiter(object):
                         # call that function with a short enough timeout, it will not time out
                         # nearly as quickly as you might expect from the function signature. So we
                         # use the calibrated delay function that is generally cleverer.
-                        self.calibration.delay(self.cond, timeout=next_release - now)
+                        self.calibration.delay(
+                            self.cond, timeout=RateLimiter._FUDGE_FACTOR * (next_release - now)
+                        )
 
     @property
     def rate(self) -> float:
@@ -127,3 +129,9 @@ class RateLimiter(object):
         change to one of those will require recalibration.
         """
         return calibrate()
+
+    # We delay a bit less than the actual duration we want, because all the delay mechanisms tend to
+    # undershoot by a *bit*. The main loop of wait() will then end up unblocking a few more times
+    # than it needs to (to reduce the rate down to the actual target) but that simply guarantees
+    # that we'll hit our actual targets.
+    _FUDGE_FACTOR = 0.9
