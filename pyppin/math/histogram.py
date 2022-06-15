@@ -83,6 +83,11 @@ class Bucketing(object):
 
 
 class Histogram(object):
+    """A histogram of numeric values.
+
+    Args:
+        bucketing: Parameters to control how values are assigned to buckets.
+    """
     def __init__(self, bucketing: Bucketing = Bucketing()) -> None:
         self.bucketing = bucketing
         self.data: List[int] = []
@@ -94,6 +99,12 @@ class Histogram(object):
         self.min: float = 0
 
     def add(self, value: float, count: int = 1) -> None:
+        """Add a value to the histogram.
+
+        Args:
+            value: The value to add.
+            count: The number of times to add this value.
+        """
         bucket = self.bucketing.bucket(value)
         if bucket >= len(self.data):
             self.data.extend([0] * (bucket - len(self.data) + 1))
@@ -106,6 +117,7 @@ class Histogram(object):
         self.min = min(self.min, value)
 
     def combine(self, other: "Histogram") -> None:
+        """Add another histogram to this histogram."""
         assert self.bucketing == other.bucketing
         if len(self.data) < len(other.data):
             self.data.extend([0] * (len(other.data) - len(self.data)))
@@ -122,6 +134,7 @@ class Histogram(object):
         return self.total / self.count
 
     def percentile(self, n: float) -> float:
+        """Return the value at the Nth percentile of this histogram, with n in [0, 100]."""
         if n <= 0:
             return self.min
         if n >= 100:

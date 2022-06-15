@@ -1,3 +1,4 @@
+import readline  # noqa
 import sys
 
 from _common import REPO_ROOT
@@ -8,8 +9,6 @@ from pyppin.base.import_file import import_file
 
 if REPO_ROOT not in sys.path:
     sys.path.append(REPO_ROOT)
-
-from pyppin.testing.interact import interact
 
 
 def import_remaining() -> None:
@@ -26,8 +25,7 @@ def main() -> None:
         tox                   Run the tests and linters (default behavior)
         tox lint              Just run the linters; remaining arguments go to the linter.
         tox test              Just run the tests; remaining arguments go to pytest.
-        tox py f1 f2...       Import the given files and stop.
-        tox shell [f1 f2...]  Import the given files then open an interactive shell.
+        tox py f1 f2...       Import (ie execute) the given files and stop.
     """
     if len(sys.argv) > 1:
         command = sys.argv[1]
@@ -40,9 +38,6 @@ def main() -> None:
             sys.argv = [sys.argv[0], "-s"] + sys.argv[2:]
         elif command == "py":
             main = import_remaining
-        elif command == "shell":
-            import_remaining()
-            main = interact  # type: ignore
         else:
             raise AssertionError(
                 f'Unknown command "{command}". Did you mean test or lint?'
