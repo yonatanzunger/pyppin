@@ -3,7 +3,7 @@ import math
 import random
 import threading
 from time import monotonic, sleep
-from typing import Any, Callable, List, NamedTuple, Tuple
+from typing import Any, Callable, List, NamedTuple, Optional, Tuple
 
 from pyppin.math import minmax
 from pyppin.math.histogram import Bucketing, Histogram
@@ -59,13 +59,15 @@ class RateLimiterCalibration(NamedTuple):
     wait_threshold: float
     """The threshold duration above which threading.Condition.wait is linear in its argument."""
 
-    def delay(self, condition: threading.Condition, timeout: float) -> None:
+    def delay(self, condition: threading.Condition, timeout: Optional[float]) -> None:
         """Delay for approximately <timeout> seconds, minimizing overshot.
 
         The condition variable must be locked; by default, this function is equivalent to a wait on
         the condition.
         """
-        if timeout >= self.wait_threshold:
+        if timeout is None:
+            condition.wait()
+        elif timeout >= self.wait_threshold:
             condition.wait(timeout=timeout)
         elif timeout >= self.yield_threshold:
             sleep(0)
@@ -85,17 +87,11 @@ WILD_ASS_GUESS = RateLimiterCalibration(
 # A few special calibrations that we use while doing the calibrations themselves, so that we're
 # testing our "real" delay functions.
 
-_ALWAYS_SPIN = RateLimiterCalibration(
-    spin_interval=0, yield_threshold=1e9, wait_threshold=1e9
-)
+_ALWAYS_SPIN = RateLimiterCalibration(spin_interval=0, yield_threshold=1e9, wait_threshold=1e9)
 
-_ALWAYS_YIELD = RateLimiterCalibration(
-    spin_interval=0, yield_threshold=0, wait_threshold=1e9
-)
+_ALWAYS_YIELD = RateLimiterCalibration(spin_interval=0, yield_threshold=0, wait_threshold=1e9)
 
-_ALWAYS_WAIT = RateLimiterCalibration(
-    spin_interval=0, yield_threshold=0, wait_threshold=0
-)
+_ALWAYS_WAIT = RateLimiterCalibration(spin_interval=0, yield_threshold=0, wait_threshold=0)
 
 
 _YIELD_PERCENTILE: float = 90
@@ -140,9 +136,7 @@ def calibrate(verbose: bool = True) -> RateLimiterCalibration:
     )
 
 
-def calibrate_spin(
-    num_threads: int, iterations: int = 500000, verbose: bool = True
-) -> Histogram:
+def calibrate_spin(num_threads: int, iterations: int = 500000, verbose: bool = True) -> Histogram:
     """Calibrate spin locking. Return a histogram in nanoseconds."""
     if verbose:
         print(f"Calibrating spin with {num_threads} threads")
@@ -177,9 +171,7 @@ def calibrate_spin(
             for time in times:
                 result.add(time * 1e9)
 
-    threads = [
-        threading.Thread(target=calibrate_spin_thread) for index in range(num_threads)
-    ]
+    threads = [threading.Thread(target=calibrate_spin_thread) for index in range(num_threads)]
     for thread in threads:
         thread.start()
     start.wait()
@@ -189,14 +181,10 @@ def calibrate_spin(
     return result
 
 
-def calibrate_yield(
-    num_threads: int, iterations: int = 50000, verbose: bool = True
-) -> Histogram:
+def calibrate_yield(num_threads: int, iterations: int = 50000, verbose: bool = True) -> Histogram:
     """Calibrate yields. Return a histogram in microseconds."""
     if verbose:
-        print(
-            f"Calibrating yield with {num_threads} threads and {iterations} iterations/thread"
-        )
+        print(f"Calibrating yield with {num_threads} threads and {iterations} iterations/thread")
     result = Histogram(
         bucketing=Bucketing(
             linear_steps=20,
@@ -225,9 +213,7 @@ def calibrate_yield(
             for time in times:
                 result.add(time * 1e9)
 
-    threads = [
-        threading.Thread(target=calibrate_yield_thread) for index in range(num_threads)
-    ]
+    threads = [threading.Thread(target=calibrate_yield_thread) for index in range(num_threads)]
     for thread in threads:
         thread.start()
     start.wait()
@@ -290,9 +276,7 @@ def measure_wait(
         in seconds.
     """
     if verbose:
-        print(
-            f"Calibrating wait with {num_threads} threads and {iterations} iterations/thread"
-        )
+        print(f"Calibrating wait with {num_threads} threads and {iterations} iterations/thread")
     result: List[Tuple[float, float]] = []
     lock = threading.Lock()
     cond = threading.Condition(lock)
@@ -318,9 +302,7 @@ def measure_wait(
                 after = monotonic()
                 result.append((log_timeout, math.log10(after - before)))
 
-    threads = [
-        threading.Thread(target=calibrate_wait_thread) for index in range(num_threads)
-    ]
+    threads = [threading.Thread(target=calibrate_wait_thread) for index in range(num_threads)]
     for thread in threads:
         thread.start()
     start.wait()
@@ -394,9 +376,7 @@ def min_wait_time(
 
     if verbose:
         for index, effective_sigma in enumerate(sigmas):
-            print(
-                f"Bucket {index} from {index * window_size + xmin}: Sigma {effective_sigma}"
-            )
+            print(f"Bucket {index} from {index * window_size + xmin}: Sigma {effective_sigma}")
         print(f"Noise seems to kick in at 10^{c:0.2f} = {t_critical} sec")
 
     return t_critical

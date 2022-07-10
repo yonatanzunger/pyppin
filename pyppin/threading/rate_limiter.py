@@ -1,7 +1,9 @@
 import threading
-import time
+
+# import time
 from typing import Optional
 
+from pyppin.threading._inner_rate_limiter import MultiLayerRateLimiter
 from pyppin.threading._rate_limiter_calibration import (
     WILD_ASS_GUESS,
     RateLimiterCalibration,
@@ -31,48 +33,42 @@ class RateLimiter(object):
         """Construct a rate limiter."""
 
         # IMPLEMENTATION EXPLANATION
-        # The RateLimiter class has an "inner" and an "outer" part. The inner part works as you
-        # might expect: it has a lock (inner_lock) and condition variable, tracks the interval it
-        # expects between successive events (self.interval) and the time of the most recent event
-        # that happened. In wait(), we simply block on the condition variable until the current time
-        # goes past previous time + interval.
+        # The RateLimiter class has three layers: an inner rate limiter, a multi-layered rate
+        # limiter, and an outer rate limiter.
         #
-        # However, that simple implementation doesn't actually work very well. The problem is
-        # contention: if there are a lot of threads, or a high rate, the mutex is getting a *lot* of
-        # contention. This drives CPU usage through the roof, and causes the rate limiter to
-        # underperform (i.e. release slower than) its intended rate. Worse, it breaks all the
-        # fairness guarantees you usually expect of a waiter or a mutex, because each thread keeps
-        # grabbing and releasing the lock every (short time interval), which effectively randomly
-        # reshuffles the wait order every few microseconds.
+        # The inner rate limiter is the part that works the way you might naively expect. It doesn't
+        # do the completely naive thing of remembering the time of the last wait() event and waiting
+        # for (time + expected interval), because what we want to promise is average performance
+        # over time, and that function would underperform; instead, it splits time into "intervals"
+        # and ensures that no more than N events happen per time window I. In the simple case, N=1
+        # and I=1/rate, but we bound I below and let N increase instead as a way to avoid huge
+        # overloads when I is very small.
         #
-        # All of this is fixed by adding a second layer around it, a second mutex called the
-        # "scheduling lock." Waiters grab the scheduling lock, and are only allowed to grab the
-        # inner lock if they already hold the scheduling lock. This causes the waiters to queue up
-        # on the scheduling lock *without* constantly grabbing and releasing it, so they form a
-        # nice, orderly, low-CPU-usage queue, and only the waiter at the "head of the line" actually
-        # does the regular grab-and-release of the inner lock.
+        # The multi-layered middle phase simply takes a stack of inner rate limiters -- one that
+        # ensures that the rate per time is R, and (if the interval is _coarse_ enough) one that
+        # slices up the interval into subintervals, and ensures that the rate per subinterval is
+        # bounded at the right rate. Otherwise, we'll get all the events per interval clustering
+        # up at artificial interval boundaries, creating a very choppy output.
         #
-        # In a fun bit of nuance, though, this code does *not* use ordinary mutex theory. In
-        # particular, there isn't an ordering relationship sched_lock > inner_lock; the rate and
-        # set_rate functions grab inner_lock directly. They need to do this, because if they had to
-        # wait in the scheduling queue it could take arbitrarily long to change the rate (even
-        # infinitely long, if the rate is currently 0!). This doesn't cause a priority-inversion
-        # deadlock because nobody who holds inner_lock can ever attempt to acquire sched_lock.
+        # The outer layer then optimizes all of this substantially by abusing mutex theory. One
+        # problem with the design of the previous layers is that, if many threads are wanting to
+        # execute, they will all simultaneously be hammering the mutices, and thus burn a lot of CPU
+        # time on contention. But this is silly, because you know that only one of them is going to
+        # go next. So in the outer layer, we add a second mutex called the "scheduling lock."
+        # Waiters grab (i.e. enqueue on) the scheduling lock, and only the one who actually holds
+        # the lock (i.e. the one at the front of the queue) is allowed to call wait() on the next
+        # layer in. This guarantees that there's at most one concurrent call to wait(), and no
+        # thread contention in the inner loop!
+        #
+        # The abuse of mutex theory is that, despite the presence of multiple locks, it is *not*
+        # true that sched_lock > lock; in particular, the set_rate function grabs the inner lock
+        # without touching the schedule lock. They need to do this, because if they had to wait in
+        # the scheduling queue it could literally take forever to execute (if e.g. the current rate
+        # were zero!) This doesn't cause a priority-inversion deadlock because nobody who holds the
+        # inner lock can ever attempt to acquire the scheduling lock.
         self.sched_lock = threading.Lock()
-
-        self.inner_lock = threading.Lock()
-        # The following fields are guarded by self.inner_lock:
-        self.cond = threading.Condition(self.inner_lock)
-        self.interval: Optional[float] = 1.0 / rate if rate > 0 else None
-        self.previous: float = 0
-
-        # This is provided for unittests to inject their own clock. Don't mess with this outside of
-        # the rate limiter test, it is subtle and quick to anger. (Subtle because you can't actually
-        # inject a clock into threading.Condition.wait, so changing this doesn't do what you naively
-        # may expect!)
-        self._clock = time.monotonic
-
-        self.calibration = calibration or WILD_ASS_GUESS
+        self.impl = MultiLayerRateLimiter(calibration or WILD_ASS_GUESS)
+        self.set_rate(rate)
 
     def wait(self) -> float:
         """Block until it is safe to proceed.
@@ -83,37 +79,16 @@ class RateLimiter(object):
         Returns: The time (per the monotonic clock) at which the wait released.
         """
         with self.sched_lock:
-            with self.inner_lock:
-                while True:
-                    if self.interval is None:
-                        self.cond.wait()
-                    else:
-                        next_release = self.previous + self.interval
-                        now = self._clock()
-                        if next_release <= now:
-                            self.previous = now
-                            return now
-                        # The naive thing to do here would be to call self.cond.wait(), but this
-                        # underperforms rather radically for short time intervals; basically, if you
-                        # call that function with a short enough timeout, it will not time out
-                        # nearly as quickly as you might expect from the function signature. So we
-                        # use the calibrated delay function that is generally cleverer.
-                        self.calibration.delay(
-                            self.cond, timeout=RateLimiter._FUDGE_FACTOR * (next_release - now)
-                        )
+            return self.impl.wait()
 
     @property
     def rate(self) -> float:
         """Return the current rate of this throttle."""
-        with self.inner_lock:  # Could actually be a read lock
-            return 1.0 / self.interval if self.interval is not None else 0
+        return self.impl.rate
 
     def set_rate(self, rate: float) -> None:
         """Change the rate of this throttle."""
-        assert rate >= 0
-        with self.inner_lock:
-            self.interval = 1.0 / rate if rate > 0 else None
-            self.cond.notify()
+        self.impl.set_rate(rate)
 
     @classmethod
     def calibrate(self) -> RateLimiterCalibration:
@@ -129,9 +104,3 @@ class RateLimiter(object):
         change to one of those will require recalibration.
         """
         return calibrate()
-
-    # We delay a bit less than the actual duration we want, because all the delay mechanisms tend to
-    # undershoot by a *bit*. The main loop of wait() will then end up unblocking a few more times
-    # than it needs to (to reduce the rate down to the actual target) but that simply guarantees
-    # that we'll hit our actual targets.
-    _FUDGE_FACTOR = 0.9

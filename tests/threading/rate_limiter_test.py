@@ -6,6 +6,13 @@ from typing import List, NamedTuple, Optional, Tuple, Union
 from pyppin.base import assert_not_none
 from pyppin.threading.rate_limiter import RateLimiter
 
+# OK, what's the guarantee that we want to ensure? The underlying idea is that if I set a rate of X,
+# and fire RPC's into something, it won't overload that thing. That thing might have spikiness
+# constraints as well; really, a rate limit constraint on the server is the number of requests it
+# can be dealing with concurrently, which comes from the request service time and parallelism. But
+# you may or may not know those two parameters; instead, what you want is a more or less steady flow
+# of requests, optimally one event every 1/rate seconds.
+
 
 class RateLimiterTest(unittest.TestCase):
     class WorkerEvent(NamedTuple):
@@ -16,9 +23,7 @@ class RateLimiterTest(unittest.TestCase):
         rate: Optional[float]  # None for stop
         time: float
 
-    def _exec_test(
-        self, rates: List[RateChangeEvent], num_threads: int
-    ) -> List[WorkerEvent]:
+    def _exec_test(self, rates: List[RateChangeEvent], num_threads: int) -> List[WorkerEvent]:
         """Execute a single test.
 
         Args:
@@ -47,14 +52,10 @@ class RateLimiterTest(unittest.TestCase):
                 history.append(throttle.wait())
 
             with time_lock:
-                times.extend(
-                    RateLimiterTest.WorkerEvent(time, index) for time in history
-                )
+                times.extend(RateLimiterTest.WorkerEvent(time, index) for time in history)
 
         # Start up the worker threads
-        threads = [
-            threading.Thread(target=worker, args=(num,)) for num in range(num_threads)
-        ]
+        threads = [threading.Thread(target=worker, args=(num,)) for num in range(num_threads)]
         for thread in threads:
             thread.start()
 
@@ -91,9 +92,7 @@ class RateLimiterTest(unittest.TestCase):
 
         return times
 
-    def _rate_change_events(
-        self, rates: List[float], wait_secs: float
-    ) -> List[RateChangeEvent]:
+    def _rate_change_events(self, rates: List[float], wait_secs: float) -> List[RateChangeEvent]:
         """Compute when to set the rate to what."""
         time = 0.0
         previous_interval: Optional[float] = None
@@ -117,9 +116,7 @@ class RateLimiterTest(unittest.TestCase):
         start = previous.time
         for event in events[1:]:
             dt = event.time - previous.time
-            result.append(
-                RateLimiterTest.RateChangeEvent(rate=1.0 / dt, time=event.time - start)
-            )
+            result.append(RateLimiterTest.RateChangeEvent(rate=1.0 / dt, time=event.time - start))
             previous = event
 
         return result
@@ -153,10 +150,7 @@ class RateLimiterTest(unittest.TestCase):
             window_start_time = event.time - smoothing_secs
             while events[window_start_index].time < window_start_time:
                 # Get the rate for this event
-                old_dt = (
-                    events[window_start_index].time
-                    - events[window_start_index - 1].time
-                )
+                old_dt = events[window_start_index].time - events[window_start_index - 1].time
                 old_rate = 1.0 / old_dt
                 window_total_rate -= old_rate
                 window_start_index += 1
@@ -164,9 +158,7 @@ class RateLimiterTest(unittest.TestCase):
             window_size = index - window_start_index + 1
             average_rate = window_total_rate / window_size
             result.append(
-                RateLimiterTest.RateChangeEvent(
-                    rate=average_rate, time=event.time - start
-                )
+                RateLimiterTest.RateChangeEvent(rate=average_rate, time=event.time - start)
             )
 
             # Leaving some commented-out print statements because if you ever have a problem with
@@ -293,9 +285,7 @@ class RateLimiterTest(unittest.TestCase):
         if isinstance(rate, float):
             rate = [rate]
 
-        rates = self._rate_change_events(
-            rate, wait_secs=2 * equilibriation_padding_secs
-        )
+        rates = self._rate_change_events(rate, wait_secs=2 * equilibriation_padding_secs)
         times = self._exec_test(rates, num_threads)
 
         # OK! Now that we've run the test, let's compute rate as a function of time.
@@ -307,6 +297,10 @@ class RateLimiterTest(unittest.TestCase):
             rates, real_rates, smoothed_rates, equilibriation_padding_secs
         )
         if not success:
+            if len(messages) > 20:
+                messages = (
+                    messages[:10] + [f'... {len(messages)-20} more messages...'] + messages[-10:]
+                )
             raise AssertionError("\n  ".join(messages))
 
     def testSteadySlowRate(self) -> None:
@@ -317,6 +311,7 @@ class RateLimiterTest(unittest.TestCase):
 
     def testSteadyHighRate(self) -> None:
         self.parametrized_test([1000], 1)
+
     """
 
     def testSteadyHighRate(self) -> None:

@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 
 from pyppin.threading.rate_limiter import RateLimiter
 
-RATE = 10000
+RATE = 100.0
 DURATION = 2.0
 
 throttle = RateLimiter()
