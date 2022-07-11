@@ -74,7 +74,7 @@ class RateLimiter(object):
         """Block until it is safe to proceed.
 
         It is guaranteed that calls to wait() will unblock at a rate no greater than once every
-        <rate> seconds, even when many threads are calling it.
+        1/<rate> seconds, even when many threads are calling it.
 
         Returns: The time (per the monotonic clock) at which the wait released.
         """
