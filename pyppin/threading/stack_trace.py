@@ -2,13 +2,18 @@ import io
 import sys
 import threading
 import traceback
+from abc import ABC
 from collections import defaultdict
 from enum import Enum
-from types import FrameType, TracebackType
-from typing import Dict, List, NamedTuple, Optional
+from types import FrameType
+from typing import Dict, Iterable, Iterator, List, NamedTuple, Optional
 
 # TODO: Figure out a way to remove "boring" frame lines, like 50 lines in a row inside site packages
 # and Python packages.
+# Maybe group by common _starts_, not just by common full bodies?
+
+# NB: This library is unittested in tests/testing/trace_on_failure_test.py, which also tests the
+# handy unittest wrappers for it.
 
 
 class TraceLineType(Enum):
@@ -26,31 +31,70 @@ class TraceLine(NamedTuple):
     line: str
     line_type: TraceLineType
 
+    def prepend(self, data: str) -> 'TraceLine':
+        return self._replace(line=data + self.line)
+
+    @classmethod
+    def as_trace(
+        cls,
+        lines: Iterable[str],
+        line_type: TraceLineType = TraceLineType.TRACE_LINE,
+        prefix: str = '',
+    ) -> Iterator[str]:
+        for line in lines:
+            yield TraceLine(prefix + line, line_type)
+
+    @classmethod
+    def blank(cls) -> 'TraceLine':
+        return TraceLine('\n', TraceLineType.TRACE_LINE)
+
 
 class ThreadStack(object):
     def __init__(
         self,
-        thread: threading.Thread,
+        thread: Optional[threading.Thread],
         stack: Optional[traceback.StackSummary],
         exception: Optional[Exception],
     ) -> None:
         """A ThreadStack represents a single thread and its stack info.
 
         You generally acquire these objects with functions like all_stacks, below.
+
+        NB that self.exception is going to be a TracebackException object, *not* the original
+        exception, in order to avoid all sorts of exciting reference counting cycles and other
+        things that can make your life unpleasant. Net is that it's safe to keep one of these
+        objects around, you don't need to do magical "dear-gods-delete-this-quickly" magic like with
+        frame objects.
         """
+        # These are public variables, and you can look at them!
         self.thread = thread
         self.stack = stack
-        self.exception = exception
+        self.exception = traceback.TracebackException.from_exception(exception)
+
         self._formatted: Optional[List[TraceLine]] = None
-        self._id: Optional[int] = None
+        self._cluster_id: Optional[int] = None
+
+    @property
+    def thread_unknown(self) -> bool:
+        """Returns true if we don't actually know what thread this is."""
+        return self.thread is not None
 
     @property
     def is_started(self) -> bool:
-        return self.thread.ident is not None
+        """Returns true if the thread is active."""
+        return self.thread is None or self.thread_id is not None
+
+    @property
+    def thread_id(self) -> Optional[int]:
+        return self.thread.ident if self.thread is not None else None
+
+    @property
+    def native_thread_id(self) -> Optional[int]:
+        return self.thread.native_id if self.thread is not None else None
 
     @property
     def is_daemon(self) -> bool:
-        return self.thread.daemon
+        return self.thread and self.thread.daemon
 
     @property
     def formatted(self) -> List[TraceLine]:
@@ -60,19 +104,35 @@ class ThreadStack(object):
         return self._formatted
 
     @property
-    def id(self) -> int:
+    def cluster_id(self) -> int:
         """Returns an int which is distinct if two threads have meaningfully different stack
         traces.
         """
-        if self._id is None:
-            self._id = hash(
+        if self._cluster_id is None:
+            self._cluster_id = hash(
                 tuple(
                     line.line
                     for line in self.formatted
                     if line.line_type in (TraceLineType.TRACE_LINE, TraceLineType.EXCEPTION)
                 )
             )
-        return self._id
+        return self._cluster_id
+
+    @property
+    def name(self) -> str:
+        if self.thread is None:
+            if self.exception is None:
+                return 'Unknown thread'
+            else:
+                return 'Exception thread (can only be tied to an actual thread ID in Python 3.10+)'
+
+        d = 'daemon; ' if self.thread.daemon else ''
+        if self.thread.ident is not None:
+            return (
+                f'Thread "{self.thread.name}" ({d}{self.thread.ident}, TID {self.thread.native_id})'
+            )
+        else:
+            return f'Thread "{self.thread.name}" ({d}not started)'
 
 
 def all_stacks(limit: Optional[int] = None, daemons: bool = True) -> List[ThreadStack]:
@@ -87,7 +147,7 @@ def all_stacks(limit: Optional[int] = None, daemons: bool = True) -> List[Thread
     Returns:
         All the active threads, in no particular order.
     """
-    return _SysState().get_all_stacks(limit=limit, daemons=daemons)
+    return _FrameState.all_stacks(limit=limit, daemons=daemons)
 
 
 def format_stacks(stacks: List[ThreadStack], group: bool = True) -> List[TraceLine]:
@@ -144,128 +204,137 @@ def print_all_stacks(
 # Implementation details begin here
 
 
-# Logic for getting stacks
-class _SysState(object):
-    def __init__(self) -> None:
-        """This is a class that manages actually fetching stack summaries out of Python. It holds a
-        bunch of frame and traceback pointers, which means you should only keep this object alive in
-        a _very_ narrow scope, or you will (a) get bogus results and (b) basically shut down GC. So
-        don't do that. In fact, you shouldn't be invoking this class except via the functions above
-        that use it; there's a reason this thing has an underscore in its name.
-        """
-        self.frames: Dict[int, FrameType] = sys._current_frames()
-        # Dictionary from thread ID to the exception in that thread, if that thread has an
-        # exception.
-        self.exceptions: Dict[int, BaseException] = {}
+class _FrameState(ABC):
+    """This is a class that manages actually fetching stack summaries out of Python. It holds a
+    bunch of frame and traceback pointers, which means you should only keep this object alive in
+    a _very_ narrow scope, or you will (a) get bogus results and (b) basically shut down GC. So
+    don't do that. In fact, you shouldn't be invoking this class except via the functions above
+    that use it; there's a reason this thing has an underscore in its name.
 
-        # The nice, Python 3.10+ way to do this
-        if hasattr(sys, '_current_exceptions'):
-            self.exceptions = sys._current_exceptions()
-        else:
-            # Old Python versions lack this, so we're going to build up the dictionary the hard way.
-            exc_info = sys.exc_info()
-            if exc_info[0] is not None:
-                assert isinstance(exc_info[1], BaseException)
-                assert isinstance(exc_info[2], TracebackType)
-
-                # Figure out which thread contains the exception traceback. Here's the frame where
-                # the exception is going on:
-                # XXX THIS LOGIC IS WRONG -- the thing in self.frames is likely to be in the
-                # exception _handler_, so of course its current frame won't match that of the
-                # exception. How else do we figure out the thread ID in which the exception is
-                # happening??
-                # XXX Possibility: We may need to only use self.exceptions in 3.10, and for earlier
-                # versions, store the exception and its stack frame separately, and print them out
-                # as though they're a separate thread, without any thread title info! That'll mean
-                # making the Thread object in a ThreadStack optional.
-                exc_frame = exc_info[2].tb_frame
-                for ident, frame in self.frames.items():
-                    if frame == exc_frame:
-                        self.exceptions[ident] = exc_info[1]
-                        break
-                else:
-                    # There's an exception, but we can't find the thread it's in??
-                    # TODO print some kind of error here.
-                    sys.stderr.write(
-                        f'Strange: There is an active exception ({exc_info[1]}), but its frame '
-                        f'is nowhere to be found.\n'
-                    )
+    It comes in two variants, because there's a "good" way to do this that produces nice traces, but
+    requires Python 3.10+, and a "lousy" way that works on earlier versions.
+    """
 
     def get_stack(self, thread: threading.Thread, limit: Optional[int]) -> ThreadStack:
+        """Get a ThreadStack for a single thread."""
+        ...
+
+    def get_all_stacks(self, limit: Optional[int], daemons: bool) -> List[ThreadStack]:
+        """Get all the ThreadStacks."""
+        ...
+
+    @staticmethod
+    def all_stacks(limit: Optional[int], daemons: bool) -> List[ThreadStack]:
+        """This is safer than calling make() directly, since it makes sure to avoid refcounting
+        loops. Read https://docs.python.org/3/library/inspect.html#the-interpreter-stack if you're
+        wondering what this is or why. I'm not bothering with a "safe easy-to-use" API for this
+        because this is an internal class for a _reason._
+        """
+        try:
+            state = _FrameState.make()
+            return state.get_all_stacks(limit=limit, daemons=daemons)
+        finally:
+            del state
+
+    @staticmethod
+    def make() -> '_FrameState':
+        return _FrameState310() if hasattr(sys, '_current_exceptions') else _FrameState39()
+
+
+class _FrameState39(_FrameState):
+    """Version that works on Python 3.9 and earlier"""
+
+    def __init__(self) -> None:
+        self.frames: Dict[int, FrameType] = sys._current_frames()
+        # In earlier versions of Python, there's no way to find the thread from an exception, so
+        # instead, # if there is an active exception, we store its exc_info here, and print it
+        # out like a fake "extra" thread -- because there's no way to know which thread it came
+        # from! Sigh.
+        _, self.exception, self.exception_tb = sys.exc_info()
+
+    def get_stack(self, thread: threading.Thread, limit: Optional[int]) -> ThreadStack:
+        # Alas, the exception here is always going to be None, because if there is an exception, we
+        # have no way to tie it to the thread. :(
+        frame: Optional[FrameType] = (
+            self.frames[thread.ident]
+            if thread.ident is not None and thread.ident in self.frames
+            else None
+        )
+
         return ThreadStack(
             thread=thread,
-            stack=self._stack_summary(thread, limit=limit),
-            exception=self._exception(thread),
+            stack=traceback.extract_stack(frame, limit=limit) if frame is not None else None,
+            exception=None,
+        )
+
+    def get_extra_stack(self, limit: Optional[int]) -> Optional[ThreadStack]:
+        """If there's an active exception, and we're in pre-3.10 land, create a fake "extra"
+        stack entry for the exception.
+        """
+        return (
+            ThreadStack(
+                thread=None,
+                stack=None,
+                exception=self.exception,
+            )
+            if self.exception is not None
+            else None
         )
 
     def get_all_stacks(self, limit: Optional[int], daemons: bool) -> List[ThreadStack]:
-        result: Dict[int, ThreadStack] = {}
-        dummy_id = -1
-        for thread in threading.enumerate():
-            if daemons or not thread.daemon:
-                thread_id: int
-                if thread.ident is not None:
-                    thread_id = thread.ident
-                else:
-                    thread_id = dummy_id
-                    dummy_id -= 1
-                result[thread_id] = self.get_stack(thread, limit=limit)
+        result = [
+            self.get_stack(thread, limit=limit)
+            for thread in threading.enumerate()
+            if daemons or not thread.daemon
+        ]
+        extra = self.get_extra_stack(limit)
+        if extra is not None:
+            result.append(extra)
 
-        # If there's any active exceptions, load those as well.
-        for thread_id, exception in self.exceptions.items():
-            # *Replace* the current stack trace of this exception with the exception trace.
-            old_stack = result.get(thread_id, None)
-            if old_stack is None:
-                # TODO print some kind of error here
-                continue
-            result[thread_id] = old_stack._replace(
-                stack=self._exception_stack_summary(exception), exception=exception
-            )
+        return result
 
-        return list(result.values())
 
-    def _stack_summary(
-        self, thread: threading.Thread, limit: Optional[int]
-    ) -> Optional[traceback.StackSummary]:
-        if thread.ident is None or thread.ident not in self.frames:
-            # Unstarted thread or missing stack.
-            return None
-        return traceback.extract_stack(self.frames[thread.ident], limit=limit)
+class _FrameState310(_FrameState):
+    """Version that works on Python 3.10+, and gets exception handling right."""
 
-    def _exception_stack_summary(
-        self, exception: BaseException, limit: Optional[int]
-    ) -> traceback.StackSummary:
-        return traceback.extract_stack(exception.__traceback__.tb_frame, limit=limit)
+    def __init__(self) -> None:
+        self.frames: Dict[int, FrameType] = sys._current_frames()
+        self.exceptions: Dict[int, BaseException] = {
+            thread_id: exc_info[1] for thread_id, exc_info in sys._current_exceptions().items()
+        }
 
-    def _exception(self, thread: threading.Thread) -> Optional[BaseException]:
-        if thread.ident is None:
-            return None
+    def get_stack(self, thread: threading.Thread, limit: Optional[int]) -> ThreadStack:
+        exception = self.exceptions.get(thread.ident, None) if thread.ident is not None else None
+        frame: Optional[FrameType]
+        if exception is not None:
+            # Use the exception's stack frame, not the one where we're executing the stack trace
+            # printer!
+            frame = exception.__traceback__.tb_frame
+        elif thread.ident is not None and thread.ident in self.frames:
+            frame = self.frames[thread.ident]
         else:
-            return self.exceptions.get(thread.ident, None)
+            frame = None
 
+        return ThreadStack(
+            thread=thread,
+            stack=traceback.extract_stack(frame, limit=limit) if frame is not None else None,
+            exception=exception,
+        )
 
-def _get_state() -> _SysState:
-    if hasattr(sys, '_current_exceptions'):
-        return _SysState(frames=sys._current_frames(), exceptions=sys._current_exceptions())
-    else:
-        exc_info = sys.exc_info()
-        return _SysState(frames=sys._current_frames(), exception=exc_info[1], exc_tb=exc_info[2])
+    def get_all_stacks(self, limit: Optional[int], daemons: bool) -> List[ThreadStack]:
+        return [
+            self.get_stack(thread, limit=limit)
+            for thread in threading.enumerate()
+            if daemons or not thread.daemon
+        ]
 
 
 # Logic for turning stacks into lists of TraceLines
 
 
-def _thread_str(thread: threading.Thread) -> str:
-    d = 'daemon; ' if thread.daemon else ''
-    if thread.ident is not None:
-        return f'"{thread.name}" ({d}{thread.ident}, TID {thread.native_id})'
-    else:
-        return f'"{thread.name}" ({d}not started)'
-
-
 def _format_stack(stack: ThreadStack, title: Optional[str] = None) -> List[TraceLine]:
     """Format just this thread into a list of trace lines."""
-    title = title or 'Thread ' + _thread_str(stack.thread)
+    title = title or stack.name
 
     result: List[TraceLine] = []
     result.append(TraceLine(title + '\n', TraceLineType.THREAD_TITLE))
@@ -274,14 +343,19 @@ def _format_stack(stack: ThreadStack, title: Optional[str] = None) -> List[Trace
     if not stack.is_started:
         return result
 
-    if stack.stack is None:
-        result.append(TraceLine('<No stack found>\n', TraceLineType.TRACE_LINE))
+    if stack.stack:
+        result.extend(TraceLine.as_trace(stack.stack.format()))
     else:
-        for line in stack.stack.format():
-            result.append(TraceLine(line, TraceLineType.TRACE_LINE))
+        result.append(TraceLine('<No stack found>\n', TraceLineType.TRACE_LINE))
 
-    if stack.exception is not None:
-        result.append(TraceLine(f'Exception: {stack.exception}\n', TraceLineType.EXCEPTION))
+    if stack.exception:
+        result.append(
+            TraceLine(
+                f'Exception: {stack.exception.exc_type.__name__}: {stack.exception}\n',
+                TraceLineType.EXCEPTION,
+            )
+        )
+        result.extend(TraceLine.as_trace(stack.exception.format()))
 
     return result
 
@@ -294,7 +368,7 @@ def _format_stack_group(stacks: List[ThreadStack]) -> List[TraceLine]:
     assert len(stacks)
     title: Optional[str] = None
     if len(stacks) > 1:
-        first_names = ", ".join(_thread_str(stack.thread) for stack in stacks[:MAX_THREADS_NAMED])
+        first_names = ", ".join(stack.name for stack in stacks[:MAX_THREADS_NAMED])
         title = f'{len(stacks)} Threads: {first_names}'
         if len(stacks) > MAX_THREADS_NAMED:
             title += ' and others'
@@ -305,8 +379,10 @@ def _format_stack_group(stacks: List[ThreadStack]) -> List[TraceLine]:
 ThreadGroup = Dict[int, List[ThreadStack]]
 
 
-def _append_group(result: List[TraceLine], group: ThreadGroup) -> None:
-    for stacks in group.values():
+def _append_group(result: List[TraceLine], group: ThreadGroup, is_first: bool = False) -> None:
+    for index, stacks in enumerate(group.values()):
+        if index or not is_first:
+            result.append(TraceLine.blank())
         result.extend(_format_stack_group(stacks))
 
 
@@ -328,11 +404,11 @@ def _format_and_group(stacks: List[ThreadStack]) -> List[TraceLine]:
         else:
             group = started_non_daemons
 
-        group[stack.id].append(stack)
+        group[stack.cluster_id].append(stack)
 
     # Now let's format the groups. We'll put the special groups at the end.
     result: List[TraceLine] = []
-    _append_group(result, unstarted_threads)
+    _append_group(result, unstarted_threads, is_first=True)
     _append_group(result, started_daemons)
     _append_group(result, started_non_daemons)
     _append_group(result, failing)
@@ -341,7 +417,9 @@ def _format_and_group(stacks: List[ThreadStack]) -> List[TraceLine]:
 
 def _format_without_group(stacks: List[ThreadStack]) -> List[TraceLine]:
     result: List[TraceLine] = []
-    for stack in stacks:
+    for index, stack in enumerate(stacks):
+        if index:
+            result.append(TraceLine.blank())
         result.extend(_format_stack(stack))
     return result
 

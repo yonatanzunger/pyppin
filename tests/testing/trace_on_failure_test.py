@@ -1,5 +1,4 @@
 import io
-import sys
 import unittest
 from typing import Type
 
@@ -21,38 +20,69 @@ def make_test_case(
                 raise ValueError('Failed teardown')
 
         def test_something(self) -> None:
-            sys.__stderr__.write(f'In testSomething: {fail_method}\n')
             if fail_method:
                 raise ValueError('Failed method')
-            raise AssertionError('No')
+            self.fail('Ordinary test case failure')
 
     return SyntheticTestCase
 
 
-def run_test_case(test: Type[unittest.TestCase]) -> unittest.TestResult:
+def run_test_case(test: Type[unittest.TestCase], debug_show_test_result=False) -> None:
+    # You can set debug_show_test_result to True if you want to see the output of all the unittests
+    # on stderr, which is useful when you're debugging the test itself.
     suite = unittest.TestSuite()
     suite.addTest(unittest.TestLoader().loadTestsFromTestCase(test))
-    unittest.TextTestRunner().run(suite)
-    """
-    result = unittest.TestResult()
-    suite.run(result)
-    return result
-    """
+    buffer = None if debug_show_test_result else io.StringIO()
+    unittest.TextTestRunner(stream=buffer).run(suite)
 
 
 class TraceOnFailureTest(unittest.TestCase):
     def setUp(self) -> None:
         self.maxDiff = None
 
-    def testWrappedClass(self) -> None:
+    def testWrappedClassTestRaisesException(self) -> None:
         buffer = io.StringIO()
 
         test_case = trace_on_failure(output=buffer)(make_test_case(fail_method=True))
 
-        print(type(test_case))
-        print(dir(test_case))
-        print(test_case.setUp)
+        run_test_case(test_case)
+        result = buffer.getvalue()
+        self.assertIn('Thread "MainThread"', result)
+        self.assertIn('ValueError: Failed method', result)
+
+    def testWrappedClassTestFails(self) -> None:
+        # When a unittest fails, rather than raises an exception, it shouldn't dump a stack trace.
+        buffer = io.StringIO()
+
+        test_case = trace_on_failure(output=buffer)(make_test_case())
 
         run_test_case(test_case)
         self.assertEqual('', buffer.getvalue())
-        self.assertFalse(True)
+
+    def testWrappedClassFailSetUp(self) -> None:
+        # Test that the wrapper captures failures in test harness methods
+        buffer = io.StringIO()
+
+        test_case = trace_on_failure(output=buffer)(
+            make_test_case(fail_setup=True, fail_method=True)
+        )
+
+        run_test_case(test_case)
+        result = buffer.getvalue()
+        self.assertIn('Thread "MainThread"', result)
+        self.assertIn('ValueError: Failed setup', result)
+        self.assertNotIn('ValueError: Failed method', result)
+
+    def testWrappedFunction(self) -> None:
+        buffer = io.StringIO()
+
+        @trace_on_failure(output=buffer)
+        def failing_function() -> None:
+            raise ValueError('Failed function')
+
+        with self.assertRaises(ValueError):
+            failing_function()
+
+        result = buffer.getvalue()
+        self.assertIn('Thread "MainThread"', result)
+        self.assertIn('ValueError: Failed function', result)
