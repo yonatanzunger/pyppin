@@ -50,13 +50,14 @@ def _decorate_function(
     limit: Optional[int],
     daemons: bool,
     group: bool,
-    exclude: Optional[Type[Exception]] = None,
+    exclude: Optional[Type[BaseException]] = None,
 ) -> Callable:
     @functools.wraps(fn)
     def wrapped(*args, **kwargs):
         try:
             return fn(*args, **kwargs)
         except BaseException as e:
+            print(f'Stop: {e.__class__.__name__}: {e}')
             if exclude is None or not issubclass(type(e), exclude):
                 print_all_stacks(output=output, limit=limit, daemons=daemons, group=group)
             raise

@@ -69,7 +69,9 @@ class ThreadStack(object):
         # These are public variables, and you can look at them!
         self.thread = thread
         self.stack = stack
-        self.exception = traceback.TracebackException.from_exception(exception)
+        self.exception = (
+            traceback.TracebackException.from_exception(exception) if exception else None
+        )
 
         self._formatted: Optional[List[TraceLine]] = None
         self._cluster_id: Optional[int] = None
@@ -459,7 +461,7 @@ NON_TTY_WRAPS = _LineWraps(
 
 TTY_WRAPS = _LineWraps(
     {
-        TraceLineType.THREAD_TITLE: _LineWrap(1),  # Bright
+        TraceLineType.THREAD_TITLE: _LineWrap.color(1),  # Bright
         TraceLineType.TRACE_LINE: _LineWrap(),
         TraceLineType.EXCEPTION: _LineWrap.color(31, 1),  # Red and bright
     }

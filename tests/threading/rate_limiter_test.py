@@ -1,9 +1,11 @@
+import sys
 import threading
 import unittest
 from time import monotonic, sleep
 from typing import List, NamedTuple, Optional, Tuple, Union
 
 from pyppin.base import assert_not_none
+from pyppin.testing.trace_on_failure import trace_on_failure
 from pyppin.threading.rate_limiter import RateLimiter
 
 # OK, what's the guarantee that we want to ensure? The underlying idea is that if I set a rate of X,
@@ -14,6 +16,7 @@ from pyppin.threading.rate_limiter import RateLimiter
 # of requests, optimally one event every 1/rate seconds.
 
 
+@trace_on_failure(output=sys.stdout)
 class RateLimiterTest(unittest.TestCase):
     class WorkerEvent(NamedTuple):
         time: float
@@ -46,6 +49,7 @@ class RateLimiterTest(unittest.TestCase):
             history: List[float] = []
 
             startup.wait()
+
             # Technically there's a racy read here, but since stop is only written once and it
             # doesn't matter if we're late on picking it up, it's fine.
             while not stop:
@@ -284,6 +288,8 @@ class RateLimiterTest(unittest.TestCase):
         """
         if isinstance(rate, float):
             rate = [rate]
+
+        print(f'Starting parametrized test with rates {rate}')
 
         rates = self._rate_change_events(rate, wait_secs=2 * equilibriation_padding_secs)
         times = self._exec_test(rates, num_threads)

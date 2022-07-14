@@ -15,12 +15,13 @@ class InnerRateLimiter(ABC):
     """An abstract class for truly "inner" rate limiters.
 
     These have a more complex API than ordinary rate limiters, splitting their wait function into
-    two calls -- start_wait(), which grabs the lock and does the actual blocking, and finish_wait(),
-    which updates the internal state and releases the lock. These are separate because multi-layer
-    rate limiters need to call them in a nested way: you start_wait on all the limiters, going from
-    coarsest to finest, to get the precise delay you want, and then you finish_wait in reverse
-    order, because it's the timestamp of the _final_ limiter to finish that needs to be used in
-    everyone else's "when did this actually happen" log.
+    two calls:
+        start_wait() does the actual blocking
+        finish_wait() updates the internal state and releases the lock.
+    These are separate because multi-layer rate limiters need to call them in a nested way: you
+    start_wait on all the limiters, from coarsest to finest, to get the precise delay you want, and
+    then you finish_wait in reverse order, because it's the timestamp of the _final_ limiter to
+    finish that needs to be used in everyone else's "when did this actually happen" log.
 
     These functions hold the lock *between* them, so it's the caller's responsibility to ensure that
     every start_wait call is balanced by a finish_wait, even in the presence of exceptions. This is
@@ -43,6 +44,9 @@ class InnerRateLimiter(ABC):
     def finish_wait(self, timestamp: Optional[float]) -> float:
         """Finish the wait operation.
 
+        It must be safe to call this function, even if start_wait was not called before. (That's
+        because start_wait could be interrupted in arbitrarily messy ways)
+
         Args:
             timestamp: Either the timestamp (as returned by start_wait or CLOCK) at which the
             operation actually was permitted, or None to indicate that the wait operation failed and
@@ -57,6 +61,7 @@ class InnerRateLimiter(ABC):
         """A complete "wait", in case it's ever needed."""
         when: Optional[float] = None
         try:
+            self.acquire()
             when = self.start_wait()
         finally:
             self.finish_wait(when)
@@ -97,7 +102,7 @@ class DelayRateLimiter(InnerRateLimiter):
                 self.calibration.delay(self.attn, None)
             else:
                 now = CLOCK()
-                delay = now - (self.last_release + self.inverse_rate)
+                delay = (self.last_release + self.inverse_rate) - now
                 if delay <= 0:
                     return now
                 self.calibration.delay(self.attn, delay)
@@ -106,7 +111,10 @@ class DelayRateLimiter(InnerRateLimiter):
         # assert self.lock.locked()
         if timestamp is not None:
             self.last_release = timestamp
-        self.lock.release()
+        try:
+            self.lock.release()
+        except RuntimeError:
+            pass  # Don't freak out if the lock wasn't held.
 
     def set_rate(self, rate: float) -> None:
         assert rate >= 0
@@ -212,11 +220,12 @@ class IntervalRateLimiter(InnerRateLimiter):
     def finish_wait(self, timestamp: Optional[float]) -> float:
         # A None value of timestamp means we aborted.
         # assert self.lock.locked()
+        if timestamp is not None:
+            self.times.append(timestamp)
         try:
-            if timestamp is not None:
-                self.times.append(timestamp)
-        finally:
             self.lock.release()
+        except RuntimeError:
+            pass  # Don't freak out if the lock wasn't held.
 
     def _prune_times(self, now: float) -> Optional[float]:
         """Prune all no-longer-relevant elements of self.times. (i.e. events before threshold)
@@ -292,7 +301,7 @@ class MultiLayerRateLimiter(object):
                 # further throttling -- the outer interval on its own suffices for that. So we
                 # increase the rate as we go deeper, so that successive limiters don't actually
                 # slow down the operation of anything further out by accident.
-                # rate *= 1.05
+                rate *= 1.05
 
             elif isinstance(limiter, DelayRateLimiter):
                 # If we get here, we were having counts > 1 at all the coarser rate limiters, so
@@ -314,13 +323,9 @@ class MultiLayerRateLimiter(object):
         count_locked = 0
         try:
             for limiter in self.limiters[: self.num_in_use]:
-                count_locked += 1
                 timestamp = limiter.start_wait()
-        except BaseException:
-            for limiter in reversed(self.limiters[:count_locked]):
-                limiter.finish_wait(None)
-            raise
-        else:
+                count_locked += 1
+        finally:
             for limiter in reversed(self.limiters[: self.num_in_use]):
                 limiter.finish_wait(timestamp)
 
