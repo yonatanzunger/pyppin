@@ -4,8 +4,6 @@ Tasks before release:
 * Clean up documentation ToC etc for aesthetics.
 * Finalize name
 * Better name for semaphore?
-* Decide on relationship with Twitter
-* Decide on relationship with Humu
 * Create "clean" repo
 * Write up release instructions
 * Wire up CI testing
@@ -14,15 +12,12 @@ Other classes to maybe add:
 * threading/
   * rate limiter ==> finish test, once histogram is done.
   * watchdog alarm
-* base/
-  * lazyimport
 * file/
   * File system, mountable system
     => In another library: GCS, AWS, etc file systems.
 * containers/
   * Ring buffer
 * math/
-  * histogram  ==> once plot_ascii is done.
   * expression tree
 * text/
   * plot_ascii ==> finish tests, labeling function.
