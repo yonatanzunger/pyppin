@@ -96,6 +96,8 @@ from typing import (
     Union,
 )
 
+from pyppin.base.flex_decorator import flex_decorator
+
 ValueType = TypeVar("ValueType")
 KeyType = TypeVar("KeyType")
 
@@ -105,9 +107,7 @@ WrappedFunctionType = Callable[..., ValueType]
 # The types you can pass in order to select the cache and its lock when decorating a method or a
 # bare function, respectively.
 MethodCacheArgument = Union[CacheType, Type[CacheType], str, None]
-MethodLockArgument = Union[
-    AbstractContextManager, Type[AbstractContextManager], bool, str
-]
+MethodLockArgument = Union[AbstractContextManager, Type[AbstractContextManager], bool, str]
 FunctionCacheArgument = Union[CacheType, Type[CacheType], None]
 FunctionLockArgument = Union[AbstractContextManager, Type[AbstractContextManager], bool]
 
@@ -144,9 +144,7 @@ class CacheFlags(NamedTuple):
                 elif lower == "w":
                     write = False
                 else:
-                    raise ValueError(
-                        f'Unexpected character "{char}" in cache skip argument'
-                    )
+                    raise ValueError(f'Unexpected character "{char}" in cache skip argument')
             return CacheFlags(read=read, write=write)
         else:
             raise TypeError(f'Bogus cache skip argument "{arg}"')
@@ -167,59 +165,59 @@ class ExplicitKeyNeeded(Exception):
     pass
 
 
+@flex_decorator
 def cachemethod(
+    function: WrappedFunctionType,
+    *,
     cache: MethodCacheArgument = dict,
     lock: MethodLockArgument = False,
     key: Optional[Callable[..., KeyType]] = None,
     cache_exceptions: bool = False,
     **kwargs: Any,
-) -> Callable[[WrappedFunctionType], "_WrappedDescriptor"]:
+) -> '_WrappedDescriptor':
     """A decorator to memoize (cache) the results of a class or instance method."""
 
-    def wrapper(function: WrappedFunctionType) -> _WrappedDescriptor:
-        # Our wrapper function will return a non-data descriptor whose __get__ returns a callable
-        # object, rather than a function. This way, when you invoke __get__ on it, it can capture
-        # the thing on which the descriptor is being called (self or the class or whatever) and
-        # curry that as a "zeroth argument" for all the underlying function calls. NB that Python
-        # would do this automatically if we just returned a function, but then we couldn't implement
-        # things like incache()! (That mechanism doesn't work for other callables; cf the discussion
-        # of instance methods in https://docs.python.org/3/reference/datamodel.html)
-        return _WrappedDescriptor(
-            _CacheCore(
-                function=function,
-                cache=cache,
-                lock=lock,
-                key=key or _default_method_cache_key,
-                cache_exceptions=cache_exceptions,
-                **kwargs,
-            )
+    # Our wrapper function will return a non-data descriptor whose __get__ returns a callable
+    # object, rather than a function. This way, when you invoke __get__ on it, it can capture
+    # the thing on which the descriptor is being called (self or the class or whatever) and
+    # curry that as a "zeroth argument" for all the underlying function calls. NB that Python
+    # would do this automatically if we just returned a function, but then we couldn't implement
+    # things like incache()! (That mechanism doesn't work for other callables; cf the discussion
+    # of instance methods in https://docs.python.org/3/reference/datamodel.html)
+    return _WrappedDescriptor(
+        _CacheCore(
+            function=function,
+            cache=cache,
+            lock=lock,
+            key=key or _default_method_cache_key,
+            cache_exceptions=cache_exceptions,
+            **kwargs,
         )
+    )
 
-    return wrapper
 
-
+@flex_decorator
 def cache(
+    function: WrappedFunctionType,
+    *,
     cache: FunctionCacheArgument = dict,
     lock: FunctionLockArgument = False,
     key: Optional[Callable[..., KeyType]] = None,
     cache_exceptions: bool = False,
     **kwargs: Any,
-) -> Callable[[WrappedFunctionType], "_WrappedFunction"]:
+) -> '_WrappedFunction':
     """A decorator to memoize (cache) the results of a function call."""
 
-    def wrapper(function: WrappedFunctionType) -> _WrappedFunction:
-        return _WrappedFunction(
-            _CacheCore(
-                function=function,
-                cache=cache,
-                lock=lock,
-                key=key or _default_function_cache_key,
-                cache_exceptions=cache_exceptions,
-                **kwargs,
-            )
+    return _WrappedFunction(
+        _CacheCore(
+            function=function,
+            cache=cache,
+            lock=lock,
+            key=key or _default_function_cache_key,
+            cache_exceptions=cache_exceptions,
+            **kwargs,
         )
-
-    return wrapper
+    )
 
 
 ##################################################################################################
@@ -398,9 +396,7 @@ class _WrappedMethod(object):
         self.core = core
         self.instance = instance
 
-    def __call__(
-        self, *args: Any, _skip: CacheSkipArgument = None, **kwargs: Any
-    ) -> ValueType:
+    def __call__(self, *args: Any, _skip: CacheSkipArgument = None, **kwargs: Any) -> ValueType:
         # Note how we curry self.wrappedSelf as a fake "argument zero," just like if this were a
         # true instance method. We do this manually (rather than having Python do it) so that
         # WrappedMethod can implement more than just __call__ -- the built-in trick only works
@@ -436,9 +432,7 @@ class _WrappedFunction(object):
         self.core = core
         functools.update_wrapper(self, core.function)
 
-    def __call__(
-        self, *args: Any, _skip: CacheSkipArgument = None, **kwargs: Any
-    ) -> ValueType:
+    def __call__(self, *args: Any, _skip: CacheSkipArgument = None, **kwargs: Any) -> ValueType:
         return self.core.invoke(_skip, *args, **kwargs)
 
     def incache(self, *args: Any, **kwargs: Any) -> bool:

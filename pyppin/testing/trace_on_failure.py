@@ -4,10 +4,14 @@ import itertools
 import unittest
 from typing import Callable, Optional, Type, Union
 
+from pyppin.base.flex_decorator import flex_decorator
 from pyppin.threading.stack_trace import print_all_stacks
 
 
+@flex_decorator
 def trace_on_failure(
+    target: Union[Callable, Type[unittest.TestCase]],
+    *,
     output: Optional[io.TextIOBase] = None,
     limit: Optional[int] = None,
     daemons: bool = True,
@@ -25,23 +29,17 @@ def trace_on_failure(
         exclude_assertion_failures: If this decorator is applied to a TestCase, then it will
             only print stack traces on exceptions, not on assertion failures from within the test.
     """
-
-    def _decorate(target: Union[Callable, Type[unittest.TestCase]]):
-        if isinstance(target, type) and issubclass(target, unittest.TestCase):
-            return _decorate_test_case(
-                target,
-                output=output,
-                limit=limit,
-                daemons=daemons,
-                group=group,
-                exclude_assertion_failures=exclude_assertion_failures,
-            )
-        else:
-            return _decorate_function(
-                target, output=output, daemons=daemons, group=group, limit=limit
-            )
-
-    return _decorate
+    if isinstance(target, type) and issubclass(target, unittest.TestCase):
+        return _decorate_test_case(
+            target,
+            output=output,
+            limit=limit,
+            daemons=daemons,
+            group=group,
+            exclude_assertion_failures=exclude_assertion_failures,
+        )
+    else:
+        return _decorate_function(target, output=output, daemons=daemons, group=group, limit=limit)
 
 
 def _decorate_function(

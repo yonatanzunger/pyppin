@@ -37,7 +37,7 @@ class MemoizedClass(object):
 function_call_count = 0
 
 
-@cache()
+@cache
 def function_with_type_cache(arg: str) -> str:
     global function_call_count
     function_call_count += 1

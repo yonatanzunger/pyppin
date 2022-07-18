@@ -61,7 +61,6 @@ class InnerRateLimiter(ABC):
         """A complete "wait", in case it's ever needed."""
         when: Optional[float] = None
         try:
-            self.acquire()
             when = self.start_wait()
         finally:
             self.finish_wait(when)
@@ -210,6 +209,8 @@ class IntervalRateLimiter(InnerRateLimiter):
             now = CLOCK()
             next_release = self._prune_times(now)
 
+            # self.times now contains the events that have happened within the past interval.
+
             if len(self.times) < self.count:
                 return now
             else:
@@ -228,12 +229,18 @@ class IntervalRateLimiter(InnerRateLimiter):
             pass  # Don't freak out if the lock wasn't held.
 
     def _prune_times(self, now: float) -> Optional[float]:
-        """Prune all no-longer-relevant elements of self.times. (i.e. events before threshold)
+        """Prune all elements of self.times which happened outside our current interval.
 
-        Return the next value of 'now' at which this function will do something nontrivial, or None
-        if it will never do so until something external changes.
-
-        Requires self.lock to be held.
+        Preconditions:
+            self.lock is held
+        Postconditions:
+            self.lock is held
+            self.times contains exactly the release events which happened during the current
+                interval window.
+        Returns:
+            The next value of 'now' at which this function will do something nontrivial if
+            none of the interval parameters or self.times change, or None if this function
+            will _only_ do something nontrivial if that happens.
         """
         if not self.times:
             return None
@@ -279,10 +286,24 @@ class MultiLayerRateLimiter(object):
     def set_rate(self, rate: float) -> None:
         """Change the rate of this throttle."""
         assert rate >= 0
-        original_rate = rate
+        # original_rate = rate
 
         self.num_in_use = 0
 
+        # XXX Change this.
+        # We want the outer interval limiter to be at a rate of <count> per <interval>
+        # The innermost interval limiter to be at a rate of 1 per <interval / count>
+        # Let's start out stupid. This logic never overshoots, but can undershoot.
+        self.limiters[0].set_rate(rate)
+        if self.limiters[0].count > 1:
+            self.num_in_use = 2
+            self.limiters[1]._set_interval_and_count(
+                self.limiters[0].interval / self.limiters[0].count, 1
+            )
+        else:
+            self.num_in_use = 1
+
+        """
         for index, limiter in enumerate(self.limiters):
             self.num_in_use += 1
             if isinstance(limiter, IntervalRateLimiter):
@@ -311,6 +332,7 @@ class MultiLayerRateLimiter(object):
                     f'Rate layer {index}: Rate {original_rate} means delay {limiter.inverse_rate} '
                     f'calc rate {limiter.rate}'
                 )
+        """
 
         print(f'Using {self.num_in_use} layers')
 

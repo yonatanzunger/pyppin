@@ -1,3 +1,23 @@
+"""A library to dump stack traces from *all* threads, not just the current one.
+
+The simple API to this library is the function print_all_stacks(), which does what it says on the
+tin. This is very useful for debugging things like deadlocks. Another useful API is in
+pyppin.testing.trace_on_failure_test, which is an annotation you can stick on functions, methods,
+and entire unittest cases to print all stacks whenever there's an uncaught exception. (NB that
+includes a KeyboardInterrupt, so you can ctrl-C out of a deadlock and see what's going on!)
+
+There are fancier API's in this library if you want to do things like actually examine the stacks
+and programmatically manipulate them.
+
+Notice: In Python <=3.9, exceptions will be printed after the stack trace, because there's no way to
+tie an exception to which thread it happened in. In Python 3.10+, this is fixed. (If this becomes an
+issue, there *is* a way to fix it, it's just a lot of work and hopefully people will just move to
+3.10 before it's needed)
+
+Warning: The non-public methods in this library are non-public for a reason; they are subtle and
+quick to anger. Do not mess with them unless you understand Python's GC system quite well.
+"""
+
 import io
 import sys
 import threading
@@ -8,12 +28,32 @@ from enum import Enum
 from types import FrameType
 from typing import Dict, Iterable, Iterator, List, NamedTuple, Optional
 
-# TODO: Figure out a way to remove "boring" frame lines, like 50 lines in a row inside site packages
-# and Python packages.
-# Maybe group by common _starts_, not just by common full bodies?
-
 # NB: This library is unittested in tests/testing/trace_on_failure_test.py, which also tests the
 # handy unittest wrappers for it.
+
+#################################################################################################
+# The basic API. Most users only need this.
+
+
+def print_all_stacks(
+    output: Optional[io.TextIOBase] = None,
+    limit: Optional[int] = None,
+    daemons: bool = True,
+    group: bool = True,
+) -> None:
+    """Print the stack traces of all active threads.
+
+    Args:
+        output: Where to write the output; defaults to stderr.
+        limit: As the argument to all_stacks.
+        daemons: Whether to include daemon threads.
+        group: If True, group together threads with identical traces.
+    """
+    print_stacks(all_stacks(limit=limit, daemons=daemons), output=output, group=group)
+
+
+#################################################################################################
+# More advanced API's, if you want to muck with the stack traces yourself
 
 
 class TraceLineType(Enum):
@@ -183,23 +223,6 @@ def print_stacks(
         group: If True, group together threads with identical traces.
     """
     print_trace(format_stacks(stacks, group=group), output=output)
-
-
-def print_all_stacks(
-    output: Optional[io.TextIOBase] = None,
-    limit: Optional[int] = None,
-    daemons: bool = True,
-    group: bool = True,
-) -> None:
-    """Print the stack traces of all active threads.
-
-    Args:
-        output: Where to write the output; defaults to stderr.
-        limit: As the argument to all_stacks.
-        daemons: Whether to include daemon threads.
-        group: If True, group together threads with identical traces.
-    """
-    print_stacks(all_stacks(limit=limit, daemons=daemons), output=output, group=group)
 
 
 #################################################################################################
@@ -451,7 +474,7 @@ class _LineWraps(object):
         return self.data[line.line_type].wrap(line.line)
 
 
-NON_TTY_WRAPS = _LineWraps(
+_NON_TTY_WRAPS = _LineWraps(
     {
         TraceLineType.THREAD_TITLE: _LineWrap(),
         TraceLineType.TRACE_LINE: _LineWrap(),
@@ -459,7 +482,7 @@ NON_TTY_WRAPS = _LineWraps(
     }
 )
 
-TTY_WRAPS = _LineWraps(
+_TTY_WRAPS = _LineWraps(
     {
         TraceLineType.THREAD_TITLE: _LineWrap.color(1),  # Bright
         TraceLineType.TRACE_LINE: _LineWrap(),
@@ -470,6 +493,6 @@ TTY_WRAPS = _LineWraps(
 
 def _write(file: io.TextIOBase, trace: List[TraceLine]) -> None:
     """Write a trace, nicely formatted, to a file."""
-    wraps = TTY_WRAPS if file.isatty() else NON_TTY_WRAPS
+    wraps = _TTY_WRAPS if file.isatty() else _NON_TTY_WRAPS
     for entry in trace:
         file.write(wraps.wrap(entry))

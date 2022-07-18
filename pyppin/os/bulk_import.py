@@ -35,7 +35,7 @@ def bulk_import(
 
     Args:
         path: The file or directory path from which to start the import.
-        recursive: If true, recurse into directories.
+        recursive: If true, recurse into subdirectories.
         exclude: A list of filename regexps (not globs!) to skip.
         verbose: If true, print when we import things.
         root: If given, modules will be named as dotted components starting from this
@@ -64,8 +64,8 @@ def bulk_import(
     ``bulk_import(f'{REPO_ROOT}/impls', root=REPO_ROOT)``. This would load the modules
     `impls.class1`, `impls.class2`, and `impls.foo.class3`. If those classes were (for example)
     registered using :class:`~pyppin.base.registered_class.RegisteredClass`, you would then be
-    able to grab all of them at
-    once, without having to maintain a directory in-code of all the implementations.
+    able to grab all of them at once, without having to maintain a directory in-code of all the
+    implementations.
     """
     if isinstance(path, str):
         path = Path(path)

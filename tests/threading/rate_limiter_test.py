@@ -1,4 +1,3 @@
-import sys
 import threading
 import unittest
 from time import monotonic, sleep
@@ -16,7 +15,9 @@ from pyppin.threading.rate_limiter import RateLimiter
 # of requests, optimally one event every 1/rate seconds.
 
 
-@trace_on_failure(output=sys.stdout)
+# If things go wrong here, they're often going to involve deadlocks. That makes trace_on_failure
+# very handy.
+@trace_on_failure()
 class RateLimiterTest(unittest.TestCase):
     class WorkerEvent(NamedTuple):
         time: float
