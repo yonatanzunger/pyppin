@@ -2,6 +2,7 @@ import math
 import unittest
 
 from pyppin.text.si_prefix import Mode, si_prefix
+from pyppin.text.sign import Sign
 
 
 class SIPrefixTest(unittest.TestCase):
@@ -31,7 +32,8 @@ class SIPrefixTest(unittest.TestCase):
         self.assertEqual('-1.1M', si_prefix(-1.1e6, threshold=1.05, precision=1))
         self.assertEqual('-1.2E+29', si_prefix(-1.23e29))
 
-        self.assertEqual('+1.2k', si_prefix(1210, precision=1, sign=True))
+        self.assertEqual('+1.2k', si_prefix(1210, precision=1, sign=Sign.POSITIVE_AND_NEGATIVE))
+        self.assertEqual(' 1.2k', si_prefix(1210, precision=1, sign=Sign.SPACE_FOR_POSITIVE))
 
     def test_positive_prefix_binary(self) -> None:
         self.assertEqual('0', si_prefix(0, mode=Mode.BINARY))

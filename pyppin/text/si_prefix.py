@@ -2,6 +2,8 @@ import math
 from enum import Enum
 from typing import Union
 
+from pyppin.text.sign import Sign, format_sign
+
 
 class Mode(Enum):
     DECIMAL = 0
@@ -15,7 +17,7 @@ def si_prefix(
     threshold: float = 1.1,
     precision: int = 1,
     ascii_only: bool = False,
-    sign: bool = False,
+    sign: Sign = Sign.NEGATIVE_ONLY,
 ) -> str:
     """Format a number as a string, using SI (système internationale) prefixes. For example,
     turn 1,234,567 into 1.2M.
@@ -34,10 +36,31 @@ def si_prefix(
         ascii_only: If False, then "micro" will be denoted with μ, as per the standard. If True,
             we use the ASCII letter u instead; this is important for some legacy environments
             that can't support Unicode.
-        sign: If True, then we will prepend a + sign for positive numbers.
+        sign: The sign convention we should use when formatting the value.
 
     Returns:
-        A string formatting the indicated number, with a following optional suffix.
+        A string representation of this number, using SI prefixes.
+
+    *** IMPORTANT NOTE ABOUT MODES ***
+    Very nasty things, including physical objects crashing into each other at high speeds, have come
+    from miscommunication about decimal versus binary prefixes! The IEC prefixes are an attempt to
+    remedy this, by using 'ki', 'Mi', etc., for binary prefixes, and 'k', 'M', etc., for decimal
+    ones, but these prefixes are only in sporadic use, possibly because the associated word forms
+    ('kibi', 'mebi', etc) sound profoundly silly. However, they are very clear!
+
+    In general, if you are unsure which to use:
+
+        * Physical quantities, including times, should ALWAYS use decimal SI prefixes.
+        * Network bandwidths are always expressed (surprise!) in *decimal*. 1Mbps = 1000000 bits per
+          second, not 1048576!
+        * Storage quantities in RAM and SSD should use binary or IEC prefixes.
+        * Storage quantities on spinning disks are historically specified in weird made-up units,
+          e.g. 1MB = 1024000 bytes. This is an artifact of disk manufacturers trying to make their
+          capacities sound higher without *technically* making false or misleading statements that
+          could get them sued. If you are _expressing_ storage quantities, always use binary or IEC
+          prefixes; if you are _parsing_ storage quantities provided to you by a manufacturer,
+          don't, measure directly instead; those numbers do not have a well-defined meaning, even if
+          they seem to use SI prefixes.
     """
     assert threshold != 0
     assert precision >= 0
@@ -45,18 +68,19 @@ def si_prefix(
     # Special cases
     if value == 0:
         return "0"
-    elif not math.isfinite(value):
-        if sign and value > 0:
-            return '+' + str(value)
-        else:
-            return str(value)
+    elif math.isnan(value):
+        return str(value)
 
-    # Normalize signs
+    # Normalize to a positive value
     if value < 0:
-        sign = '-'
+        is_negative = True
         value = -value
     else:
-        sign = '+' if sign else ''
+        is_negative = False
+
+    # The other special case: infinity!
+    if not math.isfinite(value):
+        return format_sign(str(value), sign, is_negative)
 
     base = 1000 if mode == Mode.DECIMAL else 1024
     # log_value == log base 1k of the value.
@@ -77,10 +101,10 @@ def si_prefix(
     # If index is zero, then we have no suffix at all!
     if index == 0:
         if isinstance(value, int):
-            return sign + str(value)
+            return format_sign(str(value), sign, is_negative)
         else:
             format_string = f'%0.{precision}f'
-            return sign + format_string % value
+            return format_sign(format_string % value, sign, is_negative)
 
     # Otherwise, pick the array and turn index into a real array index.
     if index > 0:
@@ -92,13 +116,13 @@ def si_prefix(
 
     # Overflow: If the number is too big for an SI prefix! Switch to exponential notation.
     if index >= len(array):
-        return sign + _exponential_notation(value, mode, precision)
+        return format_sign(_exponential_notation(value, mode, precision), sign, is_negative)
 
     # Normal case
     reduced = math.pow(base, delta)
     suffix = _IEC_SUFFIX if mode == Mode.IEC else ''
     format_string = f'%0.{precision}f'
-    return f'{sign}{format_string % reduced}{array[index]}{suffix}'
+    return format_sign(f'{format_string % reduced}{array[index]}{suffix}', sign, is_negative)
 
 
 def _exponential_notation(value: float, mode: Mode, precision: int) -> str:

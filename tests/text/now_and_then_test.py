@@ -1,26 +1,28 @@
 import unittest
 from datetime import datetime, timedelta
 
-from pyppin.text.now_and_then import LONG_FORMAT, now_and_then, time_delta_string
+from pyppin.text.now_and_then import LONG_FORMAT, now_and_then, relative_time_string
 
 
 class NowAndThenTest(unittest.TestCase):
-    def test_time_delta_string(self) -> None:
-        self.assertEqual('110.0msec from now', time_delta_string(timedelta(seconds=0.11)))
-        self.assertEqual('12.1 seconds ago', time_delta_string(timedelta(seconds=-12.1)))
-        self.assertEqual('0:43:14 from now', time_delta_string(timedelta(minutes=43, seconds=14)))
+    def test_relative_time_string(self) -> None:
+        self.assertEqual('110.0msec from now', relative_time_string(timedelta(seconds=0.11)))
+        self.assertEqual('12.1 seconds ago', relative_time_string(timedelta(seconds=-12.1)))
         self.assertEqual(
-            '3 days, 4:25:00 ago', time_delta_string(-timedelta(days=3, hours=4, minutes=25))
+            '0:43:14 from now', relative_time_string(timedelta(minutes=43, seconds=14))
+        )
+        self.assertEqual(
+            '3 days, 4:25:00 ago', relative_time_string(-timedelta(days=3, hours=4, minutes=25))
         )
         # Remember that a Gregorian year isn't an integer number of days! It's 365.2425 days.
         self.assertEqual(
             '12 years, 17 days, 7:29:36 from now',
-            time_delta_string(timedelta(days=4400, hours=5, minutes=20)),
+            relative_time_string(timedelta(days=4400, hours=5, minutes=20)),
         )
         # But Julian years are precisely 365.25 days.
         self.assertEqual(
             '12 years, 17 days, 5:20:00 ago',
-            time_delta_string(-timedelta(days=4400, hours=5, minutes=20), julian=True),
+            relative_time_string(-timedelta(days=4400, hours=5, minutes=20), julian=True),
         )
 
     def test_now_and_then(self) -> None:

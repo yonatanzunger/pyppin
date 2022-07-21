@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 from typing import List, Optional, Tuple
 
 from pyppin.text.si_prefix import si_prefix
+from pyppin.text.sign import Sign, format_sign
 
 
 def now_and_then(
@@ -30,7 +31,7 @@ def now_and_then(
     if now is None:
         now = datetime.now(tz=then.tzinfo)
     then_str = then.isoformat() if format is None else then.strftime(format)
-    return f'{then_str} ({time_delta_string(then - now, julian=julian)})'
+    return f'{then_str} ({relative_time_string(then - now, julian=julian)})'
 
 
 # A couple of handy values to pass for the format in now_and_then.
@@ -40,7 +41,7 @@ LOCAL_DATE_ONLY = '%x'
 LOCAL_TIME_ONLY = '%X'
 
 
-def time_delta_string(delta: timedelta, julian: bool = False) -> str:
+def relative_time_string(delta: timedelta, julian: bool = False) -> str:
     """Express a time delta in words, e.g. "15 seconds ago" or "3 years from now."
 
     Args:
@@ -48,18 +49,27 @@ def time_delta_string(delta: timedelta, julian: bool = False) -> str:
         julian: If True, use Julian (astronomical) years; otherwise, use Gregorian years.
     """
     if delta < _ZERO:
-        return _time_delta_string(-delta, julian=julian) + " ago"
+        return time_delta_string(-delta, julian=julian) + " ago"
     elif delta > _ZERO:
-        return _time_delta_string(delta, julian=julian) + " from now"
+        return time_delta_string(delta, julian=julian) + " from now"
     else:
         return "Now"
 
 
-def _time_delta_string(delta: timedelta, julian: bool = False) -> str:
-    """Like time_delta_string, but only for positive values."""
-    if delta <= _ZERO:
-        raise ValueError('time_delta_string only accepts strictly positive values')
+def time_delta_string(
+    delta: timedelta, julian: bool = False, sign_mode: Sign = Sign.NEGATIVE_ONLY
+) -> str:
+    """Like relative_time_string, but using a sign_mode (-, +, etc) instead of "ago" etc."""
+    if delta < _ZERO:
+        negative = True
+        delta = -delta
+    else:
+        negative = False
 
+    return format_sign(_time_delta_string(delta, julian), sign_mode=sign_mode, is_negative=negative)
+
+
+def _time_delta_string(delta: timedelta, julian: bool) -> str:
     interval = delta.total_seconds()
 
     if interval <= 1:
