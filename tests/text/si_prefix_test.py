@@ -15,6 +15,7 @@ class SIPrefixTest(unittest.TestCase):
         self.assertEqual('1100k', si_prefix(1.1e6, threshold=1.15, precision=0))
         self.assertEqual('1.1M', si_prefix(1.1e6, threshold=1.05, precision=1))
         self.assertEqual('1.2E+29', si_prefix(1.23e29))
+        self.assertEqual('1.2 giga', si_prefix(1.2e9, full_names=True))
 
     def test_negative_prefix_decimal(self) -> None:
         self.assertEqual('100.0m', si_prefix(0.1))
@@ -22,6 +23,7 @@ class SIPrefixTest(unittest.TestCase):
         self.assertEqual('1100μ', si_prefix(1.1e-3, threshold=1.2, precision=0))
         self.assertEqual('1100u', si_prefix(1.1e-3, threshold=1.2, precision=0, ascii_only=True))
         self.assertEqual('1.2E-29', si_prefix(1.23e-29))
+        self.assertEqual('1.2 atto', si_prefix(1.2e-18, full_names=True))
 
     def test_signed_value_decimal(self) -> None:
         self.assertEqual('-100', si_prefix(-100))
@@ -46,8 +48,12 @@ class SIPrefixTest(unittest.TestCase):
     def test_positive_prefix_iec(self) -> None:
         self.assertEqual('0', si_prefix(0, mode=Mode.IEC))
         self.assertEqual('100', si_prefix(100, mode=Mode.IEC))
-        self.assertEqual('1.09ki', si_prefix(1120, mode=Mode.IEC, threshold=1.05, precision=2))
+        self.assertEqual('1.09Ki', si_prefix(1120, mode=Mode.IEC, threshold=1.05, precision=2))
         self.assertEqual('1.2*2^90', si_prefix(1.2 * math.pow(2, 90), mode=Mode.IEC))
+
+    def test_negative_prefix_iec(self) -> None:
+        self.assertEqual('1.3μi', si_prefix(1.2e-6, mode=Mode.IEC))
+        self.assertEqual('1.3*2^-20', si_prefix(1.2e-6, mode=Mode.IEC, full_names=True))
 
     def test_negative_prefix_binary(self) -> None:
         # Each ten powers of two is an index position, so this is 5*2^7*2^-20 = 640 * 2^-20

@@ -53,7 +53,7 @@ def relative_time_string(delta: timedelta, julian: bool = False) -> str:
     elif delta > _ZERO:
         return time_delta_string(delta, julian=julian) + " from now"
     else:
-        return "Now"
+        return "now"
 
 
 def time_delta_string(

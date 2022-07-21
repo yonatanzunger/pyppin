@@ -19,13 +19,6 @@ Other classes to maybe add:
   * Ring buffer
 * math/
   * expression tree
-* text/
-  * plot_ascii ==> finish tests, labeling function.
-  * canvas  ==> And redo plot_ascii once this is done!
-    clear, (set_)pixel, line, arc, rect, blt, scale
-    plot, svg import, bitmap import
-  * progress bar
-  * print counter
 
 Names
 pyrexia (you give me fever...)

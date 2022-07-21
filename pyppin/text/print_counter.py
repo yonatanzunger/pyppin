@@ -20,8 +20,8 @@ class PrintCounter(object):
     ) -> None:
         """A PrintCounter is a context manager that prints regular updates of progress.
 
-        Unlike a ProgressBar, it prints every output on a separate line, and so is useful in cases
-        where you're writing logs rather than watching a TTY.
+        It prints the updates on separate lines, without any VT100 formatting or the like, so it's
+        useful in situations where you're writing log files as well as on the console.
 
         Its use is simple:
 

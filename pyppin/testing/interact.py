@@ -24,7 +24,7 @@ def interact(
             # ... Use foo
 
     When the code reaches interact(), it will stop and pop open a Python shell, from which you
-    can simply examine the value of foo (by typing 'foo'), or even *change* it ("foo = 1").
+    can simply examine the value of foo (by typing 'foo').
 
     If you exit the shell with a ^D, your program will resume executing. If you exit the shell by
     calling quit() or exit(), it will abort the entire program (by raising SystemExit).
@@ -38,6 +38,9 @@ def interact(
     read, but want to interact() to debug something from inside a unittest, change your tox.ini
     so that the test command is 'pytest -s'. That's not what you usually want -- it disables stdout
     capture as well -- but it will let you interactively probe your tests!
+
+    FUTURE NOTE: : A read-write interacting environment may become possible in future versions of
+    Python; see PEP 558, which would be required in order to implement this.
     """
 
     # Convert _test_commands into an (optional) function of the right signature to serve as the
@@ -76,6 +79,3 @@ def interact(
         # https://docs.python.org/3/library/inspect.html#the-interpreter-stack
         del nestedlocals
         del stack
-
-    # Note: A read-write interacting environment may become possible in future versions of Python;
-    # see PEP 558, which would be required in order to implement this.

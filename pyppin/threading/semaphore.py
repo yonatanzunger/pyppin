@@ -51,7 +51,7 @@ each worker thread call::
     with throttle:
         ... do the expensive operation ...
 
-Another common use is as a way to make sure all tasks have finished in a situation where you
+Another common use is as a way to **make sure all tasks have finished** in a situation where you
 don't know how many tasks will happen ahead of time -- for example, an RPC server might
 want to enter a "lame-duck" mode where it stops accepting new requests and waits for pending
 ones to finish before shutdown, or a batch job might issue a lot of asynchronous requests
@@ -123,9 +123,7 @@ class Semaphore(object):
         This is a non-retriable error; future calls will always fail.
         """
 
-    def acquire(
-        self, amount: int = 1, timeout: Optional[float] = None
-    ) -> AcquireResult:
+    def acquire(self, amount: int = 1, timeout: Optional[float] = None) -> AcquireResult:
         """Acquire (take ownership of) some capacity within the semaphore.
 
         If this function returns SUCCESS, the capacity was successfully acquired; the caller now

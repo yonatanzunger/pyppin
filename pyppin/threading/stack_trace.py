@@ -25,8 +25,8 @@ import traceback
 from abc import ABC
 from collections import defaultdict
 from enum import Enum
-from types import FrameType
-from typing import Dict, Iterable, Iterator, List, NamedTuple, Optional
+from types import FrameType, TracebackType
+from typing import Dict, Iterable, Iterator, List, NamedTuple, Optional, Type
 
 # NB: This library is unittested in tests/testing/trace_on_failure_test.py, which also tests the
 # handy unittest wrappers for it.
@@ -50,6 +50,28 @@ def print_all_stacks(
         group: If True, group together threads with identical traces.
     """
     print_stacks(all_stacks(limit=limit, daemons=daemons), output=output, group=group)
+
+
+def print_all_stacks_on_failure() -> None:
+    """Change the handling of uncaught exceptions to print *all* stacks.
+
+    This is usually something you call from main() or otherwise during program initialization,
+    if you want any uncaught exceptions to dump all the thread stacks.
+    """
+
+    def _excepthook(
+        exc_type: Type[BaseException], value: BaseException, traceback: TracebackType
+    ) -> None:
+        print_all_stacks()
+
+    sys.excepthook = _excepthook
+
+    if hasattr(sys, 'unraisablehook'):
+
+        def _unraisablehook(exc: BaseException) -> None:
+            print_all_stacks()
+
+        sys.unraisablehook = _unraisablehook
 
 
 #################################################################################################
