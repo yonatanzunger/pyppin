@@ -7,6 +7,7 @@ import locale
 import os
 from abc import ABC, abstractmethod
 from mmap import mmap
+from pickle import PickleBuffer
 from typing import (
     Any,
     BinaryIO,
@@ -60,8 +61,12 @@ if not hasattr(ctypes, "_CData"):
 
 
 """The signature for parameter types of data operations in the Python io library."""
-BytesLikeObject = Union[bytes, bytearray, array.array, memoryview, mmap, ctypes._CData]
-MutableBytesLikeObject = Union[bytearray, array.array, memoryview, mmap, ctypes._CData]
+BytesLikeObject = Union[
+    bytes, bytearray, array.array, memoryview, mmap, ctypes._CData, PickleBuffer
+]
+MutableBytesLikeObject = Union[
+    bytearray, array.array, memoryview, mmap, ctypes._CData, PickleBuffer
+]
 
 
 class FileLikeObject(ABC):

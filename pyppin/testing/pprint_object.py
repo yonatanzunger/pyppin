@@ -1,10 +1,9 @@
-import io
 from pprint import pprint
-from typing import Any, Dict, Iterable, Optional, Set
+from typing import IO, Any, Dict, Iterable, Optional, Set
 
 
 def pprint_object(
-    thing: Any, file: Optional[io.TextIOBase] = None, recurse_into: Optional[Iterable[str]] = None
+    thing: Any, file: Optional[IO[str]] = None, recurse_into: Optional[Iterable[str]] = None
 ) -> None:
     """Pretty-print all the innards of an object.
 

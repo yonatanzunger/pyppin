@@ -26,7 +26,17 @@ from abc import ABC
 from collections import defaultdict
 from enum import Enum
 from types import FrameType, TracebackType
-from typing import Dict, Iterable, Iterator, List, NamedTuple, Optional, Type
+from typing import (
+    Dict,
+    Iterable,
+    Iterator,
+    List,
+    NamedTuple,
+    Optional,
+    TextIO,
+    Type,
+    Union,
+)
 
 # NB: This library is unittested in tests/testing/trace_on_failure_test.py, which also tests the
 # handy unittest wrappers for it.
@@ -60,7 +70,7 @@ def print_all_stacks_on_failure() -> None:
     """
 
     def _excepthook(
-        exc_type: Type[BaseException], value: BaseException, traceback: TracebackType
+        exc_type: Type[BaseException], value: BaseException, traceback: Optional[TracebackType]
     ) -> None:
         print_all_stacks()
 
@@ -68,7 +78,7 @@ def print_all_stacks_on_failure() -> None:
 
     if hasattr(sys, 'unraisablehook'):
 
-        def _unraisablehook(exc: BaseException) -> None:
+        def _unraisablehook(exc: sys.UnraisableHookArgs) -> None:
             print_all_stacks()
 
         sys.unraisablehook = _unraisablehook
@@ -102,7 +112,7 @@ class TraceLine(NamedTuple):
         lines: Iterable[str],
         line_type: TraceLineType = TraceLineType.TRACE_LINE,
         prefix: str = '',
-    ) -> Iterator[str]:
+    ) -> Iterator['TraceLine']:
         for line in lines:
             yield TraceLine(prefix + line, line_type)
 
@@ -116,7 +126,7 @@ class ThreadStack(object):
         self,
         thread: Optional[threading.Thread],
         stack: Optional[traceback.StackSummary],
-        exception: Optional[Exception],
+        exception: Optional[BaseException],
     ) -> None:
         """A ThreadStack represents a single thread and its stack info.
 
@@ -158,7 +168,7 @@ class ThreadStack(object):
 
     @property
     def is_daemon(self) -> bool:
-        return self.thread and self.thread.daemon
+        return self.thread is not None and self.thread.daemon
 
     @property
     def formatted(self) -> List[TraceLine]:
@@ -297,7 +307,7 @@ class _FrameState39(_FrameState):
         # instead, # if there is an active exception, we store its exc_info here, and print it
         # out like a fake "extra" thread -- because there's no way to know which thread it came
         # from! Sigh.
-        _, self.exception, self.exception_tb = sys.exc_info()
+        self.exception: Optional[BaseException] = sys.exc_info()[1]
 
     def get_stack(self, thread: threading.Thread, limit: Optional[int]) -> ThreadStack:
         # Alas, the exception here is always going to be None, because if there is an exception, we
@@ -347,7 +357,8 @@ class _FrameState310(_FrameState):
     def __init__(self) -> None:
         self.frames: Dict[int, FrameType] = sys._current_frames()
         self.exceptions: Dict[int, BaseException] = {
-            thread_id: exc_info[1] for thread_id, exc_info in sys._current_exceptions().items()
+            thread_id: exc_info[1]
+            for thread_id, exc_info in sys._current_exceptions().items()  # type: ignore
         }
 
     def get_stack(self, thread: threading.Thread, limit: Optional[int]) -> ThreadStack:
@@ -356,7 +367,7 @@ class _FrameState310(_FrameState):
         if exception is not None:
             # Use the exception's stack frame, not the one where we're executing the stack trace
             # printer!
-            frame = exception.__traceback__.tb_frame
+            frame = exception.__traceback__.tb_frame if exception.__traceback__ else None
         elif thread.ident is not None and thread.ident in self.frames:
             frame = self.frames[thread.ident]
         else:
@@ -484,8 +495,8 @@ class _LineWrap(NamedTuple):
     @classmethod
     def color(cls, *colors: int) -> '_LineWrap':
         # Pick a VT100 color
-        colors = ";".join(str(x) for x in colors)
-        return cls(before=f'\x1b[{colors}m', after='\x1b[0m')
+        codes = ";".join(str(x) for x in colors)
+        return cls(before=f'\x1b[{codes}m', after='\x1b[0m')
 
 
 class _LineWraps(object):
@@ -513,7 +524,7 @@ _TTY_WRAPS = _LineWraps(
 )
 
 
-def _write(file: io.TextIOBase, trace: List[TraceLine]) -> None:
+def _write(file: Union[TextIO, io.TextIOBase], trace: List[TraceLine]) -> None:
     """Write a trace, nicely formatted, to a file."""
     wraps = _TTY_WRAPS if file.isatty() else _NON_TTY_WRAPS
     for entry in trace:

@@ -65,7 +65,7 @@ class PyppinFormat(NamedTuple):
         """
         orig = format_spec
         # Parse an align value
-        align: Optional[Alignment] = None
+        align = Alignment.LEFT_ALIGN
         fill = ' '
         if format_spec and format_spec[0] in _ALIGN_CHARS:
             align = _ALIGN_CHARS[format_spec[0]]
@@ -83,9 +83,10 @@ class PyppinFormat(NamedTuple):
 
         # Parse a precision value
         if format_spec.startswith('.'):
-            precision, format_spec = _leading_int(format_spec[1:])
+            precision, format_spec = _leading_int(format_spec[1:], default=1)
         else:
             precision = 1
+        assert precision is not None
 
         # Parse a threshold value
         if format_spec.startswith('('):
@@ -117,7 +118,7 @@ class PyppinFormat(NamedTuple):
         if self.format_spec in (Format.SI_DECIMAL, Format.SI_BINARY, Format.SI_IEC):
             self._require(value, int, float)
             base = si_prefix(
-                value,
+                value,  # type: ignore
                 mode=_SI_MODE[self.format_spec],
                 threshold=self.threshold,
                 precision=self.precision,
@@ -125,10 +126,10 @@ class PyppinFormat(NamedTuple):
             )
         elif self.format_spec == Format.TIME_DELTA:
             self._require(value, timedelta)
-            base = time_delta_string(value)
-        elif self.format_Spec == Format.RELATIVE_TIME:
+            base = time_delta_string(value)  # type: ignore
+        elif self.format_spec == Format.RELATIVE_TIME:
             self._require(value, timedelta)
-            base = relative_time_string(value)
+            base = relative_time_string(value)  # type: ignore
         else:
             raise RuntimeError('Never happens')
 
@@ -172,7 +173,7 @@ _FORMAT_CHARS = {
 _SI_MODE = {Format.SI_DECIMAL: Mode.DECIMAL, Format.SI_BINARY: Mode.BINARY, Format.SI_IEC: Mode.IEC}
 
 
-def _leading_int(s: str) -> Tuple[Optional[int], str]:
+def _leading_int(s: str, default: Optional[int] = None) -> Tuple[Optional[int], str]:
     """Pull off a leading int from s if available, return the int and the remainder."""
     i = 0
     for i, c in enumerate(s):
@@ -181,4 +182,4 @@ def _leading_int(s: str) -> Tuple[Optional[int], str]:
     if i:
         return int(s[:i]), s[i:]
     else:
-        return None, s
+        return default, s

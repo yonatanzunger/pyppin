@@ -27,7 +27,7 @@ def make_test_case(
     return SyntheticTestCase
 
 
-def run_test_case(test: Type[unittest.TestCase], debug_show_test_result=False) -> None:
+def run_test_case(test: Type[unittest.TestCase], debug_show_test_result: bool = False) -> None:
     # You can set debug_show_test_result to True if you want to see the output of all the unittests
     # on stderr, which is useful when you're debugging the test itself.
     suite = unittest.TestSuite()

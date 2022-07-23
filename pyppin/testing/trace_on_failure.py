@@ -2,7 +2,7 @@ import functools
 import io
 import itertools
 import unittest
-from typing import Callable, Optional, Type, Union
+from typing import Any, Callable, Optional, Type, Union
 
 from pyppin.base.flex_decorator import flex_decorator
 from pyppin.threading.stack_trace import print_all_stacks
@@ -17,7 +17,7 @@ def trace_on_failure(
     daemons: bool = True,
     group: bool = True,
     exclude_assertion_failures: bool = True,
-):
+) -> Callable:
     """Decorator which can be applied to functions, methods, and TestCases. If any exception happens
     while executing the item, dump a full stack trace (of all active threads) to output.
 
@@ -51,7 +51,7 @@ def _decorate_function(
     exclude: Optional[Type[BaseException]] = None,
 ) -> Callable:
     @functools.wraps(fn)
-    def wrapped(*args, **kwargs):
+    def wrapped(*args: Any, **kwargs: Any) -> Any:
         try:
             return fn(*args, **kwargs)
         except BaseException as e:
@@ -73,7 +73,7 @@ def _decorate_test_case(
     daemons: bool,
     group: bool,
     exclude_assertion_failures: bool,
-) -> unittest.TestCase:
+) -> Type[unittest.TestCase]:
     exclude = test.failureException if exclude_assertion_failures else None
 
     for name in itertools.chain(_TEST_METHODS, unittest.TestLoader().getTestCaseNames(test)):

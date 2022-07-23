@@ -3,7 +3,7 @@ import sys
 from collections import defaultdict
 from datetime import datetime, timedelta
 from types import TracebackType
-from typing import Optional, Type, Union
+from typing import Dict, Optional, Type, Union
 
 from pyppin.text.formatter import Formatter
 
@@ -11,7 +11,7 @@ from pyppin.text.formatter import Formatter
 class PrintCounter(object):
     def __init__(
         self,
-        print_every_n: Optional[int] = 10000,
+        print_every_n: Optional[Union[int, float]] = 10000,
         print_every_time: Optional[timedelta] = timedelta(seconds=30),
         format: str = 'Count: {count:si} after {time:td}',
         final_format: Optional[str] = 'Final: {count} after {time:td}',
@@ -61,8 +61,8 @@ class PrintCounter(object):
         self.formatter = Formatter()
         self.stream = stream or sys.stdout
 
-        self.count = 0
-        self.custom_counts = defaultdict(int)
+        self.count: Union[int, float] = 0
+        self.custom_counts: Dict[str, Union[int, float]] = defaultdict(int)
         self.next_print_time = self.start + self.print_every_time if self.print_every_time else None
         self.next_print_count = self.print_every_n
 

@@ -1,5 +1,16 @@
 import inspect
-from typing import Callable
+from functools import update_wrapper
+from typing import Any, Callable, TypeVar, Union, overload
+
+DecoratedFunction = TypeVar('DecoratedFunction', bound=Callable[..., Any])
+
+# A decorated or decorable function is anything bounded by Callable[..., Any]
+# A zero-argument decorator maps a decorable function to one of the same signature
+# A multi-argument decorator maps kwargs only ... to a zero-argument decorator
+# A polydecorator maps *either* a decorated function to one of the same signature, or kwargs only to
+#   a zero-argument decorator.
+# A flex decorator maps a decorated function plus kwargs to a decorated function
+# flex_decorator() maps a flex decorator to a polydecorator
 
 
 def flex_decorator(decorator: Callable) -> Callable:
@@ -42,17 +53,17 @@ def flex_decorator(decorator: Callable) -> Callable:
     defaults = signature.kwonlydefaults or {}
     kw_args_without_defaults = sorted(key for key in signature.kwonlyargs if key not in defaults)
 
-    # We'll generate a better decorator out of decorator, and return that. This means that
+    # We'll generate a poly decorator out of decorator, and return that. This means that
     # @flex_decorator def my_decorator(...) causes the symbol my_decorator to be defined as the
-    # function better_decorator. The resulting object can be used with two syntaxes.
+    # function poly_decorator. The resulting object can be used with two syntaxes.
     #
     # SYNTAX 1:
     #   @my_decorator
     #   def foo(...)
     #       ==> This is equivalent to
     #         def _foo(...)
-    #         foo = better_decorator(_foo)
-    #       i.e., better_decorator is called with a single argument, the function to be decorated,
+    #         foo = poly_decorator(_foo)
+    #       i.e., poly_decorator is called with a single argument, the function to be decorated,
     #       and should return the decorated version of the function, i.e. decorator(_foo). Clearly,
     #       this syntax only works if there are no KW arguments to decorator that lack defaults.
     #
@@ -61,12 +72,22 @@ def flex_decorator(decorator: Callable) -> Callable:
     #   def foo(...)
     #       ==> This is equivalent to
     #         def _foo(...)
-    #         _decorator = better_decorator(arg1=X, arg2=Y, ...)
+    #         _decorator = poly_decorator(arg1=X, arg2=Y, ...)
     #         foo = _decorator(_foo)
-    #       i.e., better_decorator is called with only keyword arguments, and should return a zero-
+    #       i.e., poly_decorator is called with only keyword arguments, and should return a zero-
     #       argument decorator which maps _foo onto decorator(_foo, arg1=X, arg2=Y, ...).
-    def better_decorator(*args, **kwargs) -> Callable:
-        if len(args) == 1 and not kwargs:
+    @overload
+    def poly_decorator(target: DecoratedFunction) -> DecoratedFunction:
+        ...
+
+    @overload
+    def poly_decorator(**kwargs: Any) -> Callable[[DecoratedFunction], DecoratedFunction]:
+        ...
+
+    def poly_decorator(
+        maybe_target: DecoratedFunction = None, /, **kwargs: Any
+    ) -> Union[DecoratedFunction, Callable[[DecoratedFunction], DecoratedFunction]]:
+        if maybe_target is not None and not kwargs:
             # Call using the first syntax. This call mode only works if all the kwargs in decorator
             # have defaults!
             if kw_args_without_defaults:
@@ -77,13 +98,16 @@ def flex_decorator(decorator: Callable) -> Callable:
                     f'thing_to_be_decorated(...).'
                 )
             # We're acting like a zero-argument decorator; simply apply decorator to this!
-            return decorator(args[0])
+            return update_wrapper(decorator(maybe_target), maybe_target)
 
-        elif not args:
+        elif maybe_target is None:
             # Call using the second syntax. We need to return a zero-argument decorator.
-            return lambda target: decorator(target, **kwargs)
+            def inner_decorator(target: DecoratedFunction) -> DecoratedFunction:
+                return update_wrapper(decorator(target, **kwargs), target)
+
+            return inner_decorator
 
         else:
             raise TypeError(f'The decorator {decorator.__name__} must be applied to a callable.')
 
-    return better_decorator
+    return poly_decorator

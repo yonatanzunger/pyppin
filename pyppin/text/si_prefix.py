@@ -1,6 +1,6 @@
 import math
 from enum import Enum
-from typing import Sequence, Union
+from typing import List, Sequence, Union
 
 from pyppin.text.sign import Sign, format_sign
 
@@ -179,4 +179,4 @@ _POSITIVE_IEC = ['Ki', 'Mi', 'Gi', 'Ti', 'Pi', 'Ei', 'Zi', 'Yi']
 _NEGATIVE_IEC_ASCII = [x + 'i' for x in _NEGATIVE_SI_ASCII]
 _NEGATIVE_IEC_UNICODE = [x + 'i' for x in _NEGATIVE_SI_UNICODE]
 _POSITIVE_LONG_IEC = [' kibi', ' mebi', ' gibi', ' tebi', ' pebi', ' exbi', ' zebi', ' yobi']
-_NEGATIVE_LONG_IEC = []  # See comment on the full_names arg to si_prefix
+_NEGATIVE_LONG_IEC: List[str] = []  # See comment on the full_names arg to si_prefix
