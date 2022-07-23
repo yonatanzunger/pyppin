@@ -6,7 +6,10 @@ from pyppin.text.sign import Sign, format_sign
 
 
 def now_and_then(
-    now: Optional[datetime], then: datetime, julian: bool = False, format: Optional[str] = None
+    now: Optional[datetime],
+    then: datetime,
+    julian: bool = False,
+    format: Optional[str] = None,
 ) -> str:
     """Output a string '{then}, {duration} ago' or '{then}, {duration} from now', or the like,
     expressing "then" in terms of "now." This tends to be useful in debugging and status pages.
@@ -31,14 +34,14 @@ def now_and_then(
     if now is None:
         now = datetime.now(tz=then.tzinfo)
     then_str = then.isoformat() if format is None else then.strftime(format)
-    return f'{then_str} ({relative_time_string(then - now, julian=julian)})'
+    return f"{then_str} ({relative_time_string(then - now, julian=julian)})"
 
 
 # A couple of handy values to pass for the format in now_and_then.
-LONG_FORMAT = '%A, %B %d, %Y %X'  # Monday, July 18, 2022 15:20:23
-LOCAL_DATETIME = '%c'  # Wed Jul 18 15:20:23 1988
-LOCAL_DATE_ONLY = '%x'
-LOCAL_TIME_ONLY = '%X'
+LONG_FORMAT = "%A, %B %d, %Y %X"  # Monday, July 18, 2022 15:20:23
+LOCAL_DATETIME = "%c"  # Wed Jul 18 15:20:23 1988
+LOCAL_DATE_ONLY = "%x"
+LOCAL_TIME_ONLY = "%X"
 
 
 def relative_time_string(delta: timedelta, julian: bool = False) -> str:
@@ -66,16 +69,18 @@ def time_delta_string(
     else:
         negative = False
 
-    return format_sign(_time_delta_string(delta, julian), sign_mode=sign_mode, is_negative=negative)
+    return format_sign(
+        _time_delta_string(delta, julian), sign_mode=sign_mode, is_negative=negative
+    )
 
 
 def _time_delta_string(delta: timedelta, julian: bool) -> str:
     interval = delta.total_seconds()
 
     if interval <= 1:
-        return f'{si_prefix(interval)}sec'
+        return f"{si_prefix(interval)}sec"
     elif interval < 60:
-        return f'{interval:0.1f} seconds'
+        return f"{interval:0.1f} seconds"
 
     # Divide the interval into these units. For a handy mnemonic, remember that to within less than
     # a percent, pi seconds is a nanocentury!
@@ -84,11 +89,11 @@ def _time_delta_string(delta: timedelta, julian: bool) -> str:
     )
 
     if years:
-        return f'{years} years, {days} days, {hours}:{minutes:02d}:{seconds:02d}'
+        return f"{years} years, {days} days, {hours}:{minutes:02d}:{seconds:02d}"
     elif days:
-        return f'{days} days, {hours}:{minutes:02d}:{seconds:02d}'
+        return f"{days} days, {hours}:{minutes:02d}:{seconds:02d}"
     else:
-        return f'{hours}:{minutes:02d}:{seconds:02d}'
+        return f"{hours}:{minutes:02d}:{seconds:02d}"
 
 
 def _subdivide(value: float, *chunks: int) -> Tuple[int, ...]:

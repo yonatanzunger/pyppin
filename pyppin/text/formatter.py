@@ -26,7 +26,11 @@ class Formatter(string.Formatter):
 
     def format_field(self, value: Any, format_spec: str) -> str:
         spec = PyppinFormat.parse(format_spec)
-        return super().format_field(value, format_spec) if spec is None else spec.format(value)
+        return (
+            super().format_field(value, format_spec)
+            if spec is None
+            else spec.format(value)
+        )
 
 
 ################################################################################################
@@ -58,7 +62,7 @@ class PyppinFormat(NamedTuple):
     precision: int
 
     @classmethod
-    def parse(cls, format_spec: str) -> Optional['PyppinFormat']:
+    def parse(cls, format_spec: str) -> Optional["PyppinFormat"]:
         """Parse a format_spec.
 
         Returns a PyppinFormat if this is a valid Pyppin format, or None otherwise.
@@ -66,7 +70,7 @@ class PyppinFormat(NamedTuple):
         orig = format_spec
         # Parse an align value
         align = Alignment.LEFT_ALIGN
-        fill = ' '
+        fill = " "
         if format_spec and format_spec[0] in _ALIGN_CHARS:
             align = _ALIGN_CHARS[format_spec[0]]
             format_spec = format_spec[1:]
@@ -82,17 +86,19 @@ class PyppinFormat(NamedTuple):
         width, format_spec = _leading_int(format_spec)
 
         # Parse a precision value
-        if format_spec.startswith('.'):
+        if format_spec.startswith("."):
             precision, format_spec = _leading_int(format_spec[1:], default=1)
         else:
             precision = 1
         assert precision is not None
 
         # Parse a threshold value
-        if format_spec.startswith('('):
-            end = format_spec.find(')')
+        if format_spec.startswith("("):
+            end = format_spec.find(")")
             if end == -1:
-                raise ValueError(f"Bad format spec '{orig}': Unmatched ( in threshold value")
+                raise ValueError(
+                    f"Bad format spec '{orig}': Unmatched ( in threshold value"
+                )
             threshold = float(format_spec[1:end])
             format_spec = format_spec[end + 1 :]
         else:
@@ -131,13 +137,15 @@ class PyppinFormat(NamedTuple):
             self._require(value, timedelta)
             base = relative_time_string(value)  # type: ignore
         else:
-            raise RuntimeError('Never happens')
+            raise RuntimeError("Never happens")
 
         return self._pad(base)
 
     def _require(self, value: object, *types: type) -> None:
         if not any(isinstance(value, type) for type in types):
-            raise ValueError(f'Cannot format {type(value).__name__} as {self.format_spec}')
+            raise ValueError(
+                f"Cannot format {type(value).__name__} as {self.format_spec}"
+            )
 
     def _pad(self, base: str) -> str:
         if self.width is None:
@@ -151,26 +159,30 @@ class PyppinFormat(NamedTuple):
         elif self.align == Alignment.CENTER_ALIGN:
             return base.center(self.width, self.fill)
         else:
-            raise RuntimeError('Never happens')
+            raise RuntimeError("Never happens")
 
 
 _ALIGN_CHARS = {
-    '<': Alignment.LEFT_ALIGN,
-    '>': Alignment.RIGHT_ALIGN,
-    '^': Alignment.CENTER_ALIGN,
-    '=': Alignment.PAD_AFTER_SIGN,
+    "<": Alignment.LEFT_ALIGN,
+    ">": Alignment.RIGHT_ALIGN,
+    "^": Alignment.CENTER_ALIGN,
+    "=": Alignment.PAD_AFTER_SIGN,
 }
 
 
 _FORMAT_CHARS = {
-    'si': Format.SI_DECIMAL,
-    'sib': Format.SI_BINARY,
-    'iec': Format.SI_IEC,
-    'td': Format.TIME_DELTA,
-    'rt': Format.RELATIVE_TIME,
+    "si": Format.SI_DECIMAL,
+    "sib": Format.SI_BINARY,
+    "iec": Format.SI_IEC,
+    "td": Format.TIME_DELTA,
+    "rt": Format.RELATIVE_TIME,
 }
 
-_SI_MODE = {Format.SI_DECIMAL: Mode.DECIMAL, Format.SI_BINARY: Mode.BINARY, Format.SI_IEC: Mode.IEC}
+_SI_MODE = {
+    Format.SI_DECIMAL: Mode.DECIMAL,
+    Format.SI_BINARY: Mode.BINARY,
+    Format.SI_IEC: Mode.IEC,
+}
 
 
 def _leading_int(s: str, default: Optional[int] = None) -> Tuple[Optional[int], str]:

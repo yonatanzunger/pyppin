@@ -13,21 +13,23 @@ def make_test_case(
     class SyntheticTestCase(unittest.TestCase):
         def setUp(self) -> None:
             if fail_setup:
-                raise ValueError('Failed setup')
+                raise ValueError("Failed setup")
 
         def tearDown(self) -> None:
             if fail_teardown:
-                raise ValueError('Failed teardown')
+                raise ValueError("Failed teardown")
 
         def test_something(self) -> None:
             if fail_method:
-                raise ValueError('Failed method')
-            self.fail('Ordinary test case failure')
+                raise ValueError("Failed method")
+            self.fail("Ordinary test case failure")
 
     return SyntheticTestCase
 
 
-def run_test_case(test: Type[unittest.TestCase], debug_show_test_result: bool = False) -> None:
+def run_test_case(
+    test: Type[unittest.TestCase], debug_show_test_result: bool = False
+) -> None:
     # You can set debug_show_test_result to True if you want to see the output of all the unittests
     # on stderr, which is useful when you're debugging the test itself.
     suite = unittest.TestSuite()
@@ -48,7 +50,7 @@ class TraceOnFailureTest(unittest.TestCase):
         run_test_case(test_case)
         result = buffer.getvalue()
         self.assertIn('Thread "MainThread"', result)
-        self.assertIn('ValueError: Failed method', result)
+        self.assertIn("ValueError: Failed method", result)
 
     def testWrappedClassTestFails(self) -> None:
         # When a unittest fails, rather than raises an exception, it shouldn't dump a stack trace.
@@ -57,7 +59,7 @@ class TraceOnFailureTest(unittest.TestCase):
         test_case = trace_on_failure(output=buffer)(make_test_case())
 
         run_test_case(test_case)
-        self.assertEqual('', buffer.getvalue())
+        self.assertEqual("", buffer.getvalue())
 
     def testWrappedClassFailSetUp(self) -> None:
         # Test that the wrapper captures failures in test harness methods
@@ -70,19 +72,19 @@ class TraceOnFailureTest(unittest.TestCase):
         run_test_case(test_case)
         result = buffer.getvalue()
         self.assertIn('Thread "MainThread"', result)
-        self.assertIn('ValueError: Failed setup', result)
-        self.assertNotIn('ValueError: Failed method', result)
+        self.assertIn("ValueError: Failed setup", result)
+        self.assertNotIn("ValueError: Failed method", result)
 
     def testWrappedFunction(self) -> None:
         buffer = io.StringIO()
 
         @trace_on_failure(output=buffer)
         def failing_function() -> None:
-            raise ValueError('Failed function')
+            raise ValueError("Failed function")
 
         with self.assertRaises(ValueError):
             failing_function()
 
         result = buffer.getvalue()
         self.assertIn('Thread "MainThread"', result)
-        self.assertIn('ValueError: Failed function', result)
+        self.assertIn("ValueError: Failed function", result)

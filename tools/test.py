@@ -49,7 +49,9 @@ def main() -> None:
         elif command == "shell":
             main = interact
         else:
-            raise AssertionError(f'Unknown command "{command}". Did you mean test or lint?')
+            raise AssertionError(
+                f'Unknown command "{command}". Did you mean test or lint?'
+            )
 
     main()
 

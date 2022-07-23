@@ -88,6 +88,7 @@ class Histogram(object):
     Args:
         bucketing: Parameters to control how values are assigned to buckets.
     """
+
     def __init__(self, bucketing: Bucketing = Bucketing()) -> None:
         self.bucketing = bucketing
         self.data: List[int] = []

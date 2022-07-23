@@ -123,7 +123,9 @@ class Semaphore(object):
         This is a non-retriable error; future calls will always fail.
         """
 
-    def acquire(self, amount: int = 1, timeout: Optional[float] = None) -> AcquireResult:
+    def acquire(
+        self, amount: int = 1, timeout: Optional[float] = None
+    ) -> AcquireResult:
         """Acquire (take ownership of) some capacity within the semaphore.
 
         If this function returns SUCCESS, the capacity was successfully acquired; the caller now

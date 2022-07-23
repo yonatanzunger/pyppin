@@ -70,13 +70,15 @@ def print_all_stacks_on_failure() -> None:
     """
 
     def _excepthook(
-        exc_type: Type[BaseException], value: BaseException, traceback: Optional[TracebackType]
+        exc_type: Type[BaseException],
+        value: BaseException,
+        traceback: Optional[TracebackType],
     ) -> None:
         print_all_stacks()
 
     sys.excepthook = _excepthook
 
-    if hasattr(sys, 'unraisablehook'):
+    if hasattr(sys, "unraisablehook"):
 
         def _unraisablehook(exc: sys.UnraisableHookArgs) -> None:
             print_all_stacks()
@@ -103,7 +105,7 @@ class TraceLine(NamedTuple):
     line: str
     line_type: TraceLineType
 
-    def prepend(self, data: str) -> 'TraceLine':
+    def prepend(self, data: str) -> "TraceLine":
         return self._replace(line=data + self.line)
 
     @classmethod
@@ -111,14 +113,14 @@ class TraceLine(NamedTuple):
         cls,
         lines: Iterable[str],
         line_type: TraceLineType = TraceLineType.TRACE_LINE,
-        prefix: str = '',
-    ) -> Iterator['TraceLine']:
+        prefix: str = "",
+    ) -> Iterator["TraceLine"]:
         for line in lines:
             yield TraceLine(prefix + line, line_type)
 
     @classmethod
-    def blank(cls) -> 'TraceLine':
-        return TraceLine('\n', TraceLineType.TRACE_LINE)
+    def blank(cls) -> "TraceLine":
+        return TraceLine("\n", TraceLineType.TRACE_LINE)
 
 
 class ThreadStack(object):
@@ -142,7 +144,9 @@ class ThreadStack(object):
         self.thread = thread
         self.stack = stack
         self.exception = (
-            traceback.TracebackException.from_exception(exception) if exception else None
+            traceback.TracebackException.from_exception(exception)
+            if exception
+            else None
         )
 
         self._formatted: Optional[List[TraceLine]] = None
@@ -187,7 +191,8 @@ class ThreadStack(object):
                 tuple(
                     line.line
                     for line in self.formatted
-                    if line.line_type in (TraceLineType.TRACE_LINE, TraceLineType.EXCEPTION)
+                    if line.line_type
+                    in (TraceLineType.TRACE_LINE, TraceLineType.EXCEPTION)
                 )
             )
         return self._cluster_id
@@ -196,15 +201,13 @@ class ThreadStack(object):
     def name(self) -> str:
         if self.thread is None:
             if self.exception is None:
-                return 'Unknown thread'
+                return "Unknown thread"
             else:
-                return 'Exception thread (can only be tied to an actual thread ID in Python 3.10+)'
+                return "Exception thread (can only be tied to an actual thread ID in Python 3.10+)"
 
-        d = 'daemon; ' if self.thread.daemon else ''
+        d = "daemon; " if self.thread.daemon else ""
         if self.thread.ident is not None:
-            return (
-                f'Thread "{self.thread.name}" ({d}{self.thread.ident}, TID {self.thread.native_id})'
-            )
+            return f'Thread "{self.thread.name}" ({d}{self.thread.ident}, TID {self.thread.native_id})'
         else:
             return f'Thread "{self.thread.name}" ({d}not started)'
 
@@ -245,7 +248,9 @@ def print_trace(lines: List[TraceLine], output: Optional[io.TextIOBase] = None) 
 
 
 def print_stacks(
-    stacks: List[ThreadStack], output: Optional[io.TextIOBase] = None, group: bool = True
+    stacks: List[ThreadStack],
+    output: Optional[io.TextIOBase] = None,
+    group: bool = True,
 ) -> None:
     """Print a collection of thread stacks.
 
@@ -294,8 +299,10 @@ class _FrameState(ABC):
             del state
 
     @staticmethod
-    def make() -> '_FrameState':
-        return _FrameState310() if hasattr(sys, '_current_exceptions') else _FrameState39()
+    def make() -> "_FrameState":
+        return (
+            _FrameState310() if hasattr(sys, "_current_exceptions") else _FrameState39()
+        )
 
 
 class _FrameState39(_FrameState):
@@ -320,7 +327,9 @@ class _FrameState39(_FrameState):
 
         return ThreadStack(
             thread=thread,
-            stack=traceback.extract_stack(frame, limit=limit) if frame is not None else None,
+            stack=traceback.extract_stack(frame, limit=limit)
+            if frame is not None
+            else None,
             exception=None,
         )
 
@@ -362,12 +371,18 @@ class _FrameState310(_FrameState):
         }
 
     def get_stack(self, thread: threading.Thread, limit: Optional[int]) -> ThreadStack:
-        exception = self.exceptions.get(thread.ident, None) if thread.ident is not None else None
+        exception = (
+            self.exceptions.get(thread.ident, None)
+            if thread.ident is not None
+            else None
+        )
         frame: Optional[FrameType]
         if exception is not None:
             # Use the exception's stack frame, not the one where we're executing the stack trace
             # printer!
-            frame = exception.__traceback__.tb_frame if exception.__traceback__ else None
+            frame = (
+                exception.__traceback__.tb_frame if exception.__traceback__ else None
+            )
         elif thread.ident is not None and thread.ident in self.frames:
             frame = self.frames[thread.ident]
         else:
@@ -375,7 +390,9 @@ class _FrameState310(_FrameState):
 
         return ThreadStack(
             thread=thread,
-            stack=traceback.extract_stack(frame, limit=limit) if frame is not None else None,
+            stack=traceback.extract_stack(frame, limit=limit)
+            if frame is not None
+            else None,
             exception=exception,
         )
 
@@ -395,7 +412,7 @@ def _format_stack(stack: ThreadStack, title: Optional[str] = None) -> List[Trace
     title = title or stack.name
 
     result: List[TraceLine] = []
-    result.append(TraceLine(title + '\n', TraceLineType.THREAD_TITLE))
+    result.append(TraceLine(title + "\n", TraceLineType.THREAD_TITLE))
 
     # Early-exit for unstarted threads
     if not stack.is_started:
@@ -404,12 +421,12 @@ def _format_stack(stack: ThreadStack, title: Optional[str] = None) -> List[Trace
     if stack.stack:
         result.extend(TraceLine.as_trace(stack.stack.format()))
     else:
-        result.append(TraceLine('<No stack found>\n', TraceLineType.TRACE_LINE))
+        result.append(TraceLine("<No stack found>\n", TraceLineType.TRACE_LINE))
 
     if stack.exception:
         result.append(
             TraceLine(
-                f'Exception: {stack.exception.exc_type.__name__}: {stack.exception}\n',
+                f"Exception: {stack.exception.exc_type.__name__}: {stack.exception}\n",
                 TraceLineType.EXCEPTION,
             )
         )
@@ -427,9 +444,9 @@ def _format_stack_group(stacks: List[ThreadStack]) -> List[TraceLine]:
     title: Optional[str] = None
     if len(stacks) > 1:
         first_names = ", ".join(stack.name for stack in stacks[:MAX_THREADS_NAMED])
-        title = f'{len(stacks)} Threads: {first_names}'
+        title = f"{len(stacks)} Threads: {first_names}"
         if len(stacks) > MAX_THREADS_NAMED:
-            title += ' and others'
+            title += " and others"
 
     return _format_stack(stacks[0], title=title)
 
@@ -437,7 +454,9 @@ def _format_stack_group(stacks: List[ThreadStack]) -> List[TraceLine]:
 ThreadGroup = Dict[int, List[ThreadStack]]
 
 
-def _append_group(result: List[TraceLine], group: ThreadGroup, is_first: bool = False) -> None:
+def _append_group(
+    result: List[TraceLine], group: ThreadGroup, is_first: bool = False
+) -> None:
     for index, stacks in enumerate(group.values()):
         if index or not is_first:
             result.append(TraceLine.blank())
@@ -493,10 +512,10 @@ class _LineWrap(NamedTuple):
         return self.before + line + self.after
 
     @classmethod
-    def color(cls, *colors: int) -> '_LineWrap':
+    def color(cls, *colors: int) -> "_LineWrap":
         # Pick a VT100 color
         codes = ";".join(str(x) for x in colors)
-        return cls(before=f'\x1b[{codes}m', after='\x1b[0m')
+        return cls(before=f"\x1b[{codes}m", after="\x1b[0m")
 
 
 class _LineWraps(object):

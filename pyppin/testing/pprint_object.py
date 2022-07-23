@@ -3,7 +3,9 @@ from typing import IO, Any, Dict, Iterable, Optional, Set
 
 
 def pprint_object(
-    thing: Any, file: Optional[IO[str]] = None, recurse_into: Optional[Iterable[str]] = None
+    thing: Any,
+    file: Optional[IO[str]] = None,
+    recurse_into: Optional[Iterable[str]] = None,
 ) -> None:
     """Pretty-print all the innards of an object.
 
@@ -27,6 +29,8 @@ def pprint_object(
 
 def _as_dict(thing: Any, recurse: Set[str]) -> Dict[str, Any]:
     return {
-        attr: _as_dict(getattr(thing, attr), recurse) if attr in recurse else getattr(thing, attr)
+        attr: _as_dict(getattr(thing, attr), recurse)
+        if attr in recurse
+        else getattr(thing, attr)
         for attr in dir(thing)
     }

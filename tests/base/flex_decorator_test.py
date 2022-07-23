@@ -17,16 +17,16 @@ class FlexDecoratorTest(unittest.TestCase):
         # You can use it without arguments
         @decorator_with_defaults
         def test_function(x: str) -> str:
-            return 'foo_' + x
+            return "foo_" + x
 
-        self.assertEqual((2, 'foo_bar'), test_function('bar'))
+        self.assertEqual((2, "foo_bar"), test_function("bar"))
 
         # Or with arguments
         @decorator_with_defaults(arg=3)
         def another_test_function(x: str) -> str:
-            return 'quux_' + x
+            return "quux_" + x
 
-        self.assertEqual((3, 'quux_bar'), another_test_function('bar'))
+        self.assertEqual((3, "quux_bar"), another_test_function("bar"))
 
     def test_without_defaults(self) -> None:
         # This one has no default value for arg.
@@ -42,11 +42,11 @@ class FlexDecoratorTest(unittest.TestCase):
 
             @decorator_without_defaults
             def test_function(x: str) -> str:
-                return 'foo_' + x
+                return "foo_" + x
 
         # But you can with arguments.
         @decorator_without_defaults(arg=3)
         def another_test_function(x: str) -> str:
-            return 'quux_' + x
+            return "quux_" + x
 
-        self.assertEqual((3, 'quux_bar'), another_test_function('bar'))
+        self.assertEqual((3, "quux_bar"), another_test_function("bar"))

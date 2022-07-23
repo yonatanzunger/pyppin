@@ -11,8 +11,8 @@ class PrintCounterTest(unittest.TestCase):
         with PrintCounter(
             print_every_n=1000,
             print_every_time=None,
-            format='Count: {count:si}; foo: {foo:.1si}',
-            final_format='Final: {count}; foo: {foo}',
+            format="Count: {count:si}; foo: {foo:.1si}",
+            final_format="Final: {count}; foo: {foo}",
             stream=output,
         ) as counter:
             for i in range(5000):

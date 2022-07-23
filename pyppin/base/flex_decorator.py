@@ -2,7 +2,7 @@ import inspect
 from functools import update_wrapper
 from typing import Any, Callable, TypeVar, Union, overload
 
-DecoratedFunction = TypeVar('DecoratedFunction', bound=Callable[..., Any])
+DecoratedFunction = TypeVar("DecoratedFunction", bound=Callable[..., Any])
 
 # A decorated or decorable function is anything bounded by Callable[..., Any]
 # A zero-argument decorator maps a decorable function to one of the same signature
@@ -46,12 +46,14 @@ def flex_decorator(decorator: Callable) -> Callable:
     signature = inspect.getfullargspec(decorator)
     if signature.varargs or len(signature.args) != 1:
         raise TypeError(
-            '@flex_decorator must decorate a function that takes exactly one positional '
-            'argument, the object to be decorated. All other arguments must be keyword-only.'
+            "@flex_decorator must decorate a function that takes exactly one positional "
+            "argument, the object to be decorated. All other arguments must be keyword-only."
         )
 
     defaults = signature.kwonlydefaults or {}
-    kw_args_without_defaults = sorted(key for key in signature.kwonlyargs if key not in defaults)
+    kw_args_without_defaults = sorted(
+        key for key in signature.kwonlyargs if key not in defaults
+    )
 
     # We'll generate a poly decorator out of decorator, and return that. This means that
     # @flex_decorator def my_decorator(...) causes the symbol my_decorator to be defined as the
@@ -81,7 +83,9 @@ def flex_decorator(decorator: Callable) -> Callable:
         ...
 
     @overload
-    def poly_decorator(**kwargs: Any) -> Callable[[DecoratedFunction], DecoratedFunction]:
+    def poly_decorator(
+        **kwargs: Any,
+    ) -> Callable[[DecoratedFunction], DecoratedFunction]:
         ...
 
     def poly_decorator(
@@ -92,10 +96,10 @@ def flex_decorator(decorator: Callable) -> Callable:
             # have defaults!
             if kw_args_without_defaults:
                 raise TypeError(
-                    f'The decorator {decorator.__name__} does not have default values specified '
+                    f"The decorator {decorator.__name__} does not have default values specified "
                     f'for the argument(s) {", ".join(kw_args_without_defaults)}. You must '
-                    f'therefore use it with the syntax @{decorator.__name__}(arg=foo, ...) def '
-                    f'thing_to_be_decorated(...).'
+                    f"therefore use it with the syntax @{decorator.__name__}(arg=foo, ...) def "
+                    f"thing_to_be_decorated(...)."
                 )
             # We're acting like a zero-argument decorator; simply apply decorator to this!
             return update_wrapper(decorator(maybe_target), maybe_target)
@@ -108,6 +112,8 @@ def flex_decorator(decorator: Callable) -> Callable:
             return inner_decorator
 
         else:
-            raise TypeError(f'The decorator {decorator.__name__} must be applied to a callable.')
+            raise TypeError(
+                f"The decorator {decorator.__name__} must be applied to a callable."
+            )
 
     return poly_decorator

@@ -14,7 +14,7 @@ class Sign(Enum):
     SPACE_FOR_POSITIVE = 2
 
     @classmethod
-    def parse(cls, format_spec: str) -> Tuple['Sign', str]:
+    def parse(cls, format_spec: str) -> Tuple["Sign", str]:
         """Parse a leading printf sign from a format_spec.
 
         Returns:
@@ -29,19 +29,19 @@ class Sign(Enum):
 
 def format_sign(formatted_unsigned: str, sign_mode: Sign, is_negative: bool) -> str:
     """Add the sign characters, as appropriate, to the given string."""
-    padding = '-' if is_negative else _SIGN_PADDING[sign_mode]
+    padding = "-" if is_negative else _SIGN_PADDING[sign_mode]
     return padding + formatted_unsigned
 
 
 _SIGN_CHARS = {
-    '-': Sign.NEGATIVE_ONLY,
-    '+': Sign.POSITIVE_AND_NEGATIVE,
-    ' ': Sign.SPACE_FOR_POSITIVE,
+    "-": Sign.NEGATIVE_ONLY,
+    "+": Sign.POSITIVE_AND_NEGATIVE,
+    " ": Sign.SPACE_FOR_POSITIVE,
 }
 
 
 _SIGN_PADDING = {
-    Sign.NEGATIVE_ONLY: '',
-    Sign.POSITIVE_AND_NEGATIVE: '+',
-    Sign.SPACE_FOR_POSITIVE: ' ',
+    Sign.NEGATIVE_ONLY: "",
+    Sign.POSITIVE_AND_NEGATIVE: "+",
+    Sign.SPACE_FOR_POSITIVE: " ",
 }

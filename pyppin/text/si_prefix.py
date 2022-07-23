@@ -113,7 +113,7 @@ def si_prefix(
         if isinstance(value, int):
             return format_sign(str(value), sign, is_negative)
         else:
-            format_string = f'%0.{precision}f'
+            format_string = f"%0.{precision}f"
             return format_sign(format_string % value, sign, is_negative)
 
     # Otherwise, pick the array and turn index into a real array index.
@@ -126,27 +126,31 @@ def si_prefix(
 
     # Overflow: If the number is too big for an SI prefix! Switch to exponential notation.
     if index >= len(array):
-        return format_sign(_exponential_notation(value, mode, precision), sign, is_negative)
+        return format_sign(
+            _exponential_notation(value, mode, precision), sign, is_negative
+        )
 
     # Normal case
     reduced = math.pow(base, delta)
-    format_string = f'%0.{precision}f'
-    return format_sign(f'{format_string % reduced}{array[index]}', sign, is_negative)
+    format_string = f"%0.{precision}f"
+    return format_sign(f"{format_string % reduced}{array[index]}", sign, is_negative)
 
 
 def _exponential_notation(value: float, mode: Mode, precision: int) -> str:
     if mode == Mode.DECIMAL:
-        format_str = f'%0.{precision}E'
+        format_str = f"%0.{precision}E"
         return format_str % value
     else:
         power = math.log2(value)
         int_power = math.floor(power)
         reduced = math.pow(2, power - int_power)
-        format_str = f'%0.{precision}f'
-        return f'{format_str % reduced}*2^{int_power}'
+        format_str = f"%0.{precision}f"
+        return f"{format_str % reduced}*2^{int_power}"
 
 
-def _prefix_array(mode: Mode, positive: bool, ascii_only: bool, full_names: bool) -> Sequence[str]:
+def _prefix_array(
+    mode: Mode, positive: bool, ascii_only: bool, full_names: bool
+) -> Sequence[str]:
     """Return the appropriate array of prefixes to use."""
     if mode in (Mode.DECIMAL, Mode.BINARY):
         if positive:
@@ -168,15 +172,42 @@ def _prefix_array(mode: Mode, positive: bool, ascii_only: bool, full_names: bool
         return _NEGATIVE_IEC_UNICODE
 
 
-_POSITIVE_SI = 'kMGTPEZY'
-_NEGATIVE_SI_ASCII = 'munpfazy'
-_NEGATIVE_SI_UNICODE = 'mμnpfazy'
+_POSITIVE_SI = "kMGTPEZY"
+_NEGATIVE_SI_ASCII = "munpfazy"
+_NEGATIVE_SI_UNICODE = "mμnpfazy"
 # Note the spaces before long forms!
-_POSITIVE_LONG_SI = [' kilo', ' mega', ' giga', ' tera', ' peta', ' exa', ' zetta', ' yotta']
-_NEGATIVE_LONG_SI = [' milli', ' micro', ' nano', ' pico', ' femto', ' atto', ' zepto', ' yocto']
+_POSITIVE_LONG_SI = [
+    " kilo",
+    " mega",
+    " giga",
+    " tera",
+    " peta",
+    " exa",
+    " zetta",
+    " yotta",
+]
+_NEGATIVE_LONG_SI = [
+    " milli",
+    " micro",
+    " nano",
+    " pico",
+    " femto",
+    " atto",
+    " zepto",
+    " yocto",
+]
 
-_POSITIVE_IEC = ['Ki', 'Mi', 'Gi', 'Ti', 'Pi', 'Ei', 'Zi', 'Yi']
-_NEGATIVE_IEC_ASCII = [x + 'i' for x in _NEGATIVE_SI_ASCII]
-_NEGATIVE_IEC_UNICODE = [x + 'i' for x in _NEGATIVE_SI_UNICODE]
-_POSITIVE_LONG_IEC = [' kibi', ' mebi', ' gibi', ' tebi', ' pebi', ' exbi', ' zebi', ' yobi']
+_POSITIVE_IEC = ["Ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi", "Yi"]
+_NEGATIVE_IEC_ASCII = [x + "i" for x in _NEGATIVE_SI_ASCII]
+_NEGATIVE_IEC_UNICODE = [x + "i" for x in _NEGATIVE_SI_UNICODE]
+_POSITIVE_LONG_IEC = [
+    " kibi",
+    " mebi",
+    " gibi",
+    " tebi",
+    " pebi",
+    " exbi",
+    " zebi",
+    " yobi",
+]
 _NEGATIVE_LONG_IEC: List[str] = []  # See comment on the full_names arg to si_prefix

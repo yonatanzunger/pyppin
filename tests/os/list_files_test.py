@@ -11,17 +11,17 @@ class ListFilesTest(unittest.TestCase):
         # repository. This is because we deliberately want to create weird things like infinite-loop
         # symlinks, which make git very unhappy.
         with TemporaryDirectory() as root:
-            with open(f'{root}/foo.txt', 'w') as foo:
-                foo.write('foo\n')
-            os.symlink(f'{root}/foo.txt', f'{root}/bar.txt')
-            os.mkdir(f'{root}/skipme')
-            with open(f'{root}/skipme/not_seen.txt', 'w') as not_seen:
-                not_seen.write('skipme\n')
-            os.mkdir(f'{root}/subdir')
-            with open(f'{root}/subdir/quux.txt', 'w') as quux:
-                quux.write('quux\n')
+            with open(f"{root}/foo.txt", "w") as foo:
+                foo.write("foo\n")
+            os.symlink(f"{root}/foo.txt", f"{root}/bar.txt")
+            os.mkdir(f"{root}/skipme")
+            with open(f"{root}/skipme/not_seen.txt", "w") as not_seen:
+                not_seen.write("skipme\n")
+            os.mkdir(f"{root}/subdir")
+            with open(f"{root}/subdir/quux.txt", "w") as quux:
+                quux.write("quux\n")
             # Yee-haw!
-            os.symlink('..', f'{root}/subdir/loop')
+            os.symlink("..", f"{root}/subdir/loop")
 
             # OK, now let's see if we can list this mess correctly. Note that the only "real" files
             # are the ones we generated with calls to write() above; everything else is a symlink or
