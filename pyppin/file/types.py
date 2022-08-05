@@ -67,6 +67,7 @@ BytesLikeObject = Union[
 MutableBytesLikeObject = Union[
     bytearray, array.array, memoryview, mmap, ctypes._CData, PickleBuffer
 ]
+OpenFile = Union[io.RawIOBase, io.BufferedIOBase, io.TextIOBase]
 
 
 class FileLikeObject(ABC):
@@ -163,7 +164,7 @@ class FileLikeObject(ABC):
         encoding: Optional[str] = None,
         errors: Optional[str] = None,
         newline: Optional[str] = None,
-    ) -> Union[io.RawIOBase, io.BufferedIOBase, io.TextIOBase]:
+    ) -> OpenFile:
         """Open a file-like object with a normal Python file API.
 
         Apart from the 'file' argument, all the arguments are identical to those of the built-in
