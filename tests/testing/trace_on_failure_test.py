@@ -78,7 +78,7 @@ class TraceOnFailureTest(unittest.TestCase):
     def testWrappedFunction(self) -> None:
         buffer = io.StringIO()
 
-        @trace_on_failure(output=buffer)
+        @trace_on_failure(output=buffer)  # type: ignore
         def failing_function() -> None:
             raise ValueError("Failed function")
 

@@ -13,22 +13,22 @@ class MemoizedClass(object):
         self.cache: Dict[str, Any] = {}
         self.calls = 0
 
-    @cachemethod(cache="cache", key=lambda x, y: y)
+    @cachemethod(cache="cache", key=lambda x, y: y)  # type: ignore
     def method_with_instance_cache(self, arg: str) -> str:
         self.calls += 1
         return "fn" + arg
 
-    @cachemethod(cache=dict, key=lambda x, y: y)
+    @cachemethod(cache=dict, key=lambda x, y: y)  # type: ignore
     def method_with_type_cache(self, arg: str) -> str:
         self.calls += 1
         return "fn" + arg
 
-    @cachemethod(cache=shared_cache, key=lambda x, y: y)
+    @cachemethod(cache=shared_cache, key=lambda x, y: y)  # type: ignore
     def method_with_object_cache(self, arg: str) -> str:
         self.calls += 1
         return "fn" + arg
 
-    @cachemethod(cache=dict)
+    @cachemethod(cache=dict)  # type: ignore
     def method_with_DefaultKey(self, arg: str) -> str:
         self.calls += 1
         return "def" + arg

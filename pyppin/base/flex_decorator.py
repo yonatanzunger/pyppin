@@ -4,6 +4,11 @@ from typing import Any, Callable, TypeVar, Union, overload
 
 DecoratedFunction = TypeVar("DecoratedFunction", bound=Callable[..., Any])
 
+# XXX FIX BEFORE PUBLICIZING: Right now there is a type signature problem, so that if you define a
+# flex_decorator and use it with parentheses, it will fail mypy with "Untyped decorator makes
+# function "my_decorator" untyped" whenever you *use* your decorator. Obviously not acceptable; need
+# to fix this.
+
 # A decorated or decorable function is anything bounded by Callable[..., Any]
 # A zero-argument decorator maps a decorable function to one of the same signature
 # A multi-argument decorator maps kwargs only ... to a zero-argument decorator

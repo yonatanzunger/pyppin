@@ -1,0 +1,22 @@
+--- BEFORE VERY FIRST RELEASE ---
+* Write up release instructions and CI testing
+
+--- BEFORE PUBLICIZING ---
+* Create maintainer aliases and repoint code of conduct etc.
+* Clean up documentation ToC etc for aesthetics.
+* Fix flex_decorator typing issue (flex_decorator_test, cache_test, trace_on_failure_test)
+
+--- COMING SOON ---
+
+Other classes to maybe add:
+* threading/
+  * rate limiter ==> finish test, once histogram is done.
+  * watchdog alarm
+* file/
+  * File system, mountable system
+    => In another library: GCS, AWS, etc file systems.
+  * Maybe even tools for talking to Google's damnable Docs APIs?
+* containers/
+  * Ring buffer
+* math/
+  * expression tree

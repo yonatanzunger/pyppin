@@ -22,7 +22,7 @@ class FlexDecoratorTest(unittest.TestCase):
         self.assertEqual((2, "foo_bar"), test_function("bar"))
 
         # Or with arguments
-        @decorator_with_defaults(arg=3)
+        @decorator_with_defaults(arg=3)  # type: ignore
         def another_test_function(x: str) -> str:
             return "quux_" + x
 
@@ -45,7 +45,7 @@ class FlexDecoratorTest(unittest.TestCase):
                 return "foo_" + x
 
         # But you can with arguments.
-        @decorator_without_defaults(arg=3)
+        @decorator_without_defaults(arg=3)  # type: ignore
         def another_test_function(x: str) -> str:
             return "quux_" + x
 
