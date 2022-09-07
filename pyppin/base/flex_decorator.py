@@ -107,12 +107,12 @@ def flex_decorator(decorator: Callable) -> Callable:
                     f"thing_to_be_decorated(...)."
                 )
             # We're acting like a zero-argument decorator; simply apply decorator to this!
-            return update_wrapper(decorator(maybe_target), maybe_target)
+            return _maybe_update_wrapper(decorator(maybe_target), maybe_target)
 
         elif maybe_target is None:
             # Call using the second syntax. We need to return a zero-argument decorator.
             def inner_decorator(target: DecoratedFunction) -> DecoratedFunction:
-                return update_wrapper(decorator(target, **kwargs), target)
+                return _maybe_update_wrapper(decorator(target, **kwargs), target)
 
             return inner_decorator
 
@@ -122,3 +122,15 @@ def flex_decorator(decorator: Callable) -> Callable:
             )
 
     return poly_decorator
+
+
+def _maybe_update_wrapper(wrapper: Any, wrapped: Any) -> Any:
+    """A conditionl update_wrapper, for when we don't know what the target is.
+
+    Basically, do it if this is a function and so functools.update_wrapper makes sense; don't do it
+    for a class, where the wrapper's dict is a mapping proxy.
+    """
+    if hasattr(wrapper, "__dict__") and hasattr(wrapper.__dict__, "update"):
+        return update_wrapper(wrapper, wrapped)
+    else:
+        return wrapper

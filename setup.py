@@ -10,17 +10,17 @@ with open(
 
 setup(
     name="pyppin",
-    version="1.0.0",
+    version="0.1.0",
     description="Python tools collection",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    keywords="",  # XXX
-    author="",  # XXX
-    author_email="",  # XXX
+    keywords="",  # TODO
+    author="Yonatan Zunger",
+    author_email="zunger@gmail.com",
     license="MIT",
-    classifiers=[],  # XXX
+    classifiers=[],  # TODO
     project_urls={
-        # XXX
+        # TODO
     },
     python_requires=">=3.7",
     install_requires=[],
