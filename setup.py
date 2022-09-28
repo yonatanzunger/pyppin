@@ -20,9 +20,9 @@ setup(
     license="Apache",
     classifiers=[
         "Development Status :: 5 - Production/Stable",
-        "License :: OSI Approved :: Apache License",
+        "License :: OSI Approved :: Apache Software License",
         "Intended Audience :: Developers",
-        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python",
     ],
     project_urls={
         "Source": "https://github.com/yonatanzunger/pyppin",
