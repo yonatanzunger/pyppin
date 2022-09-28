@@ -44,7 +44,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../readme.html">pyppin: A toolkit of Python basics</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="pyppin.base.html">pyppin.base</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="pyppin.base.html#pyppin.base.assert_not_none"><code class="docutils literal notranslate"><span class="pre">assert_not_none()</span></code></a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">pyppin.base.cache</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#skipping-the-cache">Skipping the Cache</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#checking-cache-presence">Checking cache presence</a></li>
@@ -56,6 +55,7 @@
 <li class="toctree-l3"><a class="reference internal" href="pyppin.base.import_file.html">pyppin.base.import_file</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyppin.base.lazyinit.html">pyppin.base.lazyinit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyppin.base.registered_class.html">pyppin.base.registered_class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.base.html#pyppin.base.assert_not_none"><code class="docutils literal notranslate"><span class="pre">assert_not_none()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.containers.html">pyppin.containers</a></li>
@@ -96,9 +96,10 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-pyppin.base.cache">
-<span id="pyppin-base-cache"></span><h1>pyppin.base.cache<a class="headerlink" href="#module-pyppin.base.cache" title="Permalink to this heading">¶</a></h1>
-<p>Caching decorators for functions and methods</p>
+  <section id="pyppin-base-cache">
+<h1>pyppin.base.cache<a class="headerlink" href="#pyppin-base-cache" title="Permalink to this heading">¶</a></h1>
+<p>[<a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/base/cache.py">View Source</a>]</p>
+<span class="target" id="module-pyppin.base.cache"></span><p>Caching decorators for functions and methods</p>
 <p>This file provides two decorators, <cite>&#64;cache</cite> (for functions) and <cite>&#64;cachemethod</cite> (for methods),
 which can be used to memoize the return values of the function. For example,:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyClass</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -206,26 +207,26 @@ True if the given arguments would lead to a cache hit, False otherwise.</p></li>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyppin.base.cache.CacheFlags">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyppin.base.cache.</span></span><span class="sig-name descname"><span class="pre">CacheFlags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">read</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">write</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyppin.base.cache.CacheFlags" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyppin.base.cache.</span></span><span class="sig-name descname"><span class="pre">CacheFlags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">read</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">write</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/base/cache.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.base.cache.CacheFlags" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">NamedTuple</span></code></p>
 <p>These flags indicate how the cache should be consulted on a given call.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyppin.base.cache.CacheFlags.read">
-<span class="sig-name descname"><span class="pre">read</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pyppin.base.cache.CacheFlags.read" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">read</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/base/cache.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.base.cache.CacheFlags.read" title="Permalink to this definition">¶</a></dt>
 <dd><p>If read is true, we should see if the value is in the cache before the function call,
 and if so, return the cached value. Setting it to false means we ignore the cached value.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyppin.base.cache.CacheFlags.write">
-<span class="sig-name descname"><span class="pre">write</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pyppin.base.cache.CacheFlags.write" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">write</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/base/cache.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.base.cache.CacheFlags.write" title="Permalink to this definition">¶</a></dt>
 <dd><p>If write is true, then if we didn’t get the value from the cache (either because
 <cite>read=False</cite> or because of a cache miss), we should update the cache with the new value.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyppin.base.cache.CacheFlags.from_skip_arg">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_skip_arg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#pyppin.base.cache.CacheFlags" title="pyppin.base.cache.CacheFlags"><span class="pre">CacheFlags</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pyppin.base.cache.CacheFlags" title="pyppin.base.cache.CacheFlags"><span class="pre">CacheFlags</span></a></span></span><a class="headerlink" href="#pyppin.base.cache.CacheFlags.from_skip_arg" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_skip_arg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#pyppin.base.cache.CacheFlags" title="pyppin.base.cache.CacheFlags"><span class="pre">CacheFlags</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pyppin.base.cache.CacheFlags" title="pyppin.base.cache.CacheFlags"><span class="pre">CacheFlags</span></a></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/base/cache.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.base.cache.CacheFlags.from_skip_arg" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse a “skip=&lt;foo&gt;” argument into CacheFlags.</p>
 </dd></dl>
 
@@ -233,7 +234,7 @@ and if so, return the cached value. Setting it to false means we ignore the cach
 
 <dl class="py exception">
 <dt class="sig sig-object py" id="pyppin.base.cache.ExplicitKeyNeeded">
-<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyppin.base.cache.</span></span><span class="sig-name descname"><span class="pre">ExplicitKeyNeeded</span></span><a class="headerlink" href="#pyppin.base.cache.ExplicitKeyNeeded" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyppin.base.cache.</span></span><span class="sig-name descname"><span class="pre">ExplicitKeyNeeded</span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/base/cache.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.base.cache.ExplicitKeyNeeded" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
 <p>Error: You used the default <cite>key</cite> argument in a place where it doesn’t work.</p>
 </dd></dl>

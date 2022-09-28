@@ -71,7 +71,9 @@ def time_delta_string(
     else:
         negative = False
 
-    return format_sign(_time_delta_string(delta, julian), sign_mode=sign_mode, is_negative=negative)
+    return format_sign(
+        _time_delta_string(delta, julian), sign_mode=sign_mode, is_negative=negative
+    )
 
 
 def _time_delta_string(delta: timedelta, julian: bool) -> str:

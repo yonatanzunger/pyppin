@@ -7,5 +7,8 @@ nonetheless damned useful in practice. If the main argument against adding somet
 library is "why does it need to be in there, as opposed to elsewhere?" and it's not big enough to
 merit its own standalone package, this is a perfectly reasonable place to put it.
 
-To find the current catalogue of tools and documentation, either browse the source code (it's
-deliberately meant to be readable!) or go to [the documentation](https://yonatanzunger.github.io/pyppin/).
+You can find the current catalogue of tools in 
+[the documentation](https://yonatanzunger.github.io/pyppin/). You can also directly browse the
+[source code](https://github.com/yonatanzunger/pyppin/tree/master/pyppin) and the
+[unittests](https://github.com/yonatanzunger/pyppin/tree/master/tests), which are deliberately
+heavily commented and meant to be readable!

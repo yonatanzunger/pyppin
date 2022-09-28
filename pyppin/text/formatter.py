@@ -26,7 +26,11 @@ class Formatter(string.Formatter):
 
     def format_field(self, value: Any, format_spec: str) -> str:
         spec = PyppinFormat.parse(format_spec)
-        return super().format_field(value, format_spec) if spec is None else spec.format(value)
+        return (
+            super().format_field(value, format_spec)
+            if spec is None
+            else spec.format(value)
+        )
 
 
 ################################################################################################
@@ -92,7 +96,9 @@ class PyppinFormat(NamedTuple):
         if format_spec.startswith("("):
             end = format_spec.find(")")
             if end == -1:
-                raise ValueError(f"Bad format spec '{orig}': Unmatched ( in threshold value")
+                raise ValueError(
+                    f"Bad format spec '{orig}': Unmatched ( in threshold value"
+                )
             threshold = float(format_spec[1:end])
             format_spec = format_spec[end + 1 :]
         else:
@@ -137,7 +143,9 @@ class PyppinFormat(NamedTuple):
 
     def _require(self, value: object, *types: type) -> None:
         if not any(isinstance(value, type) for type in types):
-            raise ValueError(f"Cannot format {type(value).__name__} as {self.format_spec}")
+            raise ValueError(
+                f"Cannot format {type(value).__name__} as {self.format_spec}"
+            )
 
     def _pad(self, base: str) -> str:
         if self.width is None:

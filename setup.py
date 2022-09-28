@@ -10,17 +10,17 @@ with open(
 
 setup(
     name="pyppin",
-    version="1.0.1",
+    version="1.0.2",
     description="Python tools collection",
     long_description=long_description,
     long_description_content_type="text/markdown",
     keywords="threading,stack trace,utilities",
     author="Yonatan Zunger",
     author_email="zunger@gmail.com",
-    license="MIT",
+    license="Apache",
     classifiers=[
         "Development Status :: 5 - Production/Stable",
-        "License :: OSI Approved :: MIT License",
+        "License :: OSI Approved :: Apache License",
         "Intended Audience :: Developers",
         "Programming Language :: Python :: 3.7",
     ],

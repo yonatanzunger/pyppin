@@ -11,7 +11,9 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import os
+import os.path
 import sys
+from typing import Optional
 
 import sphinx_rtd_theme
 from recommonmark.transform import AutoStructify
@@ -41,7 +43,8 @@ extensions = [
     "sphinx.ext.napoleon",
     # This allows it to parse .md files as inputs.
     "recommonmark",
-    "sphinx.ext.napoleon",
+    # This lets us link to source code.
+    "sphinx.ext.linkcode",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -77,6 +80,24 @@ autodoc_default_options = {
 napoleon_custom_sections = [
     "Fancier Example",
 ]
+
+
+_SRC_ROOT = os.path.abspath("..")
+
+
+def linkcode_resolve(domain: str, info: dict[str, str]) -> Optional[str]:
+    if domain != "py" or not info["module"]:
+        return None
+    filename = info["module"].replace(".", "/")
+    # Is this a directory or a file?
+    if os.path.isdir(f"{_SRC_ROOT}/{filename}"):
+        filename = filename + "/__init__.py"
+    elif os.path.isfile(f"{_SRC_ROOT}/{filename}.py"):
+        filename = filename + ".py"
+    else:
+        return None
+
+    return "https://github.com/yonatanzunger/pyppin/tree/master/" + filename
 
 
 def setup(app: Sphinx) -> None:

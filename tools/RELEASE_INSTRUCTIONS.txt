@@ -1,7 +1,7 @@
 To build a new release:
 
 * Basic setup
-  * Run `tox test` and `tox lint`. If lint raises any errors, run `tox lint -- --fix`
+  * Run `tox`. If lint raises any errors, run `tox lint -- --fix`
   * Make sure the fields in setup.py are correct.
   * Bump the version number in setup.py.
 * Image preparation

@@ -1,7 +1,15 @@
 pyppin.threading.stack\_trace
 =============================
 
+
+[`View Source <https://github.com/yonatanzunger/pyppin/tree/master/pyppin/threading/stack_trace.py>`_]
+
+
 .. automodule:: pyppin.threading.stack_trace
+
+   
+   
+   
 
    
    
@@ -37,6 +45,3 @@ pyppin.threading.stack\_trace
    
    
    
-
-
-

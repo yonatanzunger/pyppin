@@ -1,7 +1,15 @@
 pyppin.math.functions
 =====================
 
+
+[`View Source <https://github.com/yonatanzunger/pyppin/tree/master/pyppin/math/functions.py>`_]
+
+
 .. automodule:: pyppin.math.functions
+
+   
+   
+   
 
    
    
@@ -26,6 +34,3 @@ pyppin.math.functions
    
    
    
-
-
-

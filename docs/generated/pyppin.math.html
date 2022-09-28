@@ -47,12 +47,12 @@
 <li class="toctree-l2"><a class="reference internal" href="pyppin.containers.html">pyppin.containers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.file.html">pyppin.file</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">pyppin.math</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#pyppin.math.round_up_to"><code class="docutils literal notranslate"><span class="pre">round_up_to()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pyppin.math.cap"><code class="docutils literal notranslate"><span class="pre">cap()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pyppin.math.minmax"><code class="docutils literal notranslate"><span class="pre">minmax()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyppin.math.functions.html">pyppin.math.functions</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyppin.math.histogram.html">pyppin.math.histogram</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyppin.math.plot_ascii.html">pyppin.math.plot_ascii</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyppin.math.round_up_to"><code class="docutils literal notranslate"><span class="pre">round_up_to()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyppin.math.cap"><code class="docutils literal notranslate"><span class="pre">cap()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyppin.math.minmax"><code class="docutils literal notranslate"><span class="pre">minmax()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.os.html">pyppin.os</a></li>
@@ -89,9 +89,28 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-pyppin.math">
-<span id="pyppin-math"></span><h1>pyppin.math<a class="headerlink" href="#module-pyppin.math" title="Permalink to this heading">¶</a></h1>
-<p>Mathematical utilities.</p>
+  <section id="pyppin-math">
+<h1>pyppin.math<a class="headerlink" href="#pyppin-math" title="Permalink to this heading">¶</a></h1>
+<p>[<a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/math">Browse Source</a>]</p>
+<span class="target" id="module-pyppin.math"></span><p>Mathematical utilities.</p>
+<p class="rubric">Modules</p>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyppin.math.functions.html#module-pyppin.math.functions" title="pyppin.math.functions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.math.functions</span></code></a></p></td>
+<td><p>Abstract classes for math functions; used with histogram and plot_ascii.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pyppin.math.histogram.html#module-pyppin.math.histogram" title="pyppin.math.histogram"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.math.histogram</span></code></a></p></td>
+<td><p>A flexible class for managing, computing with, and plotting histograms.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyppin.math.plot_ascii.html#module-pyppin.math.plot_ascii" title="pyppin.math.plot_ascii"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.math.plot_ascii</span></code></a></p></td>
+<td><p>Generate ASCII-art plots of functions and data.</p></td>
+</tr>
+</tbody>
+</table>
 <p class="rubric">Functions</p>
 <table class="autosummary longtable docutils align-default">
 <colgroup>
@@ -112,40 +131,22 @@
 </table>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyppin.math.round_up_to">
-<span class="sig-prename descclassname"><span class="pre">pyppin.math.</span></span><span class="sig-name descname"><span class="pre">round_up_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multiple_of</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#pyppin.math.round_up_to" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyppin.math.</span></span><span class="sig-name descname"><span class="pre">round_up_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multiple_of</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/math/__init__.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.math.round_up_to" title="Permalink to this definition">¶</a></dt>
 <dd><p>Round &lt;value&gt; up to the nearest multiple of &lt;float&gt;.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyppin.math.cap">
-<span class="sig-prename descclassname"><span class="pre">pyppin.math.</span></span><span class="sig-name descname"><span class="pre">cap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#pyppin.math.cap" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyppin.math.</span></span><span class="sig-name descname"><span class="pre">cap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/math/__init__.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.math.cap" title="Permalink to this definition">¶</a></dt>
 <dd><p>Cap a value to an interval.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyppin.math.minmax">
-<span class="sig-prename descclassname"><span class="pre">pyppin.math.</span></span><span class="sig-name descname"><span class="pre">minmax</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#pyppin.math.minmax" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyppin.math.</span></span><span class="sig-name descname"><span class="pre">minmax</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/math/__init__.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.math.minmax" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return (min, max) of data in one pass.</p>
 </dd></dl>
 
-<p class="rubric">Modules</p>
-<table class="autosummary longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyppin.math.functions.html#module-pyppin.math.functions" title="pyppin.math.functions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.math.functions</span></code></a></p></td>
-<td><p>Abstract classes for math functions; used with histogram and plot_ascii.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyppin.math.histogram.html#module-pyppin.math.histogram" title="pyppin.math.histogram"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.math.histogram</span></code></a></p></td>
-<td><p>A flexible class for managing, computing with, and plotting histograms.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyppin.math.plot_ascii.html#module-pyppin.math.plot_ascii" title="pyppin.math.plot_ascii"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.math.plot_ascii</span></code></a></p></td>
-<td><p>Generate ASCII-art plots of functions and data.</p></td>
-</tr>
-</tbody>
-</table>
 </section>
 
 

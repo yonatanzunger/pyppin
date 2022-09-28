@@ -44,7 +44,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../readme.html">pyppin: A toolkit of Python basics</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="pyppin.base.html">pyppin.base</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="pyppin.base.html#pyppin.base.assert_not_none"><code class="docutils literal notranslate"><span class="pre">assert_not_none()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyppin.base.cache.html">pyppin.base.cache</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">pyppin.base.flex_decorator</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#pyppin.base.flex_decorator.flex_decorator"><code class="docutils literal notranslate"><span class="pre">flex_decorator()</span></code></a></li>
@@ -53,6 +52,7 @@
 <li class="toctree-l3"><a class="reference internal" href="pyppin.base.import_file.html">pyppin.base.import_file</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyppin.base.lazyinit.html">pyppin.base.lazyinit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyppin.base.registered_class.html">pyppin.base.registered_class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.base.html#pyppin.base.assert_not_none"><code class="docutils literal notranslate"><span class="pre">assert_not_none()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.containers.html">pyppin.containers</a></li>
@@ -93,9 +93,10 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-pyppin.base.flex_decorator">
-<span id="pyppin-base-flex-decorator"></span><h1>pyppin.base.flex_decorator<a class="headerlink" href="#module-pyppin.base.flex_decorator" title="Permalink to this heading">¶</a></h1>
-<p>A way to simplify writing Python decorators and improve their syntax.</p>
+  <section id="pyppin-base-flex-decorator">
+<h1>pyppin.base.flex_decorator<a class="headerlink" href="#pyppin-base-flex-decorator" title="Permalink to this heading">¶</a></h1>
+<p>[<a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/base/flex_decorator.py">View Source</a>]</p>
+<span class="target" id="module-pyppin.base.flex_decorator"></span><p>A way to simplify writing Python decorators and improve their syntax.</p>
 <p class="rubric">Functions</p>
 <table class="autosummary longtable docutils align-default">
 <colgroup>
@@ -110,7 +111,7 @@
 </table>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyppin.base.flex_decorator.flex_decorator">
-<span class="sig-prename descclassname"><span class="pre">pyppin.base.flex_decorator.</span></span><span class="sig-name descname"><span class="pre">flex_decorator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">decorator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span></span></span><a class="headerlink" href="#pyppin.base.flex_decorator.flex_decorator" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyppin.base.flex_decorator.</span></span><span class="sig-name descname"><span class="pre">flex_decorator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">decorator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/base/flex_decorator.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.base.flex_decorator.flex_decorator" title="Permalink to this definition">¶</a></dt>
 <dd><p>flex_decorator is a way to simplify writing Python decorators and improve their syntax.</p>
 <p>Usually, if you want to write a decorator without arguments, you have to write one kind of
 function, and the resulting syntax is &#64;foo def bar(), but if you want to write a decorator that
@@ -132,10 +133,13 @@ def decorated_thing(…):</p>
 <p>&#64;my_decorator
 def decorated_thing(…):</p>
 <p>This is identical to &#64;my_decorator(), so users no longer need to remember which one to use.</p>
-<p><em>WARNING</em>: There is a known conflict between this code and mypy. When you make a flex decorator
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>There is a known conflict between this code and mypy. When you make a flex decorator
 and use it with parentheses, mypy will fail at the use point with “Untyped decorator makes
 function “my_decorator” untyped”. At the moment this requires a # type: ignore on that line. Fix
 in the works but this is messy and may require changes to mypy and/or Python itself to fix.</p>
+</div>
 </dd></dl>
 
 </section>

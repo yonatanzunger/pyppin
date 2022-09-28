@@ -44,7 +44,9 @@ def flex_decorator(decorator: Callable) -> Callable:
 
     This is identical to @my_decorator(), so users no longer need to remember which one to use.
 
-    *WARNING*: There is a known conflict between this code and mypy. When you make a flex decorator
+    Warning
+    =======
+    There is a known conflict between this code and mypy. When you make a flex decorator
     and use it with parentheses, mypy will fail at the use point with "Untyped decorator makes
     function "my_decorator" untyped". At the moment this requires a # type: ignore on that line. Fix
     in the works but this is messy and may require changes to mypy and/or Python itself to fix.

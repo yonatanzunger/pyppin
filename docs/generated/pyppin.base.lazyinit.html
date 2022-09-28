@@ -44,7 +44,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../readme.html">pyppin: A toolkit of Python basics</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="pyppin.base.html">pyppin.base</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="pyppin.base.html#pyppin.base.assert_not_none"><code class="docutils literal notranslate"><span class="pre">assert_not_none()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyppin.base.cache.html">pyppin.base.cache</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyppin.base.flex_decorator.html">pyppin.base.flex_decorator</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyppin.base.import_file.html">pyppin.base.import_file</a></li>
@@ -54,6 +53,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="pyppin.base.registered_class.html">pyppin.base.registered_class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.base.html#pyppin.base.assert_not_none"><code class="docutils literal notranslate"><span class="pre">assert_not_none()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.containers.html">pyppin.containers</a></li>
@@ -94,9 +94,10 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-pyppin.base.lazyinit">
-<span id="pyppin-base-lazyinit"></span><h1>pyppin.base.lazyinit<a class="headerlink" href="#module-pyppin.base.lazyinit" title="Permalink to this heading">¶</a></h1>
-<p>An instance method decorator to make initializers execute once, on demand.</p>
+  <section id="pyppin-base-lazyinit">
+<h1>pyppin.base.lazyinit<a class="headerlink" href="#pyppin-base-lazyinit" title="Permalink to this heading">¶</a></h1>
+<p>[<a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/base/lazyinit.py">View Source</a>]</p>
+<span class="target" id="module-pyppin.base.lazyinit"></span><p>An instance method decorator to make initializers execute once, on demand.</p>
 <p class="rubric">Functions</p>
 <table class="autosummary longtable docutils align-default">
 <colgroup>
@@ -114,7 +115,7 @@
 </table>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyppin.base.lazyinit.lazyinit">
-<span class="sig-prename descclassname"><span class="pre">pyppin.base.lazyinit.</span></span><span class="sig-name descname"><span class="pre">lazyinit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">T</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">_LazyInitializedProperty</span><span class="p"><span class="pre">[</span></span><span class="pre">T</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#pyppin.base.lazyinit.lazyinit" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyppin.base.lazyinit.</span></span><span class="sig-name descname"><span class="pre">lazyinit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">T</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">_LazyInitializedProperty</span><span class="p"><span class="pre">[</span></span><span class="pre">T</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/base/lazyinit.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.base.lazyinit.lazyinit" title="Permalink to this definition">¶</a></dt>
 <dd><p>An instance method decorator to make it lazy-init and execute once.</p>
 <p>The resulting variable behaves like a property, where the function is only invoked once
 and the result memoized.</p>
@@ -139,7 +140,7 @@ called.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyppin.base.lazyinit.reset_all">
-<span class="sig-prename descclassname"><span class="pre">pyppin.base.lazyinit.</span></span><span class="sig-name descname"><span class="pre">reset_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">holder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pyppin.base.lazyinit.reset_all" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyppin.base.lazyinit.</span></span><span class="sig-name descname"><span class="pre">reset_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">holder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/base/lazyinit.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.base.lazyinit.reset_all" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reset <em>all</em> <cite>lazyinit</cite>’ed variables inside a particular object.</p>
 <p>This is almost exclusively useful in unittests, if you need to hard-reset some kind of
 environment variable or something.</p>

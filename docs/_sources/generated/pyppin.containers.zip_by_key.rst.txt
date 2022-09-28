@@ -1,7 +1,15 @@
 pyppin.containers.zip\_by\_key
 ==============================
 
+
+[`View Source <https://github.com/yonatanzunger/pyppin/tree/master/pyppin/containers/zip_by_key.py>`_]
+
+
 .. automodule:: pyppin.containers.zip_by_key
+
+   
+   
+   
 
    
    
@@ -30,6 +38,3 @@ pyppin.containers.zip\_by\_key
    
    
    
-
-
-

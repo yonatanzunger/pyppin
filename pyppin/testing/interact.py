@@ -1,4 +1,4 @@
-"""A function to open an iteractive debugging REPL anywhere in your code."""
+"""A function to open an interactive debugging REPL anywhere in your code."""
 import code
 import sys
 from typing import Callable, Iterable, Optional

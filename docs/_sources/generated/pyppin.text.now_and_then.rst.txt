@@ -1,7 +1,15 @@
 pyppin.text.now\_and\_then
 ==========================
 
+
+[`View Source <https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/now_and_then.py>`_]
+
+
 .. automodule:: pyppin.text.now_and_then
+
+   
+   
+   
 
    
    
@@ -26,6 +34,3 @@ pyppin.text.now\_and\_then
    
    
    
-
-
-
