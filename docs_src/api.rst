@@ -8,6 +8,7 @@ API
    pyppin.base
    pyppin.containers
    pyppin.file
+   pyppin.iterators
    pyppin.math
    pyppin.os
    pyppin.testing

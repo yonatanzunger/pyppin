@@ -2,7 +2,7 @@ import unittest
 from collections import defaultdict
 from typing import Dict
 
-from pyppin.containers.iterators import sample, split
+from pyppin.iterators import sample, split
 from pyppin.math import within
 from pyppin.math.histogram import Histogram
 
@@ -42,6 +42,6 @@ class IteratorsTest(unittest.TestCase):
         expected_mean = TEST_COUNT * SAMPLE_COUNT / STREAM_LENGTH
         self.assertTrue(
             within(histogram.mean, 0.99 * expected_mean, 1.01 * expected_mean),
-            f'Distribution out of range: Got mean {histogram.mean}, expected {expected_mean}',
+            f"Distribution out of range: Got mean {histogram.mean}, expected {expected_mean}",
         )
         self.assertLess(histogram.standard_deviation, 25)

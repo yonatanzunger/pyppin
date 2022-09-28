@@ -34,7 +34,9 @@ class Bucketing(object):
         if max_linear_value is not None and exponential_multiplier <= 1:
             raise ValueError("The exponential step size for bucketing must be > 1!")
         self.max_linear_value = (
-            round_up_to(max_linear_value, linear_steps) if max_linear_value is not None else None
+            round_up_to(max_linear_value, linear_steps)
+            if max_linear_value is not None
+            else None
         )
         self.linear_steps = linear_steps
         self.exponential_multiplier = exponential_multiplier
@@ -146,7 +148,9 @@ class Histogram(object):
             if count + current_count >= target_count:
                 # We found it! Let's interpolate the position we need within the bucket.
                 previous_value = (
-                    self.min if bucket == 0 else self.bucketing.value_for_bucket(bucket - 1)
+                    self.min
+                    if bucket == 0
+                    else self.bucketing.value_for_bucket(bucket - 1)
                 )
                 current_value = self.bucketing.value_for_bucket(bucket)
                 fraction = (target_count - current_count) / count

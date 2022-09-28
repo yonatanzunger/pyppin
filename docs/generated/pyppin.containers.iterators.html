@@ -19,9 +19,7 @@
         <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="pyppin.containers.zip_by_key" href="pyppin.containers.zip_by_key.html" />
-    <link rel="prev" title="pyppin.containers" href="pyppin.containers.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -40,27 +38,9 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../readme.html">pyppin: A toolkit of Python basics</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="pyppin.base.html">pyppin.base</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="pyppin.containers.html">pyppin.containers</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">pyppin.containers.iterators</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#pyppin.containers.iterators.split"><code class="docutils literal notranslate"><span class="pre">split()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pyppin.containers.iterators.sample"><code class="docutils literal notranslate"><span class="pre">sample()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="pyppin.containers.zip_by_key.html">pyppin.containers.zip_by_key</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="pyppin.file.html">pyppin.file</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pyppin.math.html">pyppin.math</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pyppin.os.html">pyppin.os</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pyppin.testing.html">pyppin.testing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pyppin.text.html">pyppin.text</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pyppin.threading.html">pyppin.threading</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Using &amp; Contributing</a></li>
 </ul>
 
@@ -78,8 +58,6 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../api.html">API</a> &raquo;</li>
-          <li><a href="pyppin.containers.html">pyppin.containers</a> &raquo;</li>
       <li>pyppin.containers.iterators</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/generated/pyppin.containers.iterators.rst.txt" rel="nofollow"> View page source</a>
@@ -93,58 +71,12 @@
   <section id="pyppin-containers-iterators">
 <h1>pyppin.containers.iterators<a class="headerlink" href="#pyppin-containers-iterators" title="Permalink to this heading">¶</a></h1>
 <p>[<a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/containers/iterators.py">View Source</a>]</p>
-<span class="target" id="module-pyppin.containers.iterators"></span><p>Useful functions for iterators.</p>
-<p class="rubric">Functions</p>
-<table class="autosummary longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pyppin.containers.iterators.sample" title="pyppin.containers.iterators.sample"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sample</span></code></a>(source, count)</p></td>
-<td><p>Select &lt;count&gt; randomly sampled items from the stream &lt;source&gt;.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pyppin.containers.iterators.split" title="pyppin.containers.iterators.split"><code class="xref py py-obj docutils literal notranslate"><span class="pre">split</span></code></a>(source, key)</p></td>
-<td><p>Split a source according to keys.</p></td>
-</tr>
-</tbody>
-</table>
-<dl class="py function">
-<dt class="sig sig-object py" id="pyppin.containers.iterators.split">
-<span class="sig-prename descclassname"><span class="pre">pyppin.containers.iterators.</span></span><span class="sig-name descname"><span class="pre">split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">DataType</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">DataType</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">KeyType</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">KeyType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">DataType</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/containers/iterators.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.containers.iterators.split" title="Permalink to this definition">¶</a></dt>
-<dd><p>Split a source according to keys.</p>
-<p>Given a sequence (v1, v2, v3), returns a dict whose keys are all possible values of key(v_n),
-and whose values are lists of all values which have that key, in the same order they appeared in
-source.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pyppin.containers.iterators.sample">
-<span class="sig-prename descclassname"><span class="pre">pyppin.containers.iterators.</span></span><span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">DataType</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">count</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">DataType</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/containers/iterators.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.containers.iterators.sample" title="Permalink to this definition">¶</a></dt>
-<dd><p>Select &lt;count&gt; randomly sampled items from the stream &lt;source&gt;.</p>
-<p>This function implements reservoir sampling using Li’s “Algorithm L.”</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>source</strong> – The data from which to sample.</p></li>
-<li><p><strong>count</strong> – The number of items to select from this sample.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A list of (up to) [count] items from the source, randomly selected with equal weights.</p>
-</dd>
-</dl>
-</dd></dl>
-
 </section>
 
 
            </div>
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="pyppin.containers.html" class="btn btn-neutral float-left" title="pyppin.containers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="pyppin.containers.zip_by_key.html" class="btn btn-neutral float-right" title="pyppin.containers.zip_by_key" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
+          <footer>
 
   <hr/>
 

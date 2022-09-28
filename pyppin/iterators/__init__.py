@@ -1,12 +1,12 @@
-"""Useful functions for iterators."""
+"""Useful tools for working with iterators and iterables."""
 
 import math
 import random
 from collections import defaultdict
 from typing import Callable, Dict, Iterable, List, TypeVar
 
-DataType = TypeVar('DataType')
-KeyType = TypeVar('KeyType')
+DataType = TypeVar("DataType")
+KeyType = TypeVar("KeyType")
 
 
 def split(
