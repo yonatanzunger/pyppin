@@ -27,6 +27,7 @@ setup(
     project_urls={
         "Source": "https://github.com/yonatanzunger/pyppin",
         "Tracker": "https://github.com/yonatanzunger/pyppin/issues",
+        "Documentation": "https://yonatanzunger.github.io/pyppin/",
     },
     python_requires=">=3.7",
     install_requires=[],

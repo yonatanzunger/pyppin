@@ -4,3 +4,8 @@ To build a new release:
 * Make sure the fields in setup.py are correct.
 * Bump the version number in setup.py.
 * Compile fresh docs by running tools/docs.py.
+* Commit all changes and push to master.
+
+Once master is ready, make a build image and push to prod:
+* python setup.py build
+* twine upload dist/*

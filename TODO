@@ -1,7 +1,3 @@
---- BEFORE PUBLICIZING ---
-* Create maintainer aliases and repoint code of conduct etc.
-* Clean up documentation ToC etc for aesthetics.
-
 --- COMING SOON ---
 
 * Fix flex_decorator typing issue (flex_decorator_test, cache_test, trace_on_failure_test)
