@@ -8,4 +8,5 @@ To build a new release:
 
 Once master is ready, make a build image and push to prod:
 * python setup.py build
+* python setup.py install
 * twine upload dist/*
