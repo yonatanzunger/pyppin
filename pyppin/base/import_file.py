@@ -1,3 +1,5 @@
+"""A function to import a Python file from its pathname."""
+
 import importlib.util
 import sys
 from pathlib import Path

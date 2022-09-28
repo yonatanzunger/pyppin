@@ -14,11 +14,13 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="pyppin.base.lazyinit" href="pyppin.base.lazyinit.html" />
+    <link rel="next" title="pyppin.base.flex_decorator" href="pyppin.base.flex_decorator.html" />
     <link rel="prev" title="pyppin.base" href="pyppin.base.html" /> 
 </head>
 
@@ -42,11 +44,16 @@
 <li class="toctree-l1"><a class="reference internal" href="../readme.html">pyppin: A toolkit of Python basics</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="pyppin.base.html">pyppin.base</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="pyppin.base.html#pyppin.base.assert_not_none"><code class="docutils literal notranslate"><span class="pre">assert_not_none()</span></code></a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">pyppin.base.cache</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#skipping-the-cache">Skipping the Cache</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#checking-cache-presence">Checking cache presence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyppin.base.cache.CacheFlags"><code class="docutils literal notranslate"><span class="pre">CacheFlags</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyppin.base.cache.ExplicitKeyNeeded"><code class="docutils literal notranslate"><span class="pre">ExplicitKeyNeeded</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.base.flex_decorator.html">pyppin.base.flex_decorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.base.import_file.html">pyppin.base.import_file</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyppin.base.lazyinit.html">pyppin.base.lazyinit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyppin.base.registered_class.html">pyppin.base.registered_class</a></li>
 </ul>
@@ -89,7 +96,7 @@
            <div itemprop="articleBody">
              
   <section id="module-pyppin.base.cache">
-<span id="pyppin-base-cache"></span><h1>pyppin.base.cache<a class="headerlink" href="#module-pyppin.base.cache" title="Permalink to this headline">¶</a></h1>
+<span id="pyppin-base-cache"></span><h1>pyppin.base.cache<a class="headerlink" href="#module-pyppin.base.cache" title="Permalink to this heading">¶</a></h1>
 <p>Caching decorators for functions and methods</p>
 <p>This file provides two decorators, <cite>&#64;cache</cite> (for functions) and <cite>&#64;cachemethod</cite> (for methods),
 which can be used to memoize the return values of the function. For example,:</p>
@@ -147,7 +154,7 @@ be to re-raise the exception. The default is not to do this.</p>
 </div></blockquote>
 </div></blockquote>
 <section id="skipping-the-cache">
-<h2>Skipping the Cache<a class="headerlink" href="#skipping-the-cache" title="Permalink to this headline">¶</a></h2>
+<h2>Skipping the Cache<a class="headerlink" href="#skipping-the-cache" title="Permalink to this heading">¶</a></h2>
 <p>The resulting function will be a wrapped version of the original, but will have an additional
 keyword argument <code class="docutils literal notranslate"><span class="pre">_skip:</span> <span class="pre">Union[bool,</span> <span class="pre">str,</span> <span class="pre">CacheFlags,</span> <span class="pre">None]=None</span></code>, which can be used to control
 caching behavior when invoking it. Some particular useful arguments:</p>
@@ -165,29 +172,15 @@ first one)</p></li>
 </ul>
 </section>
 <section id="checking-cache-presence">
-<h2>Checking cache presence<a class="headerlink" href="#checking-cache-presence" title="Permalink to this headline">¶</a></h2>
+<h2>Checking cache presence<a class="headerlink" href="#checking-cache-presence" title="Permalink to this heading">¶</a></h2>
 <p>In addition, the wrapped function has an incache() method of its own:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">wrappedfn.incache(...)</span></code> has the same signature as the function itself, but returns a bool:
 True if the given arguments would lead to a cache hit, False otherwise.</p></li>
 </ul>
-<p class="rubric">Functions</p>
-<table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pyppin.base.cache.cache" title="pyppin.base.cache.cache"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cache</span></code></a>([cache, lock, key, cache_exceptions])</p></td>
-<td><p>A decorator to memoize (cache) the results of a function call.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pyppin.base.cache.cachemethod" title="pyppin.base.cache.cachemethod"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cachemethod</span></code></a>([cache, lock, key, cache_exceptions])</p></td>
-<td><p>A decorator to memoize (cache) the results of a class or instance method.</p></td>
-</tr>
-</tbody>
-</table>
+</section>
 <p class="rubric">Classes</p>
-<table class="longtable docutils align-default">
+<table class="autosummary longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -199,7 +192,7 @@ True if the given arguments would lead to a cache hit, False otherwise.</p></li>
 </tbody>
 </table>
 <p class="rubric">Exceptions</p>
-<table class="longtable docutils align-default">
+<table class="autosummary longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -231,7 +224,7 @@ and if so, return the cached value. Setting it to false means we ignore the cach
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyppin.base.cache.CacheFlags.from_skip_arg">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_skip_arg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#pyppin.base.cache.CacheFlags" title="pyppin.base.cache.CacheFlags"><span class="pre">pyppin.base.cache.CacheFlags</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pyppin.base.cache.CacheFlags" title="pyppin.base.cache.CacheFlags"><span class="pre">pyppin.base.cache.CacheFlags</span></a></span></span><a class="headerlink" href="#pyppin.base.cache.CacheFlags.from_skip_arg" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_skip_arg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#pyppin.base.cache.CacheFlags" title="pyppin.base.cache.CacheFlags"><span class="pre">CacheFlags</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pyppin.base.cache.CacheFlags" title="pyppin.base.cache.CacheFlags"><span class="pre">CacheFlags</span></a></span></span><a class="headerlink" href="#pyppin.base.cache.CacheFlags.from_skip_arg" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse a “skip=&lt;foo&gt;” argument into CacheFlags.</p>
 </dd></dl>
 
@@ -244,19 +237,6 @@ and if so, return the cached value. Setting it to false means we ignore the cach
 <p>Error: You used the default <cite>key</cite> argument in a place where it doesn’t work.</p>
 </dd></dl>
 
-<dl class="py function">
-<dt class="sig sig-object py" id="pyppin.base.cache.cachemethod">
-<span class="sig-prename descclassname"><span class="pre">pyppin.base.cache.</span></span><span class="sig-name descname"><span class="pre">cachemethod</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">cache:</span> <span class="pre">Optional[Union[MutableMapping[pyppin.base.cache.KeyType,</span> <span class="pre">pyppin.base.cache.ValueType],</span> <span class="pre">Type[MutableMapping[pyppin.base.cache.KeyType,</span> <span class="pre">pyppin.base.cache.ValueType]],</span> <span class="pre">str]]</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'dict'&gt;,</span> <span class="pre">lock:</span> <span class="pre">Union[contextlib.AbstractContextManager,</span> <span class="pre">Type[contextlib.AbstractContextManager],</span> <span class="pre">bool,</span> <span class="pre">str]</span> <span class="pre">=</span> <span class="pre">False,</span> <span class="pre">key:</span> <span class="pre">Optional[Callable[[...],</span> <span class="pre">pyppin.base.cache.KeyType]]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">cache_exceptions:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False,</span> <span class="pre">**kwargs:</span> <span class="pre">Any</span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">pyppin.base.cache.ValueType</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">pyppin.base.cache._WrappedDescriptor</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#pyppin.base.cache.cachemethod" title="Permalink to this definition">¶</a></dt>
-<dd><p>A decorator to memoize (cache) the results of a class or instance method.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pyppin.base.cache.cache">
-<span class="sig-prename descclassname"><span class="pre">pyppin.base.cache.</span></span><span class="sig-name descname"><span class="pre">cache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">cache:</span> <span class="pre">Optional[Union[MutableMapping[pyppin.base.cache.KeyType,</span> <span class="pre">pyppin.base.cache.ValueType],</span> <span class="pre">Type[MutableMapping[pyppin.base.cache.KeyType,</span> <span class="pre">pyppin.base.cache.ValueType]]]]</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'dict'&gt;,</span> <span class="pre">lock:</span> <span class="pre">Union[contextlib.AbstractContextManager,</span> <span class="pre">Type[contextlib.AbstractContextManager],</span> <span class="pre">bool]</span> <span class="pre">=</span> <span class="pre">False,</span> <span class="pre">key:</span> <span class="pre">Optional[Callable[[...],</span> <span class="pre">pyppin.base.cache.KeyType]]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">cache_exceptions:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False,</span> <span class="pre">**kwargs:</span> <span class="pre">Any</span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">pyppin.base.cache.ValueType</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">pyppin.base.cache._WrappedFunction</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#pyppin.base.cache.cache" title="Permalink to this definition">¶</a></dt>
-<dd><p>A decorator to memoize (cache) the results of a function call.</p>
-</dd></dl>
-
-</section>
 </section>
 
 
@@ -264,7 +244,7 @@ and if so, return the cached value. Setting it to false means we ignore the cach
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="pyppin.base.html" class="btn btn-neutral float-left" title="pyppin.base" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="pyppin.base.lazyinit.html" class="btn btn-neutral float-right" title="pyppin.base.lazyinit" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="pyppin.base.flex_decorator.html" class="btn btn-neutral float-right" title="pyppin.base.flex_decorator" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

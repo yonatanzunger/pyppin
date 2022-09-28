@@ -14,7 +14,9 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -75,7 +77,7 @@
            <div itemprop="articleBody">
              
   <section id="pyppin-a-toolkit-of-python-basics">
-<h1>pyppin: A toolkit of Python basics<a class="headerlink" href="#pyppin-a-toolkit-of-python-basics" title="Permalink to this headline">¶</a></h1>
+<h1>pyppin: A toolkit of Python basics<a class="headerlink" href="#pyppin-a-toolkit-of-python-basics" title="Permalink to this heading">¶</a></h1>
 <p>pyppin is a library of “basic components” that can be used in a wide range of contexts – things
 that could hypothetically live in a standard library, only there’s no particular reason to put them
 in there. It is essentially a box of tools that are slightly less common than the basics, but are
@@ -84,14 +86,14 @@ library is “why does it need to be in there, as opposed to elsewhere?” and i
 merit its own standalone package, this is a perfectly reasonable place to put it.</p>
 <p>The current catalogue is:</p>
 <section id="debugging-tools">
-<h2>Debugging Tools<a class="headerlink" href="#debugging-tools" title="Permalink to this headline">¶</a></h2>
+<h2>Debugging Tools<a class="headerlink" href="#debugging-tools" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">interact</span></code> lets you pop open a REPL at any point in your code, with access to all the local and
 global variables, so you can easily do interactive debugging.</p></li>
 </ul>
 </section>
 <section id="better-class-definition">
-<h2>Better class definition<a class="headerlink" href="#better-class-definition" title="Permalink to this headline">¶</a></h2>
+<h2>Better class definition<a class="headerlink" href="#better-class-definition" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">&#64;cache</span></code> and <code class="docutils literal notranslate"><span class="pre">&#64;cachemethod</span></code> are decorators that allow fancier (but still one-line) caching of
 function and method results.</p></li>
@@ -102,13 +104,13 @@ of an abstract class you define.</p></li>
 </ul>
 </section>
 <section id="iteration">
-<h2>Iteration<a class="headerlink" href="#iteration" title="Permalink to this headline">¶</a></h2>
+<h2>Iteration<a class="headerlink" href="#iteration" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">zipper</span></code> flexibly merges multiple sorted iterators into a single, efficient, parallel iterator.</p></li>
 </ul>
 </section>
 <section id="scanning-directories">
-<h2>Scanning directories<a class="headerlink" href="#scanning-directories" title="Permalink to this headline">¶</a></h2>
+<h2>Scanning directories<a class="headerlink" href="#scanning-directories" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">list_files</span></code> lets you list all files recursively in a given directory, managing all the subtle
 corner cases for you.</p></li>

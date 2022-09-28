@@ -1,3 +1,5 @@
+"""Abstract classes for math functions; used with histogram and plot_ascii."""
+
 import bisect
 from typing import Dict, List, Tuple, Union
 

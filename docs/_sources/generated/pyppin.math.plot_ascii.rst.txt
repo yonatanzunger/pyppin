@@ -23,8 +23,8 @@ pyppin.math.plot\_ascii
 
    .. autosummary::
    
-      Axis
-      Interpolate
+      AxisOptions
+      Canvas
    
    
 

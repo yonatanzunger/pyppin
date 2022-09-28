@@ -1,3 +1,5 @@
+"""Pretty-print the contents of an object, including all the innards for debugging."""
+
 from pprint import pprint
 from typing import IO, Any, Dict, Iterable, Optional, Set
 

@@ -14,12 +14,14 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="pyppin.file.types" href="pyppin.file.types.html" />
-    <link rel="prev" title="pyppin.file" href="pyppin.file.html" /> 
+    <link rel="next" title="pyppin.file.tee" href="pyppin.file.tee.html" />
+    <link rel="prev" title="pyppin.file.dev_null" href="pyppin.file.dev_null.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -44,7 +46,12 @@
 <li class="toctree-l2"><a class="reference internal" href="pyppin.base.html">pyppin.base</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.containers.html">pyppin.containers</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="pyppin.file.html">pyppin.file</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">pyppin.file.memfile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.file.dev_null.html">pyppin.file.dev_null</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">pyppin.file.memfile</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pyppin.file.memfile.MemFile"><code class="docutils literal notranslate"><span class="pre">MemFile</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.file.tee.html">pyppin.file.tee</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyppin.file.types.html">pyppin.file.types</a></li>
 </ul>
 </li>
@@ -84,10 +91,10 @@
            <div itemprop="articleBody">
              
   <section id="module-pyppin.file.memfile">
-<span id="pyppin-file-memfile"></span><h1>pyppin.file.memfile<a class="headerlink" href="#module-pyppin.file.memfile" title="Permalink to this headline">¶</a></h1>
+<span id="pyppin-file-memfile"></span><h1>pyppin.file.memfile<a class="headerlink" href="#module-pyppin.file.memfile" title="Permalink to this heading">¶</a></h1>
 <p>Allow access to a single block of RAM with multiple file API handles.</p>
 <p class="rubric">Classes</p>
-<table class="longtable docutils align-default">
+<table class="autosummary longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -101,7 +108,7 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="pyppin.file.memfile.MemFile">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyppin.file.memfile.</span></span><span class="sig-name descname"><span class="pre">MemFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'memfile'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyppin.file.memfile.MemFile" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="pyppin.file.types.html#pyppin.file.types.FileLikeObject" title="pyppin.file.types.FileLikeObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyppin.file.types.FileLikeObject</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="pyppin.file.types.html#pyppin.file.types.FileLikeObject" title="pyppin.file.types.FileLikeObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileLikeObject</span></code></a></p>
 <p>Access a block of RAM as a file-like object.</p>
 <p>Unlike using io.BytesIO or io.StringIO, which do similar things, a MemFile lets you create a
 single block of memory and have <em>multiple</em> things refer to the same block by open()ing it. This
@@ -138,7 +145,7 @@ coordinate that.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyppin.file.memfile.MemFile.pread">
-<span class="sig-name descname"><span class="pre">pread</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buffer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">bytearray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array.array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">memoryview</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">mmap.mmap</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">pyppin.file.types._CData</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyppin.file.memfile.MemFile.bytes" title="pyppin.file.memfile.MemFile.bytes"><span class="pre">bytes</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bytearray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array.array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">memoryview</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">mmap.mmap</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">pyppin.file.types._CData</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#pyppin.file.memfile.MemFile.pread" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">pread</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buffer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">bytearray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">memoryview</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">mmap</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">_CData</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">PickleBuffer</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">bytes</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bytearray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">memoryview</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">mmap</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">_CData</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">PickleBuffer</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#pyppin.file.memfile.MemFile.pread" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read [size] bytes from absolute position [offset].</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -163,7 +170,7 @@ allocate a fresh one.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyppin.file.memfile.MemFile.pwrite">
-<span class="sig-name descname"><span class="pre">pwrite</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyppin.file.memfile.MemFile.bytes" title="pyppin.file.memfile.MemFile.bytes"><span class="pre">bytes</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bytearray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array.array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">memoryview</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">mmap.mmap</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">pyppin.file.types._CData</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#pyppin.file.memfile.MemFile.pwrite" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">pwrite</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">bytes</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bytearray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">memoryview</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">mmap</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">_CData</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">PickleBuffer</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#pyppin.file.memfile.MemFile.pwrite" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write the bytes in [data] to absolute position [offset].</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -202,8 +209,8 @@ do nothing.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="pyppin.file.html" class="btn btn-neutral float-left" title="pyppin.file" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="pyppin.file.types.html" class="btn btn-neutral float-right" title="pyppin.file.types" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="pyppin.file.dev_null.html" class="btn btn-neutral float-left" title="pyppin.file.dev_null" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pyppin.file.tee.html" class="btn btn-neutral float-right" title="pyppin.file.tee" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

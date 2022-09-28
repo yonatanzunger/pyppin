@@ -14,7 +14,9 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -46,7 +48,10 @@
 <li class="toctree-l2"><a class="reference internal" href="pyppin.file.html">pyppin.file</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.math.html">pyppin.math</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="pyppin.os.html">pyppin.os</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">pyppin.os.bulk_import</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">pyppin.os.bulk_import</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pyppin.os.bulk_import.bulk_import"><code class="docutils literal notranslate"><span class="pre">bulk_import()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="pyppin.os.list_files.html">pyppin.os.list_files</a></li>
 </ul>
 </li>
@@ -84,10 +89,10 @@
            <div itemprop="articleBody">
              
   <section id="module-pyppin.os.bulk_import">
-<span id="pyppin-os-bulk-import"></span><h1>pyppin.os.bulk_import<a class="headerlink" href="#module-pyppin.os.bulk_import" title="Permalink to this headline">¶</a></h1>
+<span id="pyppin-os-bulk-import"></span><h1>pyppin.os.bulk_import<a class="headerlink" href="#module-pyppin.os.bulk_import" title="Permalink to this heading">¶</a></h1>
 <p>A function to import an entire directory; useful with registered classes!</p>
 <p class="rubric">Functions</p>
-<table class="longtable docutils align-default">
+<table class="autosummary longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -100,7 +105,7 @@
 </table>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyppin.os.bulk_import.bulk_import">
-<span class="sig-prename descclassname"><span class="pre">pyppin.os.bulk_import.</span></span><span class="sig-name descname"><span class="pre">bulk_import</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recursive</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">['\\..*',</span> <span class="pre">'__pycache__',</span> <span class="pre">'_.*']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">module</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#pyppin.os.bulk_import.bulk_import" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyppin.os.bulk_import.</span></span><span class="sig-name descname"><span class="pre">bulk_import</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recursive</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">['\\..*',</span> <span class="pre">'__pycache__',</span> <span class="pre">'_.*']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">module</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#pyppin.os.bulk_import.bulk_import" title="Permalink to this definition">¶</a></dt>
 <dd><p>Import all Python files in a given directory.</p>
 <p>This is useful if, for example, a directory contains implementations which are registered
 through some mechanism that lets them be accessed programmatically! For an example of this,
@@ -109,7 +114,7 @@ look at the implementation of tools/lint.py in the pyppin package itself.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>path</strong> – The file or directory path from which to start the import.</p></li>
-<li><p><strong>recursive</strong> – If true, recurse into directories.</p></li>
+<li><p><strong>recursive</strong> – If true, recurse into subdirectories.</p></li>
 <li><p><strong>exclude</strong> – A list of filename regexps (not globs!) to skip.</p></li>
 <li><p><strong>verbose</strong> – If true, print when we import things.</p></li>
 <li><p><strong>root</strong> – If given, modules will be named as dotted components starting from this
@@ -139,8 +144,8 @@ with your repository structure as a whole.</p></li>
 <code class="docutils literal notranslate"><span class="pre">bulk_import(f'{REPO_ROOT}/impls',</span> <span class="pre">root=REPO_ROOT)</span></code>. This would load the modules
 <cite>impls.class1</cite>, <cite>impls.class2</cite>, and <cite>impls.foo.class3</cite>. If those classes were (for example)
 registered using <a class="reference internal" href="pyppin.base.registered_class.html#pyppin.base.registered_class.RegisteredClass" title="pyppin.base.registered_class.RegisteredClass"><code class="xref py py-class docutils literal notranslate"><span class="pre">RegisteredClass</span></code></a>, you would then be
-able to grab all of them at
-once, without having to maintain a directory in-code of all the implementations.</p>
+able to grab all of them at once, without having to maintain a directory in-code of all the
+implementations.</p>
 </dd></dl>
 
 </section>

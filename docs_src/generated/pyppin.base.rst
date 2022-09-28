@@ -34,6 +34,8 @@
    :recursive:
 
    pyppin.base.cache
+   pyppin.base.flex_decorator
+   pyppin.base.import_file
    pyppin.base.lazyinit
    pyppin.base.registered_class
 

@@ -1,3 +1,5 @@
+"""An io.IOBase that behaves like /dev/null."""
+
 import io
 from typing import BinaryIO, Iterable, List, Optional, Tuple, Union, cast
 

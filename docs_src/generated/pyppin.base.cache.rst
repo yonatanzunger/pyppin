@@ -9,13 +9,6 @@ pyppin.base.cache
 
    
    
-   .. rubric:: Functions
-
-   .. autosummary::
-   
-      cache
-      cachemethod
-   
    
 
    

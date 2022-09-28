@@ -14,12 +14,14 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="pyppin.os" href="pyppin.os.html" />
-    <link rel="prev" title="pyppin.math" href="pyppin.math.html" /> 
+    <link rel="prev" title="pyppin.math.histogram" href="pyppin.math.histogram.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -45,7 +47,17 @@
 <li class="toctree-l2"><a class="reference internal" href="pyppin.containers.html">pyppin.containers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.file.html">pyppin.file</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="pyppin.math.html">pyppin.math</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">pyppin.math.plot_ascii</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.math.html#pyppin.math.round_up_to"><code class="docutils literal notranslate"><span class="pre">round_up_to()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.math.html#pyppin.math.cap"><code class="docutils literal notranslate"><span class="pre">cap()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.math.html#pyppin.math.minmax"><code class="docutils literal notranslate"><span class="pre">minmax()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.math.functions.html">pyppin.math.functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.math.histogram.html">pyppin.math.histogram</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">pyppin.math.plot_ascii</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pyppin.math.plot_ascii.AxisOptions"><code class="docutils literal notranslate"><span class="pre">AxisOptions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyppin.math.plot_ascii.plot_ascii"><code class="docutils literal notranslate"><span class="pre">plot_ascii()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyppin.math.plot_ascii.Canvas"><code class="docutils literal notranslate"><span class="pre">Canvas</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.os.html">pyppin.os</a></li>
@@ -83,61 +95,55 @@
            <div itemprop="articleBody">
              
   <section id="module-pyppin.math.plot_ascii">
-<span id="pyppin-math-plot-ascii"></span><h1>pyppin.math.plot_ascii<a class="headerlink" href="#module-pyppin.math.plot_ascii" title="Permalink to this headline">¶</a></h1>
+<span id="pyppin-math-plot-ascii"></span><h1>pyppin.math.plot_ascii<a class="headerlink" href="#module-pyppin.math.plot_ascii" title="Permalink to this heading">¶</a></h1>
+<p>Generate ASCII-art plots of functions and data.</p>
 <p class="rubric">Functions</p>
-<table class="longtable docutils align-default">
+<table class="autosummary longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pyppin.math.plot_ascii.plot_ascii" title="pyppin.math.plot_ascii.plot_ascii"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_ascii</span></code></a>(data, width, height[, x_axis, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pyppin.math.plot_ascii.plot_ascii" title="pyppin.math.plot_ascii.plot_ascii"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_ascii</span></code></a>(data[, width, height, x_axis, ...])</p></td>
 <td><p>Create an ASCII-art plot of some numerical data.</p></td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Classes</p>
-<table class="longtable docutils align-default">
+<table class="autosummary longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pyppin.math.plot_ascii.Axis" title="pyppin.math.plot_ascii.Axis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Axis</span></code></a>([min, max, labels])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pyppin.math.plot_ascii.AxisOptions" title="pyppin.math.plot_ascii.AxisOptions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AxisOptions</span></code></a>([min, max, labels])</p></td>
 <td><p>Information about an axis of the plot</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pyppin.math.plot_ascii.Interpolate" title="pyppin.math.plot_ascii.Interpolate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Interpolate</span></code></a>(data)</p></td>
-<td><p>Use this to turn a list or dict of (x, y) tuples into a function.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pyppin.math.plot_ascii.Canvas" title="pyppin.math.plot_ascii.Canvas"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Canvas</span></code></a>(width, height, x_range, y_range[, ...])</p></td>
+<td><p>A Canvas is an object for drawing ASCII plots.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
-<dt class="sig sig-object py" id="pyppin.math.plot_ascii.Interpolate">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyppin.math.plot_ascii.</span></span><span class="sig-name descname"><span class="pre">Interpolate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyppin.math.plot_ascii.Interpolate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Use this to turn a list or dict of (x, y) tuples into a function.</p>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="pyppin.math.plot_ascii.Axis">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyppin.math.plot_ascii.</span></span><span class="sig-name descname"><span class="pre">Axis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyppin.math.plot_ascii.Axis" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyppin.math.plot_ascii.AxisOptions">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyppin.math.plot_ascii.</span></span><span class="sig-name descname"><span class="pre">AxisOptions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyppin.math.plot_ascii.AxisOptions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">NamedTuple</span></code></p>
 <p>Information about an axis of the plot</p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="pyppin.math.plot_ascii.Axis.min">
-<span class="sig-name descname"><span class="pre">min</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyppin.math.plot_ascii.Axis.min" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyppin.math.plot_ascii.AxisOptions.min">
+<span class="sig-name descname"><span class="pre">min</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyppin.math.plot_ascii.AxisOptions.min" title="Permalink to this definition">¶</a></dt>
 <dd><p>The minimum value to show on the plot, or None to infer from data.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="pyppin.math.plot_ascii.Axis.max">
-<span class="sig-name descname"><span class="pre">max</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyppin.math.plot_ascii.Axis.max" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyppin.math.plot_ascii.AxisOptions.max">
+<span class="sig-name descname"><span class="pre">max</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyppin.math.plot_ascii.AxisOptions.max" title="Permalink to this definition">¶</a></dt>
 <dd><p>The maximum value to show on the plot, or None to infer from data.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="pyppin.math.plot_ascii.Axis.labels">
-<span class="sig-name descname"><span class="pre">labels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyppin.math.plot_ascii.Axis.labels" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyppin.math.plot_ascii.AxisOptions.labels">
+<span class="sig-name descname"><span class="pre">labels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyppin.math.plot_ascii.AxisOptions.labels" title="Permalink to this definition">¶</a></dt>
 <dd><p>Axis labels, or None to infer from data.</p>
 </dd></dl>
 
@@ -145,19 +151,22 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyppin.math.plot_ascii.plot_ascii">
-<span class="sig-prename descclassname"><span class="pre">pyppin.math.plot_ascii.</span></span><span class="sig-name descname"><span class="pre">plot_ascii</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_axis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyppin.math.plot_ascii.Axis" title="pyppin.math.plot_ascii.Axis"><span class="pre">pyppin.math.plot_ascii.Axis</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_axis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyppin.math.plot_ascii.Axis" title="pyppin.math.plot_ascii.Axis"><span class="pre">pyppin.math.plot_ascii.Axis</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vfill</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#pyppin.math.plot_ascii.plot_ascii" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyppin.math.plot_ascii.</span></span><span class="sig-name descname"><span class="pre">plot_ascii</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_axis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyppin.math.plot_ascii.AxisOptions" title="pyppin.math.plot_ascii.AxisOptions"><span class="pre">AxisOptions</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_axis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyppin.math.plot_ascii.AxisOptions" title="pyppin.math.plot_ascii.AxisOptions"><span class="pre">AxisOptions</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vfill</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_symbol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'#'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#pyppin.math.plot_ascii.plot_ascii" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create an ASCII-art plot of some numerical data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data</strong> – The data to be plotted. If you have a list or a dict, use an Interpolate to
 turn it into a function.</p></li>
-<li><p><strong>width</strong> – The size, in characters, of the output to generate.</p></li>
-<li><p><strong>height</strong> – The size, in characters, of the output to generate.</p></li>
+<li><p><strong>width</strong> – The size, in characters, of the output to generate. The height will
+default to half the width.</p></li>
+<li><p><strong>height</strong> – The size, in characters, of the output to generate. The height will
+default to half the width.</p></li>
 <li><p><strong>x_axis</strong> – Options for the axes.</p></li>
 <li><p><strong>y_axis</strong> – Options for the axes.</p></li>
 <li><p><strong>vfill</strong> – If True, show a vertical fill (in the style of a bar chart) below each value.
 If False, show the values as points.</p></li>
+<li><p><strong>plot_symbol</strong> – The char to use when plotting it.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -166,13 +175,162 @@ If False, show the values as points.</p></li>
 </dl>
 </dd></dl>
 
+<dl class="py class">
+<dt class="sig sig-object py" id="pyppin.math.plot_ascii.Canvas">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyppin.math.plot_ascii.</span></span><span class="sig-name descname"><span class="pre">Canvas</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_labels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_labels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'</span> <span class="pre">'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyppin.math.plot_ascii.Canvas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A Canvas is an object for drawing ASCII plots.</p>
+<p>It works in terms of three coordinate systems:
+- Natural coordinates (float) are the X and Y values of the function itself, with the origin</p>
+<blockquote>
+<div><p>at the lower left.</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>Image coordinates (int) are pixel positions relative to the image region of the output, i.e.
+the sub-box inside the axes, with the origin at the lower left.</p></li>
+<li><p>Screen coordinates (int) are pixel positions within the full width ⊗ height grid, with the
+origin at the upper left.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>width</strong> – The dimensions in pixels (ie chars) of the output image.</p></li>
+<li><p><strong>height</strong> – The dimensions in pixels (ie chars) of the output image.</p></li>
+<li><p><strong>x_range</strong> – The X and Y axis ranges, in natural coordinates.</p></li>
+<li><p><strong>y_range</strong> – The X and Y axis ranges, in natural coordinates.</p></li>
+<li><p><strong>x_labels</strong> – Optional dicts from natural coordinate to label for the axes.</p></li>
+<li><p><strong>y_labels</strong> – Optional dicts from natural coordinate to label for the axes.</p></li>
+<li><p><strong>background</strong> – The background symbol for the plot.</p></li>
+</ul>
+</dd>
+</dl>
+<p>If the labels aren’t given, they will be inferred. If you want no labels, pass an explicit empty
+dict.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.math.plot_ascii.Canvas.for_plot">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">for_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_axis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyppin.math.plot_ascii.AxisOptions" title="pyppin.math.plot_ascii.AxisOptions"><span class="pre">AxisOptions</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_axis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyppin.math.plot_ascii.AxisOptions" title="pyppin.math.plot_ascii.AxisOptions"><span class="pre">AxisOptions</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'</span> <span class="pre">'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pyppin.math.plot_ascii.Canvas" title="pyppin.math.plot_ascii.Canvas"><span class="pre">Canvas</span></a></span></span><a class="headerlink" href="#pyppin.math.plot_ascii.Canvas.for_plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a Canvas suited to displaying this plot on its own.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – The function you are going to plot.</p></li>
+<li><p><strong>width</strong> – The dimensions of the output canvas.</p></li>
+<li><p><strong>height</strong> – The dimensions of the output canvas.</p></li>
+<li><p><strong>x_axis</strong> – Per-axis options.</p></li>
+<li><p><strong>y_axis</strong> – Per-axis options.</p></li>
+<li><p><strong>background</strong> – The background char for the plot.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.math.plot_ascii.Canvas.natural_to_image_x">
+<span class="sig-name descname"><span class="pre">natural_to_image_x</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#pyppin.math.plot_ascii.Canvas.natural_to_image_x" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert natural coordinates to image coordinates on the X axis.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.math.plot_ascii.Canvas.natural_to_image_y">
+<span class="sig-name descname"><span class="pre">natural_to_image_y</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#pyppin.math.plot_ascii.Canvas.natural_to_image_y" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert natural coordinates to image coordinates on the Y axis.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.math.plot_ascii.Canvas.image_to_natural_x">
+<span class="sig-name descname"><span class="pre">image_to_natural_x</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#pyppin.math.plot_ascii.Canvas.image_to_natural_x" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert image to natural coordinates on the X axis.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.math.plot_ascii.Canvas.image_to_natural_y">
+<span class="sig-name descname"><span class="pre">image_to_natural_y</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#pyppin.math.plot_ascii.Canvas.image_to_natural_y" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert image to natural coordinates on the Y axis.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.math.plot_ascii.Canvas.image_to_screen_x">
+<span class="sig-name descname"><span class="pre">image_to_screen_x</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#pyppin.math.plot_ascii.Canvas.image_to_screen_x" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert image to screen coordinates on the X axis.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.math.plot_ascii.Canvas.image_to_screen_y">
+<span class="sig-name descname"><span class="pre">image_to_screen_y</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#pyppin.math.plot_ascii.Canvas.image_to_screen_y" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert image to screen coordinates on the Y axis.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.math.plot_ascii.Canvas.screen_to_image_x">
+<span class="sig-name descname"><span class="pre">screen_to_image_x</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#pyppin.math.plot_ascii.Canvas.screen_to_image_x" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert screen to image coordinates on the X axis.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.math.plot_ascii.Canvas.screen_to_image_y">
+<span class="sig-name descname"><span class="pre">screen_to_image_y</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#pyppin.math.plot_ascii.Canvas.screen_to_image_y" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert screen to image coordinates on the Y axis.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.math.plot_ascii.Canvas.natural_to_screen_x">
+<span class="sig-name descname"><span class="pre">natural_to_screen_x</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#pyppin.math.plot_ascii.Canvas.natural_to_screen_x" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert natural coordinates to screen coordinates on the X axis.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.math.plot_ascii.Canvas.natural_to_screen_y">
+<span class="sig-name descname"><span class="pre">natural_to_screen_y</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#pyppin.math.plot_ascii.Canvas.natural_to_screen_y" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert natural coordinates to screen coordinates on the Y axis.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.math.plot_ascii.Canvas.pixel">
+<span class="sig-name descname"><span class="pre">pixel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image_x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#pyppin.math.plot_ascii.Canvas.pixel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.math.plot_ascii.Canvas.set_pixel">
+<span class="sig-name descname"><span class="pre">set_pixel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image_x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">char</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pyppin.math.plot_ascii.Canvas.set_pixel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.math.plot_ascii.Canvas.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vfill</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pyppin.math.plot_ascii.Canvas.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a function plot on top of the canvas.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – The function to plot.</p></li>
+<li><p><strong>vfill</strong> – If true, add vertical “fill” lines (like in a bar graph) below the
+curve.</p></li>
+<li><p><strong>symbol</strong> – The character to use for the plot line.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.math.plot_ascii.Canvas.scatter_plot">
+<span class="sig-name descname"><span class="pre">scatter_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pyppin.math.plot_ascii.Canvas.scatter_plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a scatter plot of (x, y) pairs.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.math.plot_ascii.Canvas.render">
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#pyppin.math.plot_ascii.Canvas.render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Actually generate the output plot.</p>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="pyppin.math.html" class="btn btn-neutral float-left" title="pyppin.math" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pyppin.math.histogram.html" class="btn btn-neutral float-left" title="pyppin.math.histogram" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="pyppin.os.html" class="btn btn-neutral float-right" title="pyppin.os" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

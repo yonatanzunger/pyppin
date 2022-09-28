@@ -1,4 +1,4 @@
-﻿pyppin.file.types
+pyppin.file.types
 =================
 
 .. automodule:: pyppin.file.types

@@ -1,3 +1,5 @@
+"""Generate ASCII-art plots of functions and data."""
+
 import array
 import io
 from typing import Callable, Dict, List, NamedTuple, Optional, Tuple

@@ -250,7 +250,7 @@ class _CacheState(Generic[KeyType, ValueType]):
             self.cache[self.key] = value
 
 
-class _CacheCore(object):
+class _CacheCore(Generic[KeyType, ValueType]):
     def __init__(
         self,
         function: WrappedFunctionType,
@@ -384,7 +384,7 @@ def _constant_getter(value: Any) -> Callable:
     return get_constant
 
 
-class _WrappedMethod(object):
+class _WrappedMethod(Generic[ValueType]):
     def __init__(
         self,
         core: _CacheCore,
@@ -413,7 +413,7 @@ class _WrappedMethod(object):
         return self.core.incache(self.instance, *args, **kwargs)
 
 
-class _WrappedDescriptor(object):
+class _WrappedDescriptor(Generic[ValueType]):
     def __init__(self, core: _CacheCore) -> None:
         """This is the object we return from @cachemethod.
 
@@ -429,7 +429,7 @@ class _WrappedDescriptor(object):
         return _WrappedMethod(self.core, instance or owner)
 
 
-class _WrappedFunction(object):
+class _WrappedFunction(Generic[ValueType]):
     def __init__(self, core: _CacheCore) -> None:
         """This is the object we return from @cache.
 

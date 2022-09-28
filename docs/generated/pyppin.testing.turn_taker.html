@@ -14,12 +14,14 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="pyppin.threading" href="pyppin.threading.html" />
-    <link rel="prev" title="pyppin.testing.interact" href="pyppin.testing.interact.html" /> 
+    <link rel="prev" title="pyppin.testing.trace_on_failure" href="pyppin.testing.trace_on_failure.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -48,7 +50,12 @@
 <li class="toctree-l2"><a class="reference internal" href="pyppin.os.html">pyppin.os</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="pyppin.testing.html">pyppin.testing</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="pyppin.testing.interact.html">pyppin.testing.interact</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">pyppin.testing.turn_taker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.testing.pprint_object.html">pyppin.testing.pprint_object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.testing.trace_on_failure.html">pyppin.testing.trace_on_failure</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">pyppin.testing.turn_taker</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pyppin.testing.turn_taker.TurnTaker"><code class="docutils literal notranslate"><span class="pre">TurnTaker</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.threading.html">pyppin.threading</a></li>
@@ -84,10 +91,10 @@
            <div itemprop="articleBody">
              
   <section id="module-pyppin.testing.turn_taker">
-<span id="pyppin-testing-turn-taker"></span><h1>pyppin.testing.turn_taker<a class="headerlink" href="#module-pyppin.testing.turn_taker" title="Permalink to this headline">¶</a></h1>
+<span id="pyppin-testing-turn-taker"></span><h1>pyppin.testing.turn_taker<a class="headerlink" href="#module-pyppin.testing.turn_taker" title="Permalink to this heading">¶</a></h1>
 <p>A tool to manage “turn taking” in multithreaded unittests.</p>
 <p class="rubric">Classes</p>
-<table class="longtable docutils align-default">
+<table class="autosummary longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -100,7 +107,7 @@
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyppin.testing.turn_taker.TurnTaker">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyppin.testing.turn_taker.</span></span><span class="sig-name descname"><span class="pre">TurnTaker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">game</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyppin.testing.turn_taker._Game</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyppin.testing.turn_taker.TurnTaker" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyppin.testing.turn_taker.</span></span><span class="sig-name descname"><span class="pre">TurnTaker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">game</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">_Game</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyppin.testing.turn_taker.TurnTaker" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A tool to manage “turn taking” in multithreaded unittests.</p>
 <p>This class makes it easy to handle multithreaded unittests, where you expect that one thread
@@ -167,13 +174,13 @@ the game by calling various instance methods.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyppin.testing.turn_taker.TurnTaker.pass_and_wait">
-<span class="sig-name descname"><span class="pre">pass_and_wait</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">to</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyppin.testing.turn_taker.TurnTaker" title="pyppin.testing.turn_taker.TurnTaker"><span class="pre">pyppin.testing.turn_taker.TurnTaker</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pyppin.testing.turn_taker.TurnTaker.pass_and_wait" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">pass_and_wait</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">to</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyppin.testing.turn_taker.TurnTaker" title="pyppin.testing.turn_taker.TurnTaker"><span class="pre">TurnTaker</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pyppin.testing.turn_taker.TurnTaker.pass_and_wait" title="Permalink to this definition">¶</a></dt>
 <dd><p>Pass the ball to another player and wait for my next turn.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyppin.testing.turn_taker.TurnTaker.pass_and_finish">
-<span class="sig-name descname"><span class="pre">pass_and_finish</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">to</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyppin.testing.turn_taker.TurnTaker" title="pyppin.testing.turn_taker.TurnTaker"><span class="pre">pyppin.testing.turn_taker.TurnTaker</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pyppin.testing.turn_taker.TurnTaker.pass_and_finish" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">pass_and_finish</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">to</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyppin.testing.turn_taker.TurnTaker" title="pyppin.testing.turn_taker.TurnTaker"><span class="pre">TurnTaker</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pyppin.testing.turn_taker.TurnTaker.pass_and_finish" title="Permalink to this definition">¶</a></dt>
 <dd><p>Pass the ball to another player and don’t wait for your next turn; you’re done.</p>
 <p>Every player, except the last one, must call this immediately before returning from their
 run method.</p>
@@ -181,7 +188,7 @@ run method.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyppin.testing.turn_taker.TurnTaker.pass_without_waiting">
-<span class="sig-name descname"><span class="pre">pass_without_waiting</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">to</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyppin.testing.turn_taker.TurnTaker" title="pyppin.testing.turn_taker.TurnTaker"><span class="pre">pyppin.testing.turn_taker.TurnTaker</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pyppin.testing.turn_taker.TurnTaker.pass_without_waiting" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">pass_without_waiting</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">to</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyppin.testing.turn_taker.TurnTaker" title="pyppin.testing.turn_taker.TurnTaker"><span class="pre">TurnTaker</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pyppin.testing.turn_taker.TurnTaker.pass_without_waiting" title="Permalink to this definition">¶</a></dt>
 <dd><p>Pass the ball <em>without</em> waiting, but not necessarily finishing my function.</p>
 <p>If you call this, you had better call wait_for_my_turn() before trying to do anything
 else with the ball! This function is primarily useful when you need to start a blocking
@@ -200,7 +207,7 @@ internally.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyppin.testing.turn_taker.TurnTaker.play">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">play</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">players</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyppin.testing.turn_taker.TurnTaker" title="pyppin.testing.turn_taker.TurnTaker"><span class="pre">pyppin.testing.turn_taker.TurnTaker</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">first_player</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyppin.testing.turn_taker.TurnTaker" title="pyppin.testing.turn_taker.TurnTaker"><span class="pre">pyppin.testing.turn_taker.TurnTaker</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">final_timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pyppin.testing.turn_taker.TurnTaker.play" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">play</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">players</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyppin.testing.turn_taker.TurnTaker" title="pyppin.testing.turn_taker.TurnTaker"><span class="pre">TurnTaker</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">first_player</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyppin.testing.turn_taker.TurnTaker" title="pyppin.testing.turn_taker.TurnTaker"><span class="pre">TurnTaker</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">final_timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pyppin.testing.turn_taker.TurnTaker.play" title="Permalink to this definition">¶</a></dt>
 <dd><p>The main function you call to play a game.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -239,7 +246,7 @@ out.</p></li>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="pyppin.testing.interact.html" class="btn btn-neutral float-left" title="pyppin.testing.interact" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pyppin.testing.trace_on_failure.html" class="btn btn-neutral float-left" title="pyppin.testing.trace_on_failure" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="pyppin.threading.html" class="btn btn-neutral float-right" title="pyppin.threading" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

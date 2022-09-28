@@ -14,7 +14,9 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -42,7 +44,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../readme.html">pyppin: A toolkit of Python basics</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">pyppin.base</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pyppin.base.assert_not_none"><code class="docutils literal notranslate"><span class="pre">assert_not_none()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyppin.base.cache.html">pyppin.base.cache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.base.flex_decorator.html">pyppin.base.flex_decorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.base.import_file.html">pyppin.base.import_file</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyppin.base.lazyinit.html">pyppin.base.lazyinit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyppin.base.registered_class.html">pyppin.base.registered_class</a></li>
 </ul>
@@ -84,10 +89,10 @@
            <div itemprop="articleBody">
              
   <section id="module-pyppin.base">
-<span id="pyppin-base"></span><h1>pyppin.base<a class="headerlink" href="#module-pyppin.base" title="Permalink to this headline">¶</a></h1>
+<span id="pyppin-base"></span><h1>pyppin.base<a class="headerlink" href="#module-pyppin.base" title="Permalink to this heading">¶</a></h1>
 <p>Basic language extensions.</p>
 <p class="rubric">Functions</p>
-<table class="longtable docutils align-default">
+<table class="autosummary longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -100,7 +105,7 @@
 </table>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyppin.base.assert_not_none">
-<span class="sig-prename descclassname"><span class="pre">pyppin.base.</span></span><span class="sig-name descname"><span class="pre">assert_not_none</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">pyppin.base._T</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pyppin.base._T</span></span></span><a class="headerlink" href="#pyppin.base.assert_not_none" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyppin.base.</span></span><span class="sig-name descname"><span class="pre">assert_not_none</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">_T</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">_T</span></span></span><a class="headerlink" href="#pyppin.base.assert_not_none" title="Permalink to this definition">¶</a></dt>
 <dd><p>Assert that a value is not None, to make mypy happy.</p>
 <p>This is useful when a function technically returns an <cite>Optional[Foo]</cite>, but you know for other
 reasons that it’s never None. Wrapping the result in this assertion makes that statement
@@ -108,7 +113,7 @@ explicit and thus makes mypy happy as well when you use its result as a <cite>Fo
 </dd></dl>
 
 <p class="rubric">Modules</p>
-<table class="longtable docutils align-default">
+<table class="autosummary longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -116,6 +121,12 @@ explicit and thus makes mypy happy as well when you use its result as a <cite>Fo
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="pyppin.base.cache.html#module-pyppin.base.cache" title="pyppin.base.cache"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.base.cache</span></code></a></p></td>
 <td><p>Caching decorators for functions and methods</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pyppin.base.flex_decorator.html#module-pyppin.base.flex_decorator" title="pyppin.base.flex_decorator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.base.flex_decorator</span></code></a></p></td>
+<td><p>A way to simplify writing Python decorators and improve their syntax.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyppin.base.import_file.html#module-pyppin.base.import_file" title="pyppin.base.import_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.base.import_file</span></code></a></p></td>
+<td><p>A function to import a Python file from its pathname.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="pyppin.base.lazyinit.html#module-pyppin.base.lazyinit" title="pyppin.base.lazyinit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.base.lazyinit</span></code></a></p></td>
 <td><p>An instance method decorator to make initializers execute once, on demand.</p></td>

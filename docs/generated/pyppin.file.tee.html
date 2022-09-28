@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pyppin.file.tee &mdash; pyppin  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pyppin.file.types" href="pyppin.file.types.html" />
+    <link rel="prev" title="pyppin.file.memfile" href="pyppin.file.memfile.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> pyppin
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../readme.html">pyppin: A toolkit of Python basics</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="pyppin.base.html">pyppin.base</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyppin.containers.html">pyppin.containers</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="pyppin.file.html">pyppin.file</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="pyppin.file.dev_null.html">pyppin.file.dev_null</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.file.memfile.html">pyppin.file.memfile</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">pyppin.file.tee</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pyppin.file.tee.tee"><code class="docutils literal notranslate"><span class="pre">tee()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyppin.file.tee.Tee"><code class="docutils literal notranslate"><span class="pre">Tee</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyppin.file.tee.RawTee"><code class="docutils literal notranslate"><span class="pre">RawTee</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyppin.file.tee.TextTee"><code class="docutils literal notranslate"><span class="pre">TextTee</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.file.types.html">pyppin.file.types</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyppin.math.html">pyppin.math</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyppin.os.html">pyppin.os</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyppin.testing.html">pyppin.testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyppin.threading.html">pyppin.threading</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Using &amp; Contributing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pyppin</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../api.html">API</a> &raquo;</li>
+          <li><a href="pyppin.file.html">pyppin.file</a> &raquo;</li>
+      <li>pyppin.file.tee</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/generated/pyppin.file.tee.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-pyppin.file.tee">
+<span id="pyppin-file-tee"></span><h1>pyppin.file.tee<a class="headerlink" href="#module-pyppin.file.tee" title="Permalink to this heading">¶</a></h1>
+<p>An io.IOBase that lets you tee writes to multiple file targets.</p>
+<p class="rubric">Functions</p>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pyppin.file.tee.tee" title="pyppin.file.tee.tee"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tee</span></code></a>(*files)</p></td>
+<td><p>Given a collection of writable file-like objects, return a single file-like object, so that a write to that central object will be fanned out to all the passed ones.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Classes</p>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pyppin.file.tee.RawTee" title="pyppin.file.tee.RawTee"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RawTee</span></code></a>(*children)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pyppin.file.tee.Tee" title="pyppin.file.tee.Tee"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Tee</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pyppin.file.tee.TextTee" title="pyppin.file.tee.TextTee"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TextTee</span></code></a>(*children)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyppin.file.tee.tee">
+<span class="sig-prename descclassname"><span class="pre">pyppin.file.tee.</span></span><span class="sig-name descname"><span class="pre">tee</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">files</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">RawIOBase</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">BufferedIOBase</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">TextIOBase</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">RawIOBase</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">BufferedIOBase</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">TextIOBase</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#pyppin.file.tee.tee" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a collection of writable file-like objects, return a single
+file-like object, so that a write to that central object will be fanned
+out to all the passed ones.</p>
+<p>One sample use of this is to pass it to subprocess.Popen, so that you can
+both capture and print stdout.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyppin.file.tee.Tee">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyppin.file.tee.</span></span><span class="sig-name descname"><span class="pre">Tee</span></span><a class="headerlink" href="#pyppin.file.tee.Tee" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">IOBase</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.file.tee.Tee.fileno">
+<span class="sig-name descname"><span class="pre">fileno</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#pyppin.file.tee.Tee.fileno" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns underlying file descriptor if one exists.</p>
+<p>OSError is raised if the IO object does not use a file descriptor.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.file.tee.Tee.readable">
+<span class="sig-name descname"><span class="pre">readable</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pyppin.file.tee.Tee.readable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return whether object was opened for reading.</p>
+<p>If False, read() will raise OSError.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.file.tee.Tee.tell">
+<span class="sig-name descname"><span class="pre">tell</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#pyppin.file.tee.Tee.tell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return current stream position.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.file.tee.Tee.writable">
+<span class="sig-name descname"><span class="pre">writable</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pyppin.file.tee.Tee.writable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return whether object was opened for writing.</p>
+<p>If False, write() will raise OSError.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyppin.file.tee.RawTee">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyppin.file.tee.</span></span><span class="sig-name descname"><span class="pre">RawTee</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">children</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">RawIOBase</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">BufferedIOBase</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyppin.file.tee.RawTee" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyppin.file.tee.Tee" title="pyppin.file.tee.Tee"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tee</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">RawIOBase</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.file.tee.RawTee.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pyppin.file.tee.RawTee.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flush and close the IO object.</p>
+<p>This method has no effect if the file is already closed.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pyppin.file.tee.RawTee.closed">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">closed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pyppin.file.tee.RawTee.closed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.file.tee.RawTee.flush">
+<span class="sig-name descname"><span class="pre">flush</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pyppin.file.tee.RawTee.flush" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flush write buffers, if applicable.</p>
+<p>This is not implemented for read-only and non-blocking streams.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.file.tee.RawTee.isatty">
+<span class="sig-name descname"><span class="pre">isatty</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pyppin.file.tee.RawTee.isatty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return whether this is an ‘interactive’ stream.</p>
+<p>Return False if it can’t be determined.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.file.tee.RawTee.seek">
+<span class="sig-name descname"><span class="pre">seek</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">whence</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#pyppin.file.tee.RawTee.seek" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change stream position.</p>
+<p>Change the stream position to the given byte offset. The offset is
+interpreted relative to the position indicated by whence.  Values
+for whence are:</p>
+<ul class="simple">
+<li><p>0 – start of stream (the default); offset should be zero or positive</p></li>
+<li><p>1 – current stream position; offset may be negative</p></li>
+<li><p>2 – end of stream; offset is usually negative</p></li>
+</ul>
+<p>Return the new absolute position.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.file.tee.RawTee.seekable">
+<span class="sig-name descname"><span class="pre">seekable</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pyppin.file.tee.RawTee.seekable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return whether object supports random access.</p>
+<p>If False, seek(), tell() and truncate() will raise OSError.
+This method may need to do a test seek().</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.file.tee.RawTee.truncate">
+<span class="sig-name descname"><span class="pre">truncate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#pyppin.file.tee.RawTee.truncate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Truncate file to size bytes.</p>
+<p>File pointer is left unchanged.  Size defaults to the current IO
+position as reported by tell().  Returns the new size.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.file.tee.RawTee.write">
+<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">bytes</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bytearray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">memoryview</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">mmap</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">_CData</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">PickleBuffer</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#pyppin.file.tee.RawTee.write" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.file.tee.RawTee.writelines">
+<span class="sig-name descname"><span class="pre">writelines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lines</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">bytes</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bytearray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">memoryview</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">mmap</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">_CData</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">PickleBuffer</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pyppin.file.tee.RawTee.writelines" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a list of lines to stream.</p>
+<p>Line separators are not added, so it is usual for each of the
+lines provided to have a line separator at the end.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyppin.file.tee.TextTee">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyppin.file.tee.</span></span><span class="sig-name descname"><span class="pre">TextTee</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">children</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TextIOBase</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyppin.file.tee.TextTee" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyppin.file.tee.Tee" title="pyppin.file.tee.Tee"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tee</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">TextIOBase</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.file.tee.TextTee.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pyppin.file.tee.TextTee.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flush and close the IO object.</p>
+<p>This method has no effect if the file is already closed.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pyppin.file.tee.TextTee.closed">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">closed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pyppin.file.tee.TextTee.closed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.file.tee.TextTee.flush">
+<span class="sig-name descname"><span class="pre">flush</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pyppin.file.tee.TextTee.flush" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flush write buffers, if applicable.</p>
+<p>This is not implemented for read-only and non-blocking streams.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.file.tee.TextTee.isatty">
+<span class="sig-name descname"><span class="pre">isatty</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pyppin.file.tee.TextTee.isatty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return whether this is an ‘interactive’ stream.</p>
+<p>Return False if it can’t be determined.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.file.tee.TextTee.seek">
+<span class="sig-name descname"><span class="pre">seek</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">whence</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#pyppin.file.tee.TextTee.seek" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change stream position.</p>
+<p>Change the stream position to the given byte offset. The offset is
+interpreted relative to the position indicated by whence.  Values
+for whence are:</p>
+<ul class="simple">
+<li><p>0 – start of stream (the default); offset should be zero or positive</p></li>
+<li><p>1 – current stream position; offset may be negative</p></li>
+<li><p>2 – end of stream; offset is usually negative</p></li>
+</ul>
+<p>Return the new absolute position.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.file.tee.TextTee.seekable">
+<span class="sig-name descname"><span class="pre">seekable</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pyppin.file.tee.TextTee.seekable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return whether object supports random access.</p>
+<p>If False, seek(), tell() and truncate() will raise OSError.
+This method may need to do a test seek().</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.file.tee.TextTee.truncate">
+<span class="sig-name descname"><span class="pre">truncate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#pyppin.file.tee.TextTee.truncate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Truncate file to size bytes.</p>
+<p>File pointer is left unchanged.  Size defaults to the current IO
+position as reported by tell().  Returns the new size.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.file.tee.TextTee.write">
+<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#pyppin.file.tee.TextTee.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write string to stream.
+Returns the number of characters written (which is always equal to
+the length of the string).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.file.tee.TextTee.writelines">
+<span class="sig-name descname"><span class="pre">writelines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lines</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pyppin.file.tee.TextTee.writelines" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a list of lines to stream.</p>
+<p>Line separators are not added, so it is usual for each of the
+lines provided to have a line separator at the end.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pyppin.file.memfile.html" class="btn btn-neutral float-left" title="pyppin.file.memfile" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pyppin.file.types.html" class="btn btn-neutral float-right" title="pyppin.file.types" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Yonatan Zunger.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

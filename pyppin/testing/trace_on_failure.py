@@ -1,3 +1,5 @@
+"""A decorator that prints a stack trace for all threads if a function, method, or test case fails."""
+
 import functools
 import io
 import itertools

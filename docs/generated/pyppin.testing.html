@@ -14,7 +14,9 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -48,6 +50,8 @@
 <li class="toctree-l2"><a class="reference internal" href="pyppin.os.html">pyppin.os</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">pyppin.testing</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="pyppin.testing.interact.html">pyppin.testing.interact</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.testing.pprint_object.html">pyppin.testing.pprint_object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.testing.trace_on_failure.html">pyppin.testing.trace_on_failure</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyppin.testing.turn_taker.html">pyppin.testing.turn_taker</a></li>
 </ul>
 </li>
@@ -83,10 +87,10 @@
            <div itemprop="articleBody">
              
   <section id="module-pyppin.testing">
-<span id="pyppin-testing"></span><h1>pyppin.testing<a class="headerlink" href="#module-pyppin.testing" title="Permalink to this headline">¶</a></h1>
+<span id="pyppin-testing"></span><h1>pyppin.testing<a class="headerlink" href="#module-pyppin.testing" title="Permalink to this heading">¶</a></h1>
 <p>Testing and debugging utilities.</p>
 <p class="rubric">Modules</p>
-<table class="longtable docutils align-default">
+<table class="autosummary longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -94,6 +98,12 @@
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="pyppin.testing.interact.html#module-pyppin.testing.interact" title="pyppin.testing.interact"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.testing.interact</span></code></a></p></td>
 <td><p>A function to open an iteractive debugging REPL anywhere in your code.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pyppin.testing.pprint_object.html#module-pyppin.testing.pprint_object" title="pyppin.testing.pprint_object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.testing.pprint_object</span></code></a></p></td>
+<td><p>Pretty-print the contents of an object, including all the innards for debugging.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyppin.testing.trace_on_failure.html#module-pyppin.testing.trace_on_failure" title="pyppin.testing.trace_on_failure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.testing.trace_on_failure</span></code></a></p></td>
+<td><p>A decorator that prints a stack trace for all threads if a function, method, or test case fails.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="pyppin.testing.turn_taker.html#module-pyppin.testing.turn_taker" title="pyppin.testing.turn_taker"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.testing.turn_taker</span></code></a></p></td>
 <td><p>A tool to manage &quot;turn taking&quot; in multithreaded unittests.</p></td>

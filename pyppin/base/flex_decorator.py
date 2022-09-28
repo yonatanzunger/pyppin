@@ -1,13 +1,10 @@
+"""A way to simplify writing Python decorators and improve their syntax."""
+
 import inspect
 from functools import update_wrapper
 from typing import Any, Callable, TypeVar, Union, overload
 
 DecoratedFunction = TypeVar("DecoratedFunction", bound=Callable[..., Any])
-
-# XXX FIX BEFORE PUBLICIZING: Right now there is a type signature problem, so that if you define a
-# flex_decorator and use it with parentheses, it will fail mypy with "Untyped decorator makes
-# function "my_decorator" untyped" whenever you *use* your decorator. Obviously not acceptable; need
-# to fix this.
 
 # A decorated or decorable function is anything bounded by Callable[..., Any]
 # A zero-argument decorator maps a decorable function to one of the same signature
@@ -46,6 +43,11 @@ def flex_decorator(decorator: Callable) -> Callable:
     def decorated_thing(...):
 
     This is identical to @my_decorator(), so users no longer need to remember which one to use.
+
+    *WARNING*: There is a known conflict between this code and mypy. When you make a flex decorator
+    and use it with parentheses, mypy will fail at the use point with "Untyped decorator makes
+    function "my_decorator" untyped". At the moment this requires a # type: ignore on that line. Fix
+    in the works but this is messy and may require changes to mypy and/or Python itself to fix.
     """
     # First, make sure the thing we're decorating has a decoratable signature.
     signature = inspect.getfullargspec(decorator)

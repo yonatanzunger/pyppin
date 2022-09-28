@@ -1,3 +1,5 @@
+"""A flexible class for managing, computing with, and plotting histograms."""
+
 import math
 from functools import cached_property
 from typing import List, Optional

@@ -9,6 +9,14 @@
 
    
    
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      cap
+      minmax
+      round_up_to
+   
    
 
    
@@ -27,5 +35,7 @@
    :toctree:
    :recursive:
 
+   pyppin.math.functions
+   pyppin.math.histogram
    pyppin.math.plot_ascii
 

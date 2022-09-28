@@ -14,7 +14,9 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -49,8 +51,8 @@
 <li class="toctree-l2"><a class="reference internal" href="pyppin.testing.html">pyppin.testing</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">pyppin.threading</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="pyppin.threading.periodic_task.html">pyppin.threading.periodic_task</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pyppin.threading.rate_limiter.html">pyppin.threading.rate_limiter</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyppin.threading.semaphore.html">pyppin.threading.semaphore</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.threading.stack_trace.html">pyppin.threading.stack_trace</a></li>
 </ul>
 </li>
 </ul>
@@ -84,10 +86,10 @@
            <div itemprop="articleBody">
              
   <section id="module-pyppin.threading">
-<span id="pyppin-threading"></span><h1>pyppin.threading<a class="headerlink" href="#module-pyppin.threading" title="Permalink to this headline">¶</a></h1>
+<span id="pyppin-threading"></span><h1>pyppin.threading<a class="headerlink" href="#module-pyppin.threading" title="Permalink to this heading">¶</a></h1>
 <p>Tools for multithreaded code.</p>
 <p class="rubric">Modules</p>
-<table class="longtable docutils align-default">
+<table class="autosummary longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -96,11 +98,11 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="pyppin.threading.periodic_task.html#module-pyppin.threading.periodic_task" title="pyppin.threading.periodic_task"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.threading.periodic_task</span></code></a></p></td>
 <td><p>Run a function periodically in a background thread.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyppin.threading.rate_limiter.html#module-pyppin.threading.rate_limiter" title="pyppin.threading.rate_limiter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.threading.rate_limiter</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyppin.threading.semaphore.html#module-pyppin.threading.semaphore" title="pyppin.threading.semaphore"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.threading.semaphore</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyppin.threading.semaphore.html#module-pyppin.threading.semaphore" title="pyppin.threading.semaphore"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.threading.semaphore</span></code></a></p></td>
 <td><p>A smarter semaphore that can do things like wait for tasks to finish.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyppin.threading.stack_trace.html#module-pyppin.threading.stack_trace" title="pyppin.threading.stack_trace"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.threading.stack_trace</span></code></a></p></td>
+<td><p>A library to dump stack traces from <em>all</em> threads, not just the current one.</p></td>
 </tr>
 </tbody>
 </table>

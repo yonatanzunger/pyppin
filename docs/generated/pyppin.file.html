@@ -14,11 +14,13 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="pyppin.file.memfile" href="pyppin.file.memfile.html" />
+    <link rel="next" title="pyppin.file.dev_null" href="pyppin.file.dev_null.html" />
     <link rel="prev" title="pyppin.containers.zip_by_key" href="pyppin.containers.zip_by_key.html" /> 
 </head>
 
@@ -44,7 +46,9 @@
 <li class="toctree-l2"><a class="reference internal" href="pyppin.base.html">pyppin.base</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.containers.html">pyppin.containers</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">pyppin.file</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.file.dev_null.html">pyppin.file.dev_null</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyppin.file.memfile.html">pyppin.file.memfile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.file.tee.html">pyppin.file.tee</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyppin.file.types.html">pyppin.file.types</a></li>
 </ul>
 </li>
@@ -83,17 +87,23 @@
            <div itemprop="articleBody">
              
   <section id="module-pyppin.file">
-<span id="pyppin-file"></span><h1>pyppin.file<a class="headerlink" href="#module-pyppin.file" title="Permalink to this headline">¶</a></h1>
+<span id="pyppin-file"></span><h1>pyppin.file<a class="headerlink" href="#module-pyppin.file" title="Permalink to this heading">¶</a></h1>
 <p>Clean API’s for managing files and file systems.</p>
 <p class="rubric">Modules</p>
-<table class="longtable docutils align-default">
+<table class="autosummary longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyppin.file.memfile.html#module-pyppin.file.memfile" title="pyppin.file.memfile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.file.memfile</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyppin.file.dev_null.html#module-pyppin.file.dev_null" title="pyppin.file.dev_null"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.file.dev_null</span></code></a></p></td>
+<td><p>An io.IOBase that behaves like /dev/null.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pyppin.file.memfile.html#module-pyppin.file.memfile" title="pyppin.file.memfile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.file.memfile</span></code></a></p></td>
 <td><p>Allow access to a single block of RAM with multiple file API handles.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyppin.file.tee.html#module-pyppin.file.tee" title="pyppin.file.tee"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.file.tee</span></code></a></p></td>
+<td><p>An io.IOBase that lets you tee writes to multiple file targets.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="pyppin.file.types.html#module-pyppin.file.types" title="pyppin.file.types"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.file.types</span></code></a></p></td>
 <td><p>Type declarations for accessing files.</p></td>
@@ -107,7 +117,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="pyppin.containers.zip_by_key.html" class="btn btn-neutral float-left" title="pyppin.containers.zip_by_key" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="pyppin.file.memfile.html" class="btn btn-neutral float-right" title="pyppin.file.memfile" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="pyppin.file.dev_null.html" class="btn btn-neutral float-right" title="pyppin.file.dev_null" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

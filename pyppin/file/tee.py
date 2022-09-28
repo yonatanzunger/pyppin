@@ -1,3 +1,5 @@
+"""An io.IOBase that lets you tee writes to multiple file targets."""
+
 import io
 from typing import Iterable, Optional, Union
 

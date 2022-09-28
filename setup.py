@@ -10,17 +10,23 @@ with open(
 
 setup(
     name="pyppin",
-    version="0.1.0",
+    version="1.0.0",
     description="Python tools collection",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    keywords="",  # TODO
+    keywords="threading,stack trace,utilities",
     author="Yonatan Zunger",
     author_email="zunger@gmail.com",
     license="MIT",
-    classifiers=[],  # TODO
+    classifiers=[
+        "Development Status :: 5 - Production/Stable",
+        "License :: OSI Approved :: MIT License",
+        "Intended Audience :: Developers",
+        "Programming Language :: Python :: 3.7",
+    ],
     project_urls={
-        # TODO
+        "Source": "https://github.com/yonatanzunger/pyppin",
+        "Tracker": "https://github.com/yonatanzunger/pyppin/issues",
     },
     python_requires=">=3.7",
     install_requires=[],
