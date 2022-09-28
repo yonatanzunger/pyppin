@@ -15,6 +15,7 @@
       :toctree:
       :recursive:
    
+      pyppin.containers.iterators
       pyppin.containers.zip_by_key
    
    
