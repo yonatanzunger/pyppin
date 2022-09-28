@@ -16,6 +16,11 @@ def cap(value: float, min: float, max: float) -> float:
     return min if value <= min else max if value >= max else value
 
 
+def within(value: float, min: float, max: float) -> bool:
+    """Test if value is in [min, max)."""
+    return value >= min and value < max
+
+
 def minmax(data: Iterable[float]) -> Tuple[float, float]:
     """Return (min, max) of data in one pass."""
     low = float("inf")
