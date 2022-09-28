@@ -1,3 +1,5 @@
+"""Format numbers using SI prefixes, turning 1,234,567 into 1.2M."""
+
 import math
 from enum import Enum
 from typing import List, Sequence, Union
@@ -126,9 +128,7 @@ def si_prefix(
 
     # Overflow: If the number is too big for an SI prefix! Switch to exponential notation.
     if index >= len(array):
-        return format_sign(
-            _exponential_notation(value, mode, precision), sign, is_negative
-        )
+        return format_sign(_exponential_notation(value, mode, precision), sign, is_negative)
 
     # Normal case
     reduced = math.pow(base, delta)
@@ -148,9 +148,7 @@ def _exponential_notation(value: float, mode: Mode, precision: int) -> str:
         return f"{format_str % reduced}*2^{int_power}"
 
 
-def _prefix_array(
-    mode: Mode, positive: bool, ascii_only: bool, full_names: bool
-) -> Sequence[str]:
+def _prefix_array(mode: Mode, positive: bool, ascii_only: bool, full_names: bool) -> Sequence[str]:
     """Return the appropriate array of prefixes to use."""
     if mode in (Mode.DECIMAL, Mode.BINARY):
         if positive:

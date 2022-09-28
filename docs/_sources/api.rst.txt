@@ -11,4 +11,5 @@ API
    pyppin.math
    pyppin.os
    pyppin.testing
+   pyppin.text
    pyppin.threading

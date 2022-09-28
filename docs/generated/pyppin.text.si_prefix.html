@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pyppin.text.si_prefix &mdash; pyppin  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pyppin.text.sign" href="pyppin.text.sign.html" />
+    <link rel="prev" title="pyppin.text.print_counter" href="pyppin.text.print_counter.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> pyppin
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../readme.html">pyppin: A toolkit of Python basics</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="pyppin.base.html">pyppin.base</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyppin.containers.html">pyppin.containers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyppin.file.html">pyppin.file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyppin.math.html">pyppin.math</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyppin.os.html">pyppin.os</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyppin.testing.html">pyppin.testing</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="pyppin.text.html">pyppin.text</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="pyppin.text.formatter.html">pyppin.text.formatter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.text.now_and_then.html">pyppin.text.now_and_then</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.text.print_counter.html">pyppin.text.print_counter</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">pyppin.text.si_prefix</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pyppin.text.si_prefix.Mode"><code class="docutils literal notranslate"><span class="pre">Mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyppin.text.si_prefix.si_prefix"><code class="docutils literal notranslate"><span class="pre">si_prefix()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.text.sign.html">pyppin.text.sign</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyppin.threading.html">pyppin.threading</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Using &amp; Contributing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pyppin</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../api.html">API</a> &raquo;</li>
+          <li><a href="pyppin.text.html">pyppin.text</a> &raquo;</li>
+      <li>pyppin.text.si_prefix</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/generated/pyppin.text.si_prefix.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-pyppin.text.si_prefix">
+<span id="pyppin-text-si-prefix"></span><h1>pyppin.text.si_prefix<a class="headerlink" href="#module-pyppin.text.si_prefix" title="Permalink to this heading">¶</a></h1>
+<p>Format numbers using SI prefixes, turning 1,234,567 into 1.2M.</p>
+<p class="rubric">Functions</p>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pyppin.text.si_prefix.si_prefix" title="pyppin.text.si_prefix.si_prefix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">si_prefix</span></code></a>(value[, mode, threshold, ...])</p></td>
+<td><p>Format a number as a string, using SI (système internationale) prefixes.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Classes</p>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pyppin.text.si_prefix.Mode" title="pyppin.text.si_prefix.Mode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Mode</span></code></a>(value)</p></td>
+<td><p>An enumeration.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyppin.text.si_prefix.Mode">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyppin.text.si_prefix.</span></span><span class="sig-name descname"><span class="pre">Mode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyppin.text.si_prefix.Mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>An enumeration.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyppin.text.si_prefix.Mode.DECIMAL">
+<span class="sig-name descname"><span class="pre">DECIMAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#pyppin.text.si_prefix.Mode.DECIMAL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyppin.text.si_prefix.Mode.BINARY">
+<span class="sig-name descname"><span class="pre">BINARY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#pyppin.text.si_prefix.Mode.BINARY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyppin.text.si_prefix.Mode.IEC">
+<span class="sig-name descname"><span class="pre">IEC</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#pyppin.text.si_prefix.Mode.IEC" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyppin.text.si_prefix.si_prefix">
+<span class="sig-prename descclassname"><span class="pre">pyppin.text.si_prefix.</span></span><span class="sig-name descname"><span class="pre">si_prefix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pyppin.text.si_prefix.Mode" title="pyppin.text.si_prefix.Mode"><span class="pre">Mode</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Mode.DECIMAL</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precision</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascii_only</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">full_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sign</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pyppin.text.sign.html#pyppin.text.sign.Sign" title="pyppin.text.sign.Sign"><span class="pre">Sign</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Sign.NEGATIVE_ONLY</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#pyppin.text.si_prefix.si_prefix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format a number as a string, using SI (système internationale) prefixes. For example,
+turn 1,234,567 into 1.2M.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value</strong> – The number to be formatted.</p></li>
+<li><p><strong>mode</strong> – Whether to use decimal or binary SI units. (See below for more info)
+Decimal: 1k = 1000
+Binary: 1k = 1024, but use the ordinary symbols k, M, etc.
+IEC: 1k = 1024, but write ki, Mi, etc., as per the IEC80000 standard.</p></li>
+<li><p><strong>threshold</strong> – How far above the minimum for a prefix to go before using it. For example,
+if the threshold is set to 1.1 and we’re in decimal mode, then 1050 will still be
+written as 1050, but 1100 will be written as 1.1k; likewise, 1050000 will be 1050k,
+and 1100000 will be 1.1M.</p></li>
+<li><p><strong>precision</strong> – The number of digits after the decimal point to show.</p></li>
+<li><p><strong>ascii_only</strong> – If False, then “micro” will be denoted with μ, as per the standard. If True,
+we use the ASCII letter u instead; this is important for some legacy environments
+that can’t support Unicode.</p></li>
+<li><p><strong>full_names</strong> – If True, then we will print out the full words for the SI prefixes (‘Mega’,
+‘micro’, etc) rather than the one-letter abbreviations (‘M’, ‘μ’, etc).
+WARNING: There are no IEC-defined full names for negative-power prefixes, i.e. no
+IEC equivalents to milli, micro, and so on. For <em>short</em> names we can use the IEC
+convention of appending ‘i’ (mi, μi, etc), but there’s no actual full name or rule
+for it that works. As a result, setting mode=IEC, full_names=True will treat all
+values less than one the same way prefix overflows are handled, with ‘2^-X’ instead
+of a name.</p></li>
+<li><p><strong>sign</strong> – The sign convention we should use when formatting the value.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A string representation of this number, using SI prefixes.</p>
+</dd>
+</dl>
+<p><strong>* IMPORTANT NOTE ABOUT MODES *</strong></p>
+<p>Very nasty things, including physical objects crashing into each other at high speeds, have come
+from miscommunication about decimal versus binary prefixes! The IEC prefixes are an attempt to
+remedy this, by using ‘ki’, ‘Mi’, etc., for binary prefixes, and ‘k’, ‘M’, etc., for decimal
+ones, but these prefixes are only in sporadic use, possibly because the associated word forms
+(‘kibi’, ‘mebi’, etc) sound profoundly silly. However, they are very clear!</p>
+<p>In general, if you are unsure which to use:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Physical quantities, including times, should ALWAYS use decimal SI prefixes.</p></li>
+<li><p>Network bandwidths are always expressed (surprise!) in <em>decimal</em>. 1Mbps = 1000000 bits per
+second, not 1048576!</p></li>
+<li><p>Storage quantities in RAM and SSD should use binary or IEC prefixes.</p></li>
+<li><p>Storage quantities on spinning disks are historically specified in weird made-up units,
+e.g. 1MB = 1024000 bytes. This is an artifact of disk manufacturers trying to make their
+capacities sound higher without <em>technically</em> making false or misleading statements that
+could get them sued. If you are _expressing_ storage quantities, always use binary or IEC
+prefixes; if you are _parsing_ storage quantities provided to you by a manufacturer,
+don’t, measure directly instead; those numbers do not have a well-defined meaning, even if
+they seem to use SI prefixes.</p></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pyppin.text.print_counter.html" class="btn btn-neutral float-left" title="pyppin.text.print_counter" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pyppin.text.sign.html" class="btn btn-neutral float-right" title="pyppin.text.sign" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Yonatan Zunger.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

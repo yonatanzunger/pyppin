@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyppin.testing.trace_on_failure &mdash; pyppin  documentation</title>
+  <title>pyppin.text &mdash; pyppin  documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -20,8 +20,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="pyppin.testing.turn_taker" href="pyppin.testing.turn_taker.html" />
-    <link rel="prev" title="pyppin.testing.pprint_object" href="pyppin.testing.pprint_object.html" /> 
+    <link rel="next" title="pyppin.text.formatter" href="pyppin.text.formatter.html" />
+    <link rel="prev" title="pyppin.testing.turn_taker" href="pyppin.testing.turn_taker.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -48,14 +48,15 @@
 <li class="toctree-l2"><a class="reference internal" href="pyppin.file.html">pyppin.file</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.math.html">pyppin.math</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.os.html">pyppin.os</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="pyppin.testing.html">pyppin.testing</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="pyppin.testing.interact.html">pyppin.testing.interact</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pyppin.testing.pprint_object.html">pyppin.testing.pprint_object</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">pyppin.testing.trace_on_failure</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pyppin.testing.turn_taker.html">pyppin.testing.turn_taker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyppin.testing.html">pyppin.testing</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">pyppin.text</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.text.formatter.html">pyppin.text.formatter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.text.now_and_then.html">pyppin.text.now_and_then</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.text.print_counter.html">pyppin.text.print_counter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.text.si_prefix.html">pyppin.text.si_prefix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.text.sign.html">pyppin.text.sign</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="pyppin.text.html">pyppin.text</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.threading.html">pyppin.threading</a></li>
 </ul>
 </li>
@@ -77,10 +78,9 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../api.html">API</a> &raquo;</li>
-          <li><a href="pyppin.testing.html">pyppin.testing</a> &raquo;</li>
-      <li>pyppin.testing.trace_on_failure</li>
+      <li>pyppin.text</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/generated/pyppin.testing.trace_on_failure.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/generated/pyppin.text.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -88,17 +88,40 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-pyppin.testing.trace_on_failure">
-<span id="pyppin-testing-trace-on-failure"></span><h1>pyppin.testing.trace_on_failure<a class="headerlink" href="#module-pyppin.testing.trace_on_failure" title="Permalink to this heading">¶</a></h1>
-<p>A decorator that prints a stack trace for all threads if a function, method, or test case fails.</p>
+  <section id="module-pyppin.text">
+<span id="pyppin-text"></span><h1>pyppin.text<a class="headerlink" href="#module-pyppin.text" title="Permalink to this heading">¶</a></h1>
+<p class="rubric">Modules</p>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyppin.text.formatter.html#module-pyppin.text.formatter" title="pyppin.text.formatter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.text.formatter</span></code></a></p></td>
+<td><p>Tools to format numbers, times, etc., using the fancy functions in pyppin.text.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pyppin.text.now_and_then.html#module-pyppin.text.now_and_then" title="pyppin.text.now_and_then"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.text.now_and_then</span></code></a></p></td>
+<td><p>Produce human-readable strings expressing relative time for status pages and debugging.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyppin.text.print_counter.html#module-pyppin.text.print_counter" title="pyppin.text.print_counter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.text.print_counter</span></code></a></p></td>
+<td><p>A context manager that prints regular updates of a task's progress.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pyppin.text.si_prefix.html#module-pyppin.text.si_prefix" title="pyppin.text.si_prefix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.text.si_prefix</span></code></a></p></td>
+<td><p>Format numbers using SI prefixes, turning 1,234,567 into 1.2M.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyppin.text.sign.html#module-pyppin.text.sign" title="pyppin.text.sign"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.text.sign</span></code></a></p></td>
+<td><p>Some shared logic for defining sign-printing conventions.</p></td>
+</tr>
+</tbody>
+</table>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="pyppin.testing.pprint_object.html" class="btn btn-neutral float-left" title="pyppin.testing.pprint_object" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="pyppin.testing.turn_taker.html" class="btn btn-neutral float-right" title="pyppin.testing.turn_taker" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="pyppin.testing.turn_taker.html" class="btn btn-neutral float-left" title="pyppin.testing.turn_taker" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pyppin.text.formatter.html" class="btn btn-neutral float-right" title="pyppin.text.formatter" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

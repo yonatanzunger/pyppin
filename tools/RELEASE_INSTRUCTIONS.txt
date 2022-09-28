@@ -1,9 +1,12 @@
 To build a new release:
 
-* Run `tox test` and `tox lint`. If lint raises any errors, run `tox lint -- --fix`
-* Make sure the fields in setup.py are correct.
-* Bump the version number in setup.py.
-* Compile fresh docs by running tools/docs.py.
+* Basic setup
+  * Run `tox test` and `tox lint`. If lint raises any errors, run `tox lint -- --fix`
+  * Make sure the fields in setup.py are correct.
+  * Bump the version number in setup.py.
+* Image preparation
+  * Make sure that docs_src/api.rst contains all the subdirectories of pyppin.
+  * Compile fresh docs by running tools/docs.py.
 * Commit all changes and push to master.
 
 Once master is ready, make a build image and push to prod:
