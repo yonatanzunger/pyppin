@@ -21,7 +21,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="pyppin.math.functions" href="pyppin.math.functions.html" />
-    <link rel="prev" title="pyppin.iterators" href="pyppin.iterators.html" /> 
+    <link rel="prev" title="pyppin.iterators.zip_by_key" href="pyppin.iterators.zip_by_key.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -44,7 +44,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../readme.html">pyppin: A toolkit of Python basics</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="pyppin.base.html">pyppin.base</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pyppin.containers.html">pyppin.containers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.file.html">pyppin.file</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.iterators.html">pyppin.iterators</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">pyppin.math</a><ul>
@@ -103,7 +102,7 @@
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="pyppin.math.functions.html#module-pyppin.math.functions" title="pyppin.math.functions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.math.functions</span></code></a></p></td>
-<td><p>Abstract classes for math functions; used with histogram and plot_ascii.</p></td>
+<td><p>Create real-valued functions by interpolating data.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="pyppin.math.histogram.html#module-pyppin.math.histogram" title="pyppin.math.histogram"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.math.histogram</span></code></a></p></td>
 <td><p>A flexible class for managing, computing with, and plotting histograms.</p></td>
@@ -127,7 +126,7 @@
 <td><p>Return (min, max) of data in one pass.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#pyppin.math.round_up_to" title="pyppin.math.round_up_to"><code class="xref py py-obj docutils literal notranslate"><span class="pre">round_up_to</span></code></a>(value, multiple_of)</p></td>
-<td><p>Round &lt;value&gt; up to the nearest multiple of &lt;float&gt;.</p></td>
+<td><p>Round <code class="docutils literal notranslate"><span class="pre">value</span></code> up to the nearest multiple of <code class="docutils literal notranslate"><span class="pre">multiple_of</span></code>.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#pyppin.math.within" title="pyppin.math.within"><code class="xref py py-obj docutils literal notranslate"><span class="pre">within</span></code></a>(value, min, max)</p></td>
 <td><p>Test if value is in [min, max).</p></td>
@@ -137,7 +136,7 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="pyppin.math.round_up_to">
 <span class="sig-prename descclassname"><span class="pre">pyppin.math.</span></span><span class="sig-name descname"><span class="pre">round_up_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multiple_of</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/math/__init__.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.math.round_up_to" title="Permalink to this definition">¶</a></dt>
-<dd><p>Round &lt;value&gt; up to the nearest multiple of &lt;float&gt;.</p>
+<dd><p>Round <code class="docutils literal notranslate"><span class="pre">value</span></code> up to the nearest multiple of <code class="docutils literal notranslate"><span class="pre">multiple_of</span></code>.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -164,7 +163,7 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="pyppin.iterators.html" class="btn btn-neutral float-left" title="pyppin.iterators" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pyppin.iterators.zip_by_key.html" class="btn btn-neutral float-left" title="pyppin.iterators.zip_by_key" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="pyppin.math.functions.html" class="btn btn-neutral float-right" title="pyppin.math.functions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

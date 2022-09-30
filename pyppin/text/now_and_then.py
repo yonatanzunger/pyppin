@@ -39,11 +39,23 @@ def now_and_then(
     return f"{then_str} ({relative_time_string(then - now, julian=julian)})"
 
 
-# A couple of handy values to pass for the format in now_and_then.
-LONG_FORMAT = "%A, %B %d, %Y %X"  # Monday, July 18, 2022 15:20:23
-LOCAL_DATETIME = "%c"  # Wed Jul 18 15:20:23 1988
-LOCAL_DATE_ONLY = "%x"
-LOCAL_TIME_ONLY = "%X"
+class Formats(object):
+    """This class just wraps some handy constants to pass as 'format' to now_and_then."""
+
+    # Dumb hack: The comments below contain U+FE55 ﹕instead of colons, so that sphinx doesn't get
+    # massively confused when generating docstrings out of them.
+
+    LONG_FORMAT = "%A, %B %d, %Y %X"
+    """A standard "long" format, 'Monday, July 18, 2022 15﹕20﹕23' """
+
+    LOCAL_DATETIME = "%c"
+    """The localized datetime format, e.g. 'Wed Jul 18 15﹕20﹕23 1988' """
+
+    LOCAL_DATE_ONLY = "%x"
+    """The localized date-only format, e.g. 'Wed Jul 18 1988' """
+
+    LOCAL_TIME_ONLY = "%X"
+    """The localized time-only format, e.g. '15﹕20﹕23' """
 
 
 def relative_time_string(delta: timedelta, julian: bool = False) -> str:
@@ -64,7 +76,11 @@ def relative_time_string(delta: timedelta, julian: bool = False) -> str:
 def time_delta_string(
     delta: timedelta, julian: bool = False, sign_mode: Sign = Sign.NEGATIVE_ONLY
 ) -> str:
-    """Like relative_time_string, but using a sign_mode (-, +, etc) instead of "ago" etc."""
+    """Like relative_time_string, but using a sign_mode (-, +, etc) instead of "ago" and "from now."
+
+    So for example, it may yield "+3 years" or "-15 seconds" rather than "3 years from now" and
+    "15 seconds ago."
+    """
     if delta < _ZERO:
         negative = True
         delta = -delta

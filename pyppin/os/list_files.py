@@ -1,4 +1,10 @@
-"""(Correctly) yield all files (recursively) in a directory."""
+"""Recursively list all the files in a directory.
+
+"Wait, isn't that what os.ScanDir is for?" you ask. Well... sorta. That function isn't recursive for
+a reason -- correctly recursively listing things in the presence of file system links and the like
+is surprisingly subtle and subject to exciting bugs. This function is here so that you never have to
+worry about that again.
+"""
 import os
 import stat
 from pathlib import Path

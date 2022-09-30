@@ -6,7 +6,6 @@ API
    :toctree: generated
 
    pyppin.base
-   pyppin.containers
    pyppin.file
    pyppin.iterators
    pyppin.math

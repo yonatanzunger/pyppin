@@ -20,7 +20,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="pyppin.math" href="pyppin.math.html" />
+    <link rel="next" title="pyppin.iterators.zip_by_key" href="pyppin.iterators.zip_by_key.html" />
     <link rel="prev" title="pyppin.file.types" href="pyppin.file.types.html" /> 
 </head>
 
@@ -44,9 +44,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../readme.html">pyppin: A toolkit of Python basics</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="pyppin.base.html">pyppin.base</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pyppin.containers.html">pyppin.containers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.file.html">pyppin.file</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">pyppin.iterators</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.iterators.zip_by_key.html">pyppin.iterators.zip_by_key</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pyppin.iterators.split"><code class="docutils literal notranslate"><span class="pre">split()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pyppin.iterators.sample"><code class="docutils literal notranslate"><span class="pre">sample()</span></code></a></li>
 </ul>
@@ -88,8 +88,20 @@
              
   <section id="pyppin-iterators">
 <h1>pyppin.iterators<a class="headerlink" href="#pyppin-iterators" title="Permalink to this heading">¶</a></h1>
-<p>[<a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/iterators.py">View Source</a>]</p>
+<p>[<a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/iterators">Browse Source</a>]</p>
 <span class="target" id="module-pyppin.iterators"></span><p>Useful tools for working with iterators and iterables.</p>
+<p class="rubric">Modules</p>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyppin.iterators.zip_by_key.html#module-pyppin.iterators.zip_by_key" title="pyppin.iterators.zip_by_key"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.iterators.zip_by_key</span></code></a></p></td>
+<td><p>Merge multiple sorted iterators into a single iterator over sorted tuples.</p></td>
+</tr>
+</tbody>
+</table>
 <p class="rubric">Functions</p>
 <table class="autosummary longtable docutils align-default">
 <colgroup>
@@ -101,24 +113,23 @@
 <td><p>Select &lt;count&gt; randomly sampled items from the stream &lt;source&gt;.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#pyppin.iterators.split" title="pyppin.iterators.split"><code class="xref py py-obj docutils literal notranslate"><span class="pre">split</span></code></a>(source, key)</p></td>
-<td><p>Split a source according to keys.</p></td>
+<td><p>Split a source according to keys, like a SQL GROUP BY statement.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyppin.iterators.split">
 <span class="sig-prename descclassname"><span class="pre">pyppin.iterators.</span></span><span class="sig-name descname"><span class="pre">split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">DataType</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">DataType</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">KeyType</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">KeyType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">DataType</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/iterators/__init__.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.iterators.split" title="Permalink to this definition">¶</a></dt>
-<dd><p>Split a source according to keys.</p>
-<p>Given a sequence (v1, v2, v3), returns a dict whose keys are all possible values of key(v_n),
-and whose values are lists of all values which have that key, in the same order they appeared in
-source.</p>
+<dd><p>Split a source according to keys, like a SQL GROUP BY statement.</p>
+<p>For each value in <code class="docutils literal notranslate"><span class="pre">source</span></code>, call key(value), and return a dict whose keys are all possible
+keys, and whose values are a list of all values in the original source who had that key.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyppin.iterators.sample">
 <span class="sig-prename descclassname"><span class="pre">pyppin.iterators.</span></span><span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">DataType</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">count</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">DataType</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/iterators/__init__.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.iterators.sample" title="Permalink to this definition">¶</a></dt>
 <dd><p>Select &lt;count&gt; randomly sampled items from the stream &lt;source&gt;.</p>
-<p>This function implements reservoir sampling using Li’s “Algorithm L.”</p>
+<p>This function implements <a class="reference external" href="https://en.wikipedia.org/wiki/Reservoir_sampling">reservoir sampling</a> using Li’s “Algorithm L.”</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -139,7 +150,7 @@ source.</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="pyppin.file.types.html" class="btn btn-neutral float-left" title="pyppin.file.types" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="pyppin.math.html" class="btn btn-neutral float-right" title="pyppin.math" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="pyppin.iterators.zip_by_key.html" class="btn btn-neutral float-right" title="pyppin.iterators.zip_by_key" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

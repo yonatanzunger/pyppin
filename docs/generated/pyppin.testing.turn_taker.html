@@ -44,7 +44,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../readme.html">pyppin: A toolkit of Python basics</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="pyppin.base.html">pyppin.base</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pyppin.containers.html">pyppin.containers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.file.html">pyppin.file</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.iterators.html">pyppin.iterators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.math.html">pyppin.math</a></li>
@@ -95,7 +94,7 @@
   <section id="pyppin-testing-turn-taker">
 <h1>pyppin.testing.turn_taker<a class="headerlink" href="#pyppin-testing-turn-taker" title="Permalink to this heading">¶</a></h1>
 <p>[<a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/testing/turn_taker.py">View Source</a>]</p>
-<span class="target" id="module-pyppin.testing.turn_taker"></span><p>A tool to manage “turn taking” in multithreaded unittests.</p>
+<span class="target" id="module-pyppin.testing.turn_taker"></span><p>A tool to simplify unittesting operations that involve many threads.</p>
 <p class="rubric">Classes</p>
 <table class="autosummary longtable docutils align-default">
 <colgroup>
@@ -113,14 +112,15 @@
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyppin.testing.turn_taker.</span></span><span class="sig-name descname"><span class="pre">TurnTaker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">game</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">_Game</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/testing/turn_taker.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.testing.turn_taker.TurnTaker" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A tool to manage “turn taking” in multithreaded unittests.</p>
-<p>This class makes it easy to handle multithreaded unittests, where you expect that one thread
-will do X, then another thread will do Y, and so on. It doesn’t help you test for unexpected
-races, but it does help you test that expected sequences of behavior – even complicated ones –
-happen as you want.</p>
-<p>It works by modeling “turn taking” as a game where the players (i.e., the threads) pass each
-other a ball. Only the player currently holding the ball can act; once they’re done acting,
-they can pass the ball to someone else and either wait for their next turn or decide they’re
-done with their part in the game. Once everyone has decided they’re done, the game ends.</p>
+<p>Testing code where you want to verify that actors in multiple threads interact with a shared
+system in an expected way can be hard. Black-box testing (“the right outcome happened”) can
+miss subtle race conditions that only happen sometimes, but white-box testing (“the system
+worked the way my mental model does”) is tricky. This class is designed to make that easier.</p>
+<p>Imagine that the threads of your unittest are playing a game with a ball. If one thread wants
+another thread to do something, they ask that thread to do it, and then pass them the ball. When
+that thread is done, they pass the ball back to the first player. Catching the ball lets the
+first player know that the thing should now be done, and they can check what’s going on in the
+world. By passing the ball back and forth, all the threads can take turns doing things.</p>
 <p>The easiest way to illustrate how it works is with an example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">testSomething</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="k">class</span> <span class="nc">Player1</span><span class="p">(</span><span class="n">TurnTaker</span><span class="p">):</span>
@@ -147,11 +147,17 @@ done with their part in the game. Once everyone has decided they’re done, the 
     <span class="n">TestTaker</span><span class="o">.</span><span class="n">play</span><span class="p">(</span><span class="n">Player1</span><span class="p">,</span> <span class="n">Player2</span><span class="p">,</span> <span class="n">first_player</span><span class="o">=</span><span class="n">Player1</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Any exceptions raised by one of the players will be raised by the call to <code class="docutils literal notranslate"><span class="pre">play()</span></code>. Errors
-in the structure of the test itself (e.g., a player exiting without passing while others are
-waiting, or someone trying to act while it isn’t their turn) are raised as the exceptions
-indicated below.</p>
-<p>(You can find many examples of how this class is used in <a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/tests/threading">pyppin’s own unittests</a>.)</p>
+<p>The call to <code class="docutils literal notranslate"><span class="pre">play</span></code> starts up threads for both players, but Player 2 doesn’t actually start yet
+– only the first player gets to execute. They do some work and then <code class="docutils literal notranslate"><span class="pre">pass_and_wait()</span></code> to
+player 2. This blocks player 1 and unblocks player 2, who now does some other stuff and then
+calls <code class="docutils literal notranslate"><span class="pre">pass_and_wait()</span></code> to send control back to player 1. Player 1 does some final checking
+and then calls <code class="docutils literal notranslate"><span class="pre">pass_and_finish()</span></code>, signalling that it isn’t waiting for the ball to show up
+anymore. Since nobody is waiting for any more balls, the game ends, and the unittest has passed!</p>
+<p>Importantly, any exceptions (including assertion failures) raised by one of the players will be
+raised by the call to <code class="docutils literal notranslate"><span class="pre">play()</span></code>. This is important, because Python doesn’t usually propagate
+exceptions across threads; this way, all your players can make assertions in the ordinary
+unittest style and know that they’ll lead to test failures in the usual way, too.</p>
+<p>You can find several examples of how to use this in <a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/tests/threading">pyppin’s own unittests</a>.)</p>
 <dl class="py exception">
 <dt class="sig sig-object py" id="pyppin.testing.turn_taker.TurnTaker.PlayerExitedWithoutPassing">
 <em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PlayerExitedWithoutPassing</span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/testing/turn_taker.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.testing.turn_taker.TurnTaker.PlayerExitedWithoutPassing" title="Permalink to this definition">¶</a></dt>

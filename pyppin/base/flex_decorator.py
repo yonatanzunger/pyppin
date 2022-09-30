@@ -125,7 +125,8 @@ def flex_decorator(decorator: Callable) -> Callable:
                 f"The decorator {decorator.__name__} must be applied to a callable."
             )
 
-    return poly_decorator
+    # Also propagate the docstring, etc., from decorator onto the poly_decorator.
+    return update_wrapper(poly_decorator, decorator)
 
 
 def _maybe_update_wrapper(wrapper: Any, wrapped: Any) -> Any:

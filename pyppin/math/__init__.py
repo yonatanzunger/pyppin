@@ -3,7 +3,7 @@ from typing import Iterable, Tuple
 
 
 def round_up_to(value: float, multiple_of: float) -> float:
-    """Round <value> up to the nearest multiple of <float>."""
+    """Round ``value`` up to the nearest multiple of ``multiple_of``."""
     float_count = value / multiple_of
     int_count = int(float_count)
     if float_count != int_count:

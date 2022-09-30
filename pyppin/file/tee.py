@@ -6,6 +6,8 @@ from typing import Iterable, Optional, Union
 from pyppin.file.dev_null import RawDevNull
 from pyppin.file.types import BytesLikeObject, OpenFile
 
+__all__ = ["tee"]
+
 
 def tee(*files: OpenFile) -> OpenFile:
     """Given a collection of writable file-like objects, return a single

@@ -44,15 +44,14 @@
 <li class="toctree-l1"><a class="reference internal" href="../readme.html">pyppin: A toolkit of Python basics</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="pyppin.base.html">pyppin.base</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pyppin.containers.html">pyppin.containers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.file.html">pyppin.file</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.iterators.html">pyppin.iterators</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="pyppin.math.html">pyppin.math</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="pyppin.math.functions.html">pyppin.math.functions</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyppin.math.histogram.html">pyppin.math.histogram</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">pyppin.math.plot_ascii</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#pyppin.math.plot_ascii.AxisOptions"><code class="docutils literal notranslate"><span class="pre">AxisOptions</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pyppin.math.plot_ascii.plot_ascii"><code class="docutils literal notranslate"><span class="pre">plot_ascii()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyppin.math.plot_ascii.AxisOptions"><code class="docutils literal notranslate"><span class="pre">AxisOptions</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pyppin.math.plot_ascii.Canvas"><code class="docutils literal notranslate"><span class="pre">Canvas</span></code></a></li>
 </ul>
 </li>
@@ -128,6 +127,32 @@
 </tr>
 </tbody>
 </table>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyppin.math.plot_ascii.plot_ascii">
+<span class="sig-prename descclassname"><span class="pre">pyppin.math.plot_ascii.</span></span><span class="sig-name descname"><span class="pre">plot_ascii</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_axis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyppin.math.plot_ascii.AxisOptions" title="pyppin.math.plot_ascii.AxisOptions"><span class="pre">AxisOptions</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_axis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyppin.math.plot_ascii.AxisOptions" title="pyppin.math.plot_ascii.AxisOptions"><span class="pre">AxisOptions</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vfill</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_symbol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'#'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/math/plot_ascii.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.math.plot_ascii.plot_ascii" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an ASCII-art plot of some numerical data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – The data to be plotted. If you want to plot a list or dict of data, rather than
+a function, use the helpers in pyppin.math.functions to convert them.</p></li>
+<li><p><strong>width</strong> – The size, in characters, of the output to generate. The height will
+default to half the width.</p></li>
+<li><p><strong>height</strong> – The size, in characters, of the output to generate. The height will
+default to half the width.</p></li>
+<li><p><strong>x_axis</strong> – Options for the axes.</p></li>
+<li><p><strong>y_axis</strong> – Options for the axes.</p></li>
+<li><p><strong>vfill</strong> – If True, show a vertical fill (in the style of a bar chart) below each value.
+If False, show the values as points.</p></li>
+<li><p><strong>plot_symbol</strong> – The char to use when plotting it.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Beautiful ASCII art.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="pyppin.math.plot_ascii.AxisOptions">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyppin.math.plot_ascii.</span></span><span class="sig-name descname"><span class="pre">AxisOptions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/math/plot_ascii.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.math.plot_ascii.AxisOptions" title="Permalink to this definition">¶</a></dt>
@@ -151,32 +176,6 @@
 <dd><p>Axis labels, or None to infer from data.</p>
 </dd></dl>
 
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pyppin.math.plot_ascii.plot_ascii">
-<span class="sig-prename descclassname"><span class="pre">pyppin.math.plot_ascii.</span></span><span class="sig-name descname"><span class="pre">plot_ascii</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_axis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyppin.math.plot_ascii.AxisOptions" title="pyppin.math.plot_ascii.AxisOptions"><span class="pre">AxisOptions</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_axis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyppin.math.plot_ascii.AxisOptions" title="pyppin.math.plot_ascii.AxisOptions"><span class="pre">AxisOptions</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vfill</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_symbol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'#'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/math/plot_ascii.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.math.plot_ascii.plot_ascii" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create an ASCII-art plot of some numerical data.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> – The data to be plotted. If you have a list or a dict, use an Interpolate to
-turn it into a function.</p></li>
-<li><p><strong>width</strong> – The size, in characters, of the output to generate. The height will
-default to half the width.</p></li>
-<li><p><strong>height</strong> – The size, in characters, of the output to generate. The height will
-default to half the width.</p></li>
-<li><p><strong>x_axis</strong> – Options for the axes.</p></li>
-<li><p><strong>y_axis</strong> – Options for the axes.</p></li>
-<li><p><strong>vfill</strong> – If True, show a vertical fill (in the style of a bar chart) below each value.
-If False, show the values as points.</p></li>
-<li><p><strong>plot_symbol</strong> – The char to use when plotting it.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Beautiful ASCII art.</p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py class">

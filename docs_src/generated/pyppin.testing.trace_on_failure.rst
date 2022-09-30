@@ -1,4 +1,4 @@
-pyppin.testing.trace\_on\_failure
+﻿pyppin.testing.trace\_on\_failure
 =================================
 
 
@@ -11,11 +11,18 @@ pyppin.testing.trace\_on\_failure
    
    
 
+
    
    
    
 
    
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      trace_on_failure
    
    
 

@@ -1,4 +1,4 @@
-pyppin.base.cache
+﻿pyppin.base.cache
 =================
 
 
@@ -11,11 +11,19 @@ pyppin.base.cache
    
    
 
+
    
    
    
 
    
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      cache
+      cachemethod
    
    
 

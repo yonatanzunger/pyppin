@@ -44,7 +44,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../readme.html">pyppin: A toolkit of Python basics</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="pyppin.base.html">pyppin.base</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pyppin.containers.html">pyppin.containers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.file.html">pyppin.file</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.iterators.html">pyppin.iterators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.math.html">pyppin.math</a></li>
@@ -105,7 +104,7 @@
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#pyppin.text.print_counter.PrintCounter" title="pyppin.text.print_counter.PrintCounter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PrintCounter</span></code></a>([print_every_n, ...])</p></td>
-<td><p></p></td>
+<td><p>A PrintCounter is a context manager that prints regular updates of progress.</p></td>
 </tr>
 </tbody>
 </table>
@@ -113,6 +112,63 @@
 <dt class="sig sig-object py" id="pyppin.text.print_counter.PrintCounter">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyppin.text.print_counter.</span></span><span class="sig-name descname"><span class="pre">PrintCounter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">print_every_n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_every_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">timedelta</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">datetime.timedelta(seconds=30)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Count:</span> <span class="pre">{count:si}</span> <span class="pre">after</span> <span class="pre">{time:td}'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">final_format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Final:</span> <span class="pre">{count}</span> <span class="pre">after</span> <span class="pre">{time:td}'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stream</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">TextIOBase</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/print_counter.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.print_counter.PrintCounter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A PrintCounter is a context manager that prints regular updates of progress.</p>
+<p>It prints the updates on separate lines, without any VT100 formatting or the like, so it’s
+useful in situations where you’re writing log files as well as on the console.</p>
+<p>Its use is simple:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">PrintCounter</span><span class="p">()</span> <span class="k">as</span> <span class="n">counter</span><span class="p">:</span>
+    <span class="o">...</span> <span class="n">do</span> <span class="n">some</span> <span class="n">big</span> <span class="n">loop</span> <span class="ow">and</span> <span class="n">occasionally</span> <span class="n">call</span>
+    <span class="n">counter</span><span class="o">.</span><span class="n">inc</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Every N calls to counter.inc(), or whenever at least Δ time has passed since the last call
+to inc(), it will print out an update statement. The use of both count and time lets you
+edeasily monitor both fast and slow operations and always get useful feedback.</p>
+<p>You can also have “custom counters” by adding keyword arguments to inc(). These counters are
+available in your format string as well to print out, but (unlike the primary counter) they
+will <em>not</em> trigger printing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>print_every_n</strong> – If not None, print whenever it’s been at least N counts since the last
+print happened.</p></li>
+<li><p><strong>print_every_time</strong> – If not None, print whenever it’s been at least X time since the last
+print happened.</p></li>
+<li><p><strong>format</strong> – <p>The string to print out. This is a standard Python format string, which receives
+the arguments:</p>
+<blockquote>
+<div><ul>
+<li><p>count: int or float, the current count</p></li>
+<li><p>time: timedelta, the total elapsed time</p></li>
+<li><p>Any custom counts you created, int or float.</p></li>
+</ul>
+</div></blockquote>
+</p></li>
+<li><p><strong>final_format</strong> – If given, the format to be used for the final print string. If None, equal
+to ‘format’. Note that the default deliberately uses the raw format for count, not
+the SI one, so you get an exact final count!</p></li>
+<li><p><strong>start</strong> – The zero time for measurement; the default is now.</p></li>
+<li><p><strong>stream</strong> – Where to print the result to, or None to print to stdout.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Say you’re transferring a bunch of files, and want to show progress on both bytes and files.
+You decide you want the primary trigger of status updates to be when bytes sent moves, rather
+than number of files, since individual files are probably big. So you do this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">PrintCounter</span><span class="p">(</span>
+    <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;Transferred </span><span class="si">{files}</span><span class="s1"> files ({count:sib}B) in {time:td} ({size/time.seconds():sib}B/s)&#39;</span><span class="p">,</span>
+<span class="p">)</span> <span class="k">as</span> <span class="n">counter</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">bytes_sent</span> <span class="o">=</span> <span class="n">send_some_data</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+            <span class="n">counter</span><span class="o">.</span><span class="n">inc</span><span class="p">(</span><span class="n">bytes_sent</span><span class="p">)</span>
+
+        <span class="n">counter</span><span class="o">.</span><span class="n">inc</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">files</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># Implement the file counter alone</span>
+</pre></div>
+</div>
+<p>Note the format strings like :sib and :td being used here – you can find out more about those
+in <a class="reference internal" href="pyppin.text.formatter.html"><span class="doc">pyppin.text.formatter</span></a>.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyppin.text.print_counter.PrintCounter.inc">
 <span class="sig-name descname"><span class="pre">inc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">count</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">custom</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/print_counter.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.print_counter.PrintCounter.inc" title="Permalink to this definition">¶</a></dt>

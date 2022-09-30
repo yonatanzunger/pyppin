@@ -2,14 +2,23 @@
 ================
 
 
-[`View Source <https://github.com/yonatanzunger/pyppin/tree/master/pyppin/iterators.py>`_]
+[`Browse Source <https://github.com/yonatanzunger/pyppin/tree/master/pyppin/iterators>`_]
 
 
 .. automodule:: pyppin.iterators
 
    
    
+   .. rubric:: Modules
+ 
+   .. autosummary::
+      :toctree:
+      :recursive:
    
+      pyppin.iterators.zip_by_key
+   
+   
+
 
    
    

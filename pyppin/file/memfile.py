@@ -2,7 +2,12 @@
 
 from typing import Optional, Tuple
 
-from pyppin.file.types import BytesLikeObject, FileLikeObject, MutableBytesLikeObject
+from pyppin.file.types import (
+    BytesLikeObject,
+    FileLikeObject,
+    MutableBytesLikeObject,
+    OpenFile,
+)
 
 
 class MemFile(FileLikeObject):
@@ -27,6 +32,31 @@ class MemFile(FileLikeObject):
 
     def __str__(self) -> str:
         return self._name
+
+    def open(
+        self,
+        mode: str = "r",
+        buffering: int = -1,
+        encoding: Optional[str] = None,
+        errors: Optional[str] = None,
+        newline: Optional[str] = None,
+    ) -> OpenFile:
+        """Create a new file handle which accesses the data in this MemFile.
+
+        The resulting object is of the appropriate type (io.RawIO, io.BufferedIO, or io.TextIO)
+        depending on the arguments in the usual fashion.
+
+        Note that there is no inherent thread-safety in these files: If multiple threads are reading
+        and writing the same MemFile at once, they need to synchronize their access to it, just like
+        they would for ordinary files on disk.
+        """
+        return super().open(
+            mode=mode,
+            buffering=buffering,
+            encoding=encoding,
+            errors=errors,
+            newline=newline,
+        )
 
     @property
     def bytes(self) -> bytearray:

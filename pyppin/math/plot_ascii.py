@@ -9,31 +9,20 @@ from pyppin.math import cap
 from pyppin.math.functions import FunctionFromSortedData
 
 
-class AxisOptions(NamedTuple):
-    """Information about an axis of the plot"""
-
-    min: Optional[float] = None
-    """The minimum value to show on the plot, or None to infer from data."""
-    max: Optional[float] = None
-    """The maximum value to show on the plot, or None to infer from data."""
-    labels: Optional[Dict[float, str]] = None
-    """Axis labels, or None to infer from data."""
-
-
 def plot_ascii(
     data: Callable[[float], float],
     width: int = 100,
     height: int = 0,
-    x_axis: Optional[AxisOptions] = None,
-    y_axis: Optional[AxisOptions] = None,
+    x_axis: Optional["AxisOptions"] = None,
+    y_axis: Optional["AxisOptions"] = None,
     vfill: bool = False,
     plot_symbol: str = "#",
 ) -> str:
     """Create an ASCII-art plot of some numerical data.
 
     Args:
-        data: The data to be plotted. If you have a list or a dict, use an Interpolate to
-            turn it into a function.
+        data: The data to be plotted. If you want to plot a list or dict of data, rather than
+            a function, use the helpers in pyppin.math.functions to convert them.
         width, height: The size, in characters, of the output to generate. The height will
             default to half the width.
         x_axis, y_axis: Options for the axes.
@@ -50,6 +39,17 @@ def plot_ascii(
     )
     canvas.plot(data, vfill=vfill, symbol=plot_symbol)
     return canvas.render()
+
+
+class AxisOptions(NamedTuple):
+    """Information about an axis of the plot"""
+
+    min: Optional[float] = None
+    """The minimum value to show on the plot, or None to infer from data."""
+    max: Optional[float] = None
+    """The maximum value to show on the plot, or None to infer from data."""
+    labels: Optional[Dict[float, str]] = None
+    """Axis labels, or None to infer from data."""
 
 
 class Canvas(object):

@@ -179,7 +179,10 @@ def cachemethod(
     cache_exceptions: bool = False,
     **kwargs: Any,
 ) -> "_WrappedDescriptor":
-    """A decorator to memoize (cache) the results of a class or instance method."""
+    """A decorator to memoize (cache) the results of a class or instance method.
+
+    See the module documentation for an explanation of its arguments.
+    """
 
     # Our wrapper function will return a non-data descriptor whose __get__ returns a callable
     # object, rather than a function. This way, when you invoke __get__ on it, it can capture
@@ -210,7 +213,10 @@ def cache(
     cache_exceptions: bool = False,
     **kwargs: Any,
 ) -> "_WrappedFunction":
-    """A decorator to memoize (cache) the results of a function call."""
+    """A decorator to memoize (cache) the results of a function call.
+
+    See the module documentation for an explanation of its arguments.
+    """
 
     return _WrappedFunction(
         _CacheCore(

@@ -44,7 +44,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../readme.html">pyppin: A toolkit of Python basics</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="pyppin.base.html">pyppin.base</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pyppin.containers.html">pyppin.containers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.file.html">pyppin.file</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.iterators.html">pyppin.iterators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.math.html">pyppin.math</a></li>
@@ -149,6 +148,8 @@
 <span class="sig-prename descclassname"><span class="pre">pyppin.text.si_prefix.</span></span><span class="sig-name descname"><span class="pre">si_prefix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pyppin.text.si_prefix.Mode" title="pyppin.text.si_prefix.Mode"><span class="pre">Mode</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Mode.DECIMAL</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precision</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascii_only</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">full_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sign</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pyppin.text.sign.html#pyppin.text.sign.Sign" title="pyppin.text.sign.Sign"><span class="pre">Sign</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Sign.NEGATIVE_ONLY</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/si_prefix.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.si_prefix.si_prefix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Format a number as a string, using SI (système internationale) prefixes. For example,
 turn 1,234,567 into 1.2M.</p>
+<p>Numbers beyond the range of SI prefixes will be rendered as 1.2E243 (decimal) or 1.2*2^99
+(binary).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -167,7 +168,7 @@ we use the ASCII letter u instead; this is important for some legacy environment
 that can’t support Unicode.</p></li>
 <li><p><strong>full_names</strong> – If True, then we will print out the full words for the SI prefixes (‘Mega’,
 ‘micro’, etc) rather than the one-letter abbreviations (‘M’, ‘μ’, etc).
-WARNING: There are no IEC-defined full names for negative-power prefixes, i.e. no
+<strong>NOTE:</strong> There are no IEC-defined full names for negative-power prefixes, i.e. no
 IEC equivalents to milli, micro, and so on. For <em>short</em> names we can use the IEC
 convention of appending ‘i’ (mi, μi, etc), but there’s no actual full name or rule
 for it that works. As a result, setting mode=IEC, full_names=True will treat all
@@ -180,28 +181,46 @@ of a name.</p></li>
 <dd class="field-even"><p>A string representation of this number, using SI prefixes.</p>
 </dd>
 </dl>
-<p><strong>* IMPORTANT NOTE ABOUT MODES *</strong></p>
-<p>Very nasty things, including physical objects crashing into each other at high speeds, have come
-from miscommunication about decimal versus binary prefixes! The IEC prefixes are an attempt to
-remedy this, by using ‘ki’, ‘Mi’, etc., for binary prefixes, and ‘k’, ‘M’, etc., for decimal
-ones, but these prefixes are only in sporadic use, possibly because the associated word forms
-(‘kibi’, ‘mebi’, etc) sound profoundly silly. However, they are very clear!</p>
-<p>In general, if you are unsure which to use:</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Very nasty things, including physical objects crashing into each other at high speeds, have
+happened because of miscommunications about decimal (1k = 1,000) and binary (1k = 1,024)
+prefixes.</p>
+<p>The IEC prefixes are an attempt to fix this, by using ‘ki’, ‘Mi’, etc., for binary prefixes, and
+reserving ‘k’, ‘M’, etc., for decimal ones. However, IEC notation is only in sporadic use,
+possibly because the associated word forms (‘kibi’, ‘Mebi’, etc) sound rather silly. This means
+that if you encounter a numeric prefix in the wild, you need to check to see which one you are
+seeing!</p>
+<p>In general, when IEC prefixes aren’t in use, there are some very important conventions to
+follow:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p>Physical quantities, including times, should ALWAYS use decimal SI prefixes.</p></li>
-<li><p>Network bandwidths are always expressed (surprise!) in <em>decimal</em>. 1Mbps = 1000000 bits per
-second, not 1048576!</p></li>
-<li><p>Storage quantities in RAM and SSD should use binary or IEC prefixes.</p></li>
-<li><p>Storage quantities on spinning disks are historically specified in weird made-up units,
-e.g. 1MB = 1024000 bytes. This is an artifact of disk manufacturers trying to make their
-capacities sound higher without <em>technically</em> making false or misleading statements that
-could get them sued. If you are _expressing_ storage quantities, always use binary or IEC
-prefixes; if you are _parsing_ storage quantities provided to you by a manufacturer,
-don’t, measure directly instead; those numbers do not have a well-defined meaning, even if
-they seem to use SI prefixes.</p></li>
+<li><p>Physical quantities, including times, should always use decimal SI prefixes.</p></li>
+<li><p>Storage quantities (in RAM or on disk) should always use binary or IEC prefixes.</p></li>
+<li><p>Network capacities should always use decimal (surprise!) IEC prefixes.</p></li>
 </ul>
 </div></blockquote>
+<p>There are a few surprises hiding in the rules above:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Because network capacities are measured in decimal units while data is measured in binary
+units, transmitting 1MB of data (1,048,576 bytes) at 1MBps (1,000,000 bytes per second)
+takes 1.049 seconds, not one second.</p></li>
+<li><p>Network capacities are measured in three different but similar-sounding units: Bps (bytes
+per second of data transmitted), bps (bits per second of data transmitted), and baud
+(line-level transitions per second, i.e. raw bits on the wire per second, including bits
+used for things like error-correcting codes and other things that aren’t actual data
+transmitted). bps (note the lowercase!) is by far the most common, to the extent that if
+anyone ever talks to you about Bps you should check if they actually meant that.
+Transmitting 1MB of data at 1Mbps takes 8.39 seconds.</p></li>
+<li><p>Historically, storage quantities on spinning disks were reported by manufacturers in weird
+units that were neither decimal nor binary, like “1MB = 1,024,000 bytes”. This is an
+artifact of them trying to make their capacities sound higher without <em>technically</em> making
+false or misleading statements. If you encounter numbers like these in the wild, take them
+with a very large grain of salt.</p></li>
+</ul>
+</div></blockquote>
+</div>
 </dd></dl>
 
 </section>

@@ -12,11 +12,10 @@ KeyType = TypeVar("KeyType")
 def split(
     source: Iterable[DataType], key: Callable[[DataType], KeyType]
 ) -> Dict[KeyType, List[DataType]]:
-    """Split a source according to keys.
+    """Split a source according to keys, like a SQL GROUP BY statement.
 
-    Given a sequence (v1, v2, v3), returns a dict whose keys are all possible values of key(v_n),
-    and whose values are lists of all values which have that key, in the same order they appeared in
-    source.
+    For each value in ``source``, call key(value), and return a dict whose keys are all possible
+    keys, and whose values are a list of all values in the original source who had that key.
     """
     result: Dict[KeyType, List[DataType]] = defaultdict(list)
     for value in source:
@@ -27,7 +26,8 @@ def split(
 def sample(source: Iterable[DataType], count: int) -> List[DataType]:
     """Select <count> randomly sampled items from the stream <source>.
 
-    This function implements reservoir sampling using Li's "Algorithm L."
+    This function implements `reservoir sampling
+    <https://en.wikipedia.org/wiki/Reservoir_sampling>`_ using Li's "Algorithm L."
 
     Args:
         source: The data from which to sample.

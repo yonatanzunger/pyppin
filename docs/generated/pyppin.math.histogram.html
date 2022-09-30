@@ -44,14 +44,13 @@
 <li class="toctree-l1"><a class="reference internal" href="../readme.html">pyppin: A toolkit of Python basics</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="pyppin.base.html">pyppin.base</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pyppin.containers.html">pyppin.containers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.file.html">pyppin.file</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.iterators.html">pyppin.iterators</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="pyppin.math.html">pyppin.math</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="pyppin.math.functions.html">pyppin.math.functions</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">pyppin.math.histogram</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#pyppin.math.histogram.Bucketing"><code class="docutils literal notranslate"><span class="pre">Bucketing</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pyppin.math.histogram.Histogram"><code class="docutils literal notranslate"><span class="pre">Histogram</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyppin.math.histogram.Bucketing"><code class="docutils literal notranslate"><span class="pre">Bucketing</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="pyppin.math.plot_ascii.html">pyppin.math.plot_ascii</a></li>
@@ -110,11 +109,101 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#pyppin.math.histogram.Bucketing" title="pyppin.math.histogram.Bucketing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Bucketing</span></code></a>([max_linear_value, linear_steps, ...])</p></td>
 <td><p>Define the shapes of the buckets that we will use for the histogram.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pyppin.math.histogram.Histogram" title="pyppin.math.histogram.Histogram"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Histogram</span></code></a>(bucketing)</p></td>
-<td><p>A histogram of numeric values.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pyppin.math.histogram.Histogram" title="pyppin.math.histogram.Histogram"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Histogram</span></code></a>([bucketing])</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyppin.math.histogram.Histogram">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyppin.math.histogram.</span></span><span class="sig-name descname"><span class="pre">Histogram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bucketing</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyppin.math.histogram.Bucketing" title="pyppin.math.histogram.Bucketing"><span class="pre">Bucketing</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/math/histogram.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.math.histogram.Histogram" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.math.histogram.Histogram.add">
+<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">count</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/math/histogram.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.math.histogram.Histogram.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a value to the histogram.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value</strong> – The value to add.</p></li>
+<li><p><strong>count</strong> – The number of times to add this value.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.math.histogram.Histogram.combine">
+<span class="sig-name descname"><span class="pre">combine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pyppin.math.histogram.Histogram" title="pyppin.math.histogram.Histogram"><span class="pre">Histogram</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/math/histogram.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.math.histogram.Histogram.combine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add another histogram to this histogram.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pyppin.math.histogram.Histogram.mean">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mean</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/math/histogram.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.math.histogram.Histogram.mean" title="Permalink to this definition">¶</a></dt>
+<dd><p>The mean value of the data.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.math.histogram.Histogram.percentile">
+<span class="sig-name descname"><span class="pre">percentile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/math/histogram.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.math.histogram.Histogram.percentile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the value at the Nth percentile of this histogram, with n in [0, 100].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pyppin.math.histogram.Histogram.median">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">median</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/math/histogram.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.math.histogram.Histogram.median" title="Permalink to this definition">¶</a></dt>
+<dd><p>The median (50th percentile) value of the data.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pyppin.math.histogram.Histogram.variance">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">variance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/math/histogram.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.math.histogram.Histogram.variance" title="Permalink to this definition">¶</a></dt>
+<dd><p>The distribution variance of the data.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pyppin.math.histogram.Histogram.standard_deviation">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">standard_deviation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/math/histogram.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.math.histogram.Histogram.standard_deviation" title="Permalink to this definition">¶</a></dt>
+<dd><p>The standard deviation of the data.</p>
+<p>Reminder: If your data doesn’t follow a Gaussian distribution, this is not going to give you
+a very meaningful number.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.math.histogram.Histogram.plot_ascii">
+<span class="sig-name descname"><span class="pre">plot_ascii</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_percentile</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_percentile</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raw_counts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/math/histogram.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.math.histogram.Histogram.plot_ascii" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate an ASCII plot of the histogram.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>width</strong> – The dimensions of the plot, in characters. The height defaults
+to half the width.</p></li>
+<li><p><strong>height</strong> – The dimensions of the plot, in characters. The height defaults
+to half the width.</p></li>
+<li><p><strong>min_percentile</strong> – The subrange of the histogram to include.</p></li>
+<li><p><strong>max_percentile</strong> – The subrange of the histogram to include.</p></li>
+<li><p><strong>raw_counts</strong> – If True, plot the raw bucket counts. If False (the default), plot the
+probability distribution function.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.math.histogram.Histogram.histogram_values">
+<span class="sig-name descname"><span class="pre">histogram_values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="pyppin.math.functions.html#pyppin.math.functions.PiecewiseConstant" title="pyppin.math.functions.PiecewiseConstant"><span class="pre">PiecewiseConstant</span></a></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/math/histogram.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.math.histogram.Histogram.histogram_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a function that returns the counts in each bucket.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyppin.math.histogram.Histogram.pdf">
+<span class="sig-name descname"><span class="pre">pdf</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="pyppin.math.functions.html#pyppin.math.functions.Interpolate" title="pyppin.math.functions.Interpolate"><span class="pre">Interpolate</span></a></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/math/histogram.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.math.histogram.Histogram.pdf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the probability distribution function inferred from this histogram.</p>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="pyppin.math.histogram.Bucketing">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyppin.math.histogram.</span></span><span class="sig-name descname"><span class="pre">Bucketing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_linear_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linear_steps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exponential_multiplier</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/math/histogram.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.math.histogram.Bucketing" title="Permalink to this definition">¶</a></dt>
@@ -157,96 +246,6 @@ or None to use linear values for everything.</p></li>
 <dt class="sig sig-object py" id="pyppin.math.histogram.Bucketing.value_for_bucket">
 <span class="sig-name descname"><span class="pre">value_for_bucket</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bucket</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/math/histogram.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.math.histogram.Bucketing.value_for_bucket" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the (min) value for the indicated bucket.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="pyppin.math.histogram.Histogram">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyppin.math.histogram.</span></span><span class="sig-name descname"><span class="pre">Histogram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bucketing:</span> <span class="pre">~pyppin.math.histogram.Bucketing</span> <span class="pre">=</span> <span class="pre">&lt;pyppin.math.histogram.Bucketing</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/math/histogram.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.math.histogram.Histogram" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>A histogram of numeric values.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>bucketing</strong> – Parameters to control how values are assigned to buckets.</p>
-</dd>
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="pyppin.math.histogram.Histogram.add">
-<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">count</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/math/histogram.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.math.histogram.Histogram.add" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add a value to the histogram.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>value</strong> – The value to add.</p></li>
-<li><p><strong>count</strong> – The number of times to add this value.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pyppin.math.histogram.Histogram.combine">
-<span class="sig-name descname"><span class="pre">combine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pyppin.math.histogram.Histogram" title="pyppin.math.histogram.Histogram"><span class="pre">Histogram</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/math/histogram.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.math.histogram.Histogram.combine" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add another histogram to this histogram.</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="pyppin.math.histogram.Histogram.mean">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mean</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/math/histogram.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.math.histogram.Histogram.mean" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pyppin.math.histogram.Histogram.percentile">
-<span class="sig-name descname"><span class="pre">percentile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/math/histogram.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.math.histogram.Histogram.percentile" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the value at the Nth percentile of this histogram, with n in [0, 100].</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="pyppin.math.histogram.Histogram.median">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">median</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/math/histogram.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.math.histogram.Histogram.median" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="pyppin.math.histogram.Histogram.variance">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">variance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/math/histogram.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.math.histogram.Histogram.variance" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="pyppin.math.histogram.Histogram.standard_deviation">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">standard_deviation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/math/histogram.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.math.histogram.Histogram.standard_deviation" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pyppin.math.histogram.Histogram.plot_ascii">
-<span class="sig-name descname"><span class="pre">plot_ascii</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_percentile</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_percentile</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raw_counts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/math/histogram.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.math.histogram.Histogram.plot_ascii" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate an ASCII plot of the histogram.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>width</strong> – The dimensions of the plot, in characters. The height defaults
-to half the width.</p></li>
-<li><p><strong>height</strong> – The dimensions of the plot, in characters. The height defaults
-to half the width.</p></li>
-<li><p><strong>min_percentile</strong> – The subrange of the histogram to include.</p></li>
-<li><p><strong>max_percentile</strong> – The subrange of the histogram to include.</p></li>
-<li><p><strong>raw_counts</strong> – If True, plot the raw bucket counts. If False (the default), plot the
-probability distribution function.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pyppin.math.histogram.Histogram.histogram_values">
-<span class="sig-name descname"><span class="pre">histogram_values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="pyppin.math.functions.html#pyppin.math.functions.PiecewiseConstant" title="pyppin.math.functions.PiecewiseConstant"><span class="pre">PiecewiseConstant</span></a></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/math/histogram.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.math.histogram.Histogram.histogram_values" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a function that returns the counts in each bucket.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pyppin.math.histogram.Histogram.pdf">
-<span class="sig-name descname"><span class="pre">pdf</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="pyppin.math.functions.html#pyppin.math.functions.Interpolate" title="pyppin.math.functions.Interpolate"><span class="pre">Interpolate</span></a></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/math/histogram.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.math.histogram.Histogram.pdf" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the probability distribution function inferred from this histogram.</p>
 </dd></dl>
 
 </dd></dl>

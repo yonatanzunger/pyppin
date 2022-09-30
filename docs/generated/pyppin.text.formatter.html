@@ -44,7 +44,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../readme.html">pyppin: A toolkit of Python basics</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="pyppin.base.html">pyppin.base</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pyppin.containers.html">pyppin.containers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.file.html">pyppin.file</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.iterators.html">pyppin.iterators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.math.html">pyppin.math</a></li>
@@ -99,17 +98,22 @@
   <section id="pyppin-text-formatter">
 <h1>pyppin.text.formatter<a class="headerlink" href="#pyppin-text-formatter" title="Permalink to this heading">¶</a></h1>
 <p>[<a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/formatter.py">View Source</a>]</p>
-<span class="target" id="module-pyppin.text.formatter"></span><p>Tools to format numbers, times, etc., using the fancy functions in pyppin.text.</p>
+<span class="target" id="module-pyppin.text.formatter"></span><p>Tools to format numbers, times, etc., using the fancy functions in <a class="reference internal" href="pyppin.text.html"><span class="doc">pyppin.text</span></a>.</p>
 <p>The most general way to use this is with the Formatter class in this file. In addition to all of the
 standard Python formatting, it supports a few new formats:</p>
-<blockquote>
-<div><p>TYPE        FORMAT SPEC                                             RESULT
-int, float  [[fill]align][sign][width][.precision][(threshold)]si   SI (decimal scale)
-int, float  [[fill]align][sign][width][.precision][(threshold)]sib  SI (binary scale)
-int, float  [[fill]align][sign][width][.precision][(threshold)]iec  SI (binary scale, IEC)
-timedelta   [[fill]align][sign][width]td                            time_delta_string
-timedelta   [[fill]align][width]rd                                  relative_time_string</p>
-</div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TYPE</span>        <span class="n">FORMAT</span> <span class="n">SPEC</span>                                             <span class="n">RESULT</span>
+<span class="nb">int</span><span class="p">,</span> <span class="nb">float</span>  <span class="p">[[</span><span class="n">fill</span><span class="p">]</span><span class="n">align</span><span class="p">][</span><span class="n">sign</span><span class="p">][</span><span class="n">width</span><span class="p">][</span><span class="o">.</span><span class="n">precision</span><span class="p">][(</span><span class="n">threshold</span><span class="p">)]</span><span class="n">si</span>   <span class="n">SI</span> <span class="p">(</span><span class="n">decimal</span> <span class="n">scale</span><span class="p">)</span>
+<span class="nb">int</span><span class="p">,</span> <span class="nb">float</span>  <span class="p">[[</span><span class="n">fill</span><span class="p">]</span><span class="n">align</span><span class="p">][</span><span class="n">sign</span><span class="p">][</span><span class="n">width</span><span class="p">][</span><span class="o">.</span><span class="n">precision</span><span class="p">][(</span><span class="n">threshold</span><span class="p">)]</span><span class="n">sib</span>  <span class="n">SI</span> <span class="p">(</span><span class="n">binary</span> <span class="n">scale</span><span class="p">)</span>
+<span class="nb">int</span><span class="p">,</span> <span class="nb">float</span>  <span class="p">[[</span><span class="n">fill</span><span class="p">]</span><span class="n">align</span><span class="p">][</span><span class="n">sign</span><span class="p">][</span><span class="n">width</span><span class="p">][</span><span class="o">.</span><span class="n">precision</span><span class="p">][(</span><span class="n">threshold</span><span class="p">)]</span><span class="n">iec</span>  <span class="n">SI</span> <span class="p">(</span><span class="n">binary</span> <span class="n">scale</span><span class="p">,</span> <span class="n">IEC</span><span class="p">)</span>
+<span class="n">timedelta</span>   <span class="p">[[</span><span class="n">fill</span><span class="p">]</span><span class="n">align</span><span class="p">][</span><span class="n">sign</span><span class="p">][</span><span class="n">width</span><span class="p">]</span><span class="n">td</span>                            <span class="n">time_delta_string</span>
+<span class="n">timedelta</span>   <span class="p">[[</span><span class="n">fill</span><span class="p">]</span><span class="n">align</span><span class="p">][</span><span class="n">width</span><span class="p">]</span><span class="n">rd</span>                                  <span class="n">relative_time_string</span>
+</pre></div>
+</div>
+<p>For example, you might format a timedelta as <code class="docutils literal notranslate"><span class="pre">{var:50rd}</span></code> to get a 50-character wide relative time
+string (“3 days from now”), or a number of bytes as <code class="docutils literal notranslate"><span class="pre">{size:sib}B</span></code> (“1.2GB”).</p>
+<p>The simplest way to use these formats is with pyppin.text.formatter.Formatter, which is a standard
+Python <a class="reference external" href="https://docs.python.org/3/library/string.html#custom-string-formatting">string Formatter</a>.
+Its <code class="docutils literal notranslate"><span class="pre">format()</span></code> method behaves just like <code class="docutils literal notranslate"><span class="pre">str.format()</span></code>.</p>
 <p class="rubric">Classes</p>
 <table class="autosummary longtable docutils align-default">
 <colgroup>

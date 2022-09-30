@@ -1,12 +1,21 @@
-"""Abstract classes for math functions; used with histogram and plot_ascii."""
+"""Create real-valued functions by interpolating data.
+
+Utilities like plot_ascii take a real-valued function, i.e. a ``Callable[[float], float]``, as their
+argument. This library lets you turn a set of data points into an (interpolated) function that you
+can use there.
+"""
 
 import bisect
+from abc import ABC
 from typing import Dict, List, Tuple, Union
 
 
-class FunctionFromSortedData(object):
-    """Base class for a bunch of Callable[[float], float] that are based on sorted (x, y) inputs
-    at fixed data points.
+class FunctionFromSortedData(ABC):
+    """Base class for functions built out of a set of (x, y) data pairs.
+
+    All the subclasses of this are callable objects that behave like a function from float to float,
+    and are constructed from a collection of (x, y) data pairs, either as a list or a dict. If
+    provided as a list, no more than one y-value should be given per x-value!
     """
 
     def __init__(
@@ -48,9 +57,8 @@ class FunctionFromSortedData(object):
 
 
 class Interpolate(FunctionFromSortedData):
-    """A function that linearly interpolates between a sequence of values.
-
-    This is useful if you want to plot or otherwise process a set of numbers.
+    """Build a function by linearly interpolating (i.e. drawing straight lines) between the given
+    data points.
     """
 
     def __call__(self, arg: float) -> float:
@@ -63,7 +71,9 @@ class Interpolate(FunctionFromSortedData):
 
 
 class PiecewiseConstant(FunctionFromSortedData):
-    """A piecewise-constant function."""
+    """Build a piecewise constant function, i.e. one that gives constant values between one given
+    x-value and the next.
+    """
 
     def __call__(self, arg: float) -> float:
         left_index = self._left_of(arg)

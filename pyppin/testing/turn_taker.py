@@ -1,4 +1,4 @@
-"""A tool to manage "turn taking" in multithreaded unittests."""
+"""A tool to simplify unittesting operations that involve many threads."""
 
 import threading
 from typing import Optional, Set, Type, Union
@@ -7,15 +7,16 @@ from typing import Optional, Set, Type, Union
 class TurnTaker(object):
     """A tool to manage "turn taking" in multithreaded unittests.
 
-    This class makes it easy to handle multithreaded unittests, where you expect that one thread
-    will do X, then another thread will do Y, and so on. It doesn't help you test for unexpected
-    races, but it does help you test that expected sequences of behavior -- even complicated ones --
-    happen as you want.
+    Testing code where you want to verify that actors in multiple threads interact with a shared
+    system in an expected way can be hard. Black-box testing ("the right outcome happened") can
+    miss subtle race conditions that only happen sometimes, but white-box testing ("the system
+    worked the way my mental model does") is tricky. This class is designed to make that easier.
 
-    It works by modeling "turn taking" as a game where the players (i.e., the threads) pass each
-    other a ball. Only the player currently holding the ball can act; once they're done acting,
-    they can pass the ball to someone else and either wait for their next turn or decide they're
-    done with their part in the game. Once everyone has decided they're done, the game ends.
+    Imagine that the threads of your unittest are playing a game with a ball. If one thread wants
+    another thread to do something, they ask that thread to do it, and then pass them the ball. When
+    that thread is done, they pass the ball back to the first player. Catching the ball lets the
+    first player know that the thing should now be done, and they can check what's going on in the
+    world. By passing the ball back and forth, all the threads can take turns doing things.
 
     The easiest way to illustrate how it works is with an example::
 
@@ -43,12 +44,19 @@ class TurnTaker(object):
             # The unittest then runs the game as follows:
             TestTaker.play(Player1, Player2, first_player=Player1)
 
-    Any exceptions raised by one of the players will be raised by the call to ``play()``. Errors
-    in the structure of the test itself (e.g., a player exiting without passing while others are
-    waiting, or someone trying to act while it isn't their turn) are raised as the exceptions
-    indicated below.
+    The call to ``play`` starts up threads for both players, but Player 2 doesn't actually start yet
+    -- only the first player gets to execute. They do some work and then ``pass_and_wait()`` to
+    player 2. This blocks player 1 and unblocks player 2, who now does some other stuff and then
+    calls ``pass_and_wait()`` to send control back to player 1. Player 1 does some final checking
+    and then calls ``pass_and_finish()``, signalling that it isn't waiting for the ball to show up
+    anymore. Since nobody is waiting for any more balls, the game ends, and the unittest has passed!
 
-    (You can find many examples of how this class is used in `pyppin's own unittests
+    Importantly, any exceptions (including assertion failures) raised by one of the players will be
+    raised by the call to ``play()``. This is important, because Python doesn't usually propagate
+    exceptions across threads; this way, all your players can make assertions in the ordinary
+    unittest style and know that they'll lead to test failures in the usual way, too.
+
+    You can find several examples of how to use this in `pyppin's own unittests
     <https://github.com/yonatanzunger/pyppin/tree/master/tests/threading>`_.)
     """
 

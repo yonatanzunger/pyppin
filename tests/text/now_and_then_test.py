@@ -1,7 +1,7 @@
 import unittest
 from datetime import datetime, timedelta
 
-from pyppin.text.now_and_then import LONG_FORMAT, now_and_then, relative_time_string
+from pyppin.text.now_and_then import Formats, now_and_then, relative_time_string
 
 
 class NowAndThenTest(unittest.TestCase):
@@ -39,7 +39,7 @@ class NowAndThenTest(unittest.TestCase):
         # Let 'now' be 7/1, and 'then' be 7/18, a day in the future.
         self.assertEqual(
             "Monday, July 18, 2022 15:22:23 (17 days, 15:22:23 from now)",
-            now_and_then(time1, time2, format=LONG_FORMAT),
+            now_and_then(time1, time2, format=Formats.LONG_FORMAT),
         )
 
         # Other way round, and let's use ISO format.

@@ -39,7 +39,7 @@ def interact(
     so that the test command is 'pytest -s'. That's not what you usually want -- it disables stdout
     capture as well -- but it will let you interactively probe your tests!
 
-    FUTURE NOTE: : A read-write interacting environment may become possible in future versions of
+    FUTURE NOTE: A read-write interacting environment may become possible in future versions of
     Python; see PEP 558, which would be required in order to implement this.
     """
 

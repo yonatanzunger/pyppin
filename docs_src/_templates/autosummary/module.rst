@@ -21,6 +21,7 @@
    {% endif %}
    {% endblock %}
 
+
    {% block attributes %}
    {% if attributes %}
    .. rubric:: {{ _('Module Attributes') }}

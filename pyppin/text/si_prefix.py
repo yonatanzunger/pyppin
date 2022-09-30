@@ -25,6 +25,9 @@ def si_prefix(
     """Format a number as a string, using SI (système internationale) prefixes. For example,
     turn 1,234,567 into 1.2M.
 
+    Numbers beyond the range of SI prefixes will be rendered as 1.2E243 (decimal) or 1.2*2^99
+    (binary).
+
     Args:
         value: The number to be formatted.
         mode: Whether to use decimal or binary SI units. (See below for more info)
@@ -41,7 +44,7 @@ def si_prefix(
             that can't support Unicode.
         full_names: If True, then we will print out the full words for the SI prefixes ('Mega',
             'micro', etc) rather than the one-letter abbreviations ('M', 'μ', etc).
-            WARNING: There are no IEC-defined full names for negative-power prefixes, i.e. no
+            **NOTE:** There are no IEC-defined full names for negative-power prefixes, i.e. no
             IEC equivalents to milli, micro, and so on. For *short* names we can use the IEC
             convention of appending 'i' (mi, μi, etc), but there's no actual full name or rule
             for it that works. As a result, setting mode=IEC, full_names=True will treat all
@@ -52,27 +55,43 @@ def si_prefix(
     Returns:
         A string representation of this number, using SI prefixes.
 
-    *** IMPORTANT NOTE ABOUT MODES ***
+    Warning
+    =======
 
-    Very nasty things, including physical objects crashing into each other at high speeds, have come
-    from miscommunication about decimal versus binary prefixes! The IEC prefixes are an attempt to
-    remedy this, by using 'ki', 'Mi', etc., for binary prefixes, and 'k', 'M', etc., for decimal
-    ones, but these prefixes are only in sporadic use, possibly because the associated word forms
-    ('kibi', 'mebi', etc) sound profoundly silly. However, they are very clear!
+    Very nasty things, including physical objects crashing into each other at high speeds, have
+    happened because of miscommunications about decimal (1k = 1,000) and binary (1k = 1,024)
+    prefixes.
 
-    In general, if you are unsure which to use:
+    The IEC prefixes are an attempt to fix this, by using 'ki', 'Mi', etc., for binary prefixes, and
+    reserving 'k', 'M', etc., for decimal ones. However, IEC notation is only in sporadic use,
+    possibly because the associated word forms ('kibi', 'Mebi', etc) sound rather silly. This means
+    that if you encounter a numeric prefix in the wild, you need to check to see which one you are
+    seeing!
 
-        * Physical quantities, including times, should ALWAYS use decimal SI prefixes.
-        * Network bandwidths are always expressed (surprise!) in *decimal*. 1Mbps = 1000000 bits per
-          second, not 1048576!
-        * Storage quantities in RAM and SSD should use binary or IEC prefixes.
-        * Storage quantities on spinning disks are historically specified in weird made-up units,
-          e.g. 1MB = 1024000 bytes. This is an artifact of disk manufacturers trying to make their
-          capacities sound higher without *technically* making false or misleading statements that
-          could get them sued. If you are _expressing_ storage quantities, always use binary or IEC
-          prefixes; if you are _parsing_ storage quantities provided to you by a manufacturer,
-          don't, measure directly instead; those numbers do not have a well-defined meaning, even if
-          they seem to use SI prefixes.
+    In general, when IEC prefixes aren't in use, there are some very important conventions to
+    follow:
+
+        * Physical quantities, including times, should always use decimal SI prefixes.
+        * Storage quantities (in RAM or on disk) should always use binary or IEC prefixes.
+        * Network capacities should always use decimal (surprise!) IEC prefixes.
+
+    There are a few surprises hiding in the rules above:
+
+        * Because network capacities are measured in decimal units while data is measured in binary
+          units, transmitting 1MB of data (1,048,576 bytes) at 1MBps (1,000,000 bytes per second)
+          takes 1.049 seconds, not one second.
+        * Network capacities are measured in three different but similar-sounding units: Bps (bytes
+          per second of data transmitted), bps (bits per second of data transmitted), and baud
+          (line-level transitions per second, i.e. raw bits on the wire per second, including bits
+          used for things like error-correcting codes and other things that aren't actual data
+          transmitted). bps (note the lowercase!) is by far the most common, to the extent that if
+          anyone ever talks to you about Bps you should check if they actually meant that.
+          Transmitting 1MB of data at 1Mbps takes 8.39 seconds.
+        * Historically, storage quantities on spinning disks were reported by manufacturers in weird
+          units that were neither decimal nor binary, like "1MB = 1,024,000 bytes". This is an
+          artifact of them trying to make their capacities sound higher without *technically* making
+          false or misleading statements. If you encounter numbers like these in the wild, take them
+          with a very large grain of salt.
     """
     assert threshold != 0
     assert precision >= 0

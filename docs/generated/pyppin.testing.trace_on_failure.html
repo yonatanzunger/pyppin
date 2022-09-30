@@ -44,7 +44,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../readme.html">pyppin: A toolkit of Python basics</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="pyppin.base.html">pyppin.base</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pyppin.containers.html">pyppin.containers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.file.html">pyppin.file</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.iterators.html">pyppin.iterators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.math.html">pyppin.math</a></li>
@@ -52,7 +51,10 @@
 <li class="toctree-l2 current"><a class="reference internal" href="pyppin.testing.html">pyppin.testing</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="pyppin.testing.interact.html">pyppin.testing.interact</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyppin.testing.pprint_object.html">pyppin.testing.pprint_object</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">pyppin.testing.trace_on_failure</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">pyppin.testing.trace_on_failure</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pyppin.testing.trace_on_failure.trace_on_failure"><code class="docutils literal notranslate"><span class="pre">trace_on_failure()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="pyppin.testing.turn_taker.html">pyppin.testing.turn_taker</a></li>
 </ul>
 </li>
@@ -93,6 +95,37 @@
 <h1>pyppin.testing.trace_on_failure<a class="headerlink" href="#pyppin-testing-trace-on-failure" title="Permalink to this heading">¶</a></h1>
 <p>[<a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/testing/trace_on_failure.py">View Source</a>]</p>
 <span class="target" id="module-pyppin.testing.trace_on_failure"></span><p>A decorator that prints a stack trace for all threads if a function, method, or test case fails.</p>
+<p class="rubric">Functions</p>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pyppin.testing.trace_on_failure.trace_on_failure" title="pyppin.testing.trace_on_failure.trace_on_failure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">trace_on_failure</span></code></a>(target, *[, output, limit, ...])</p></td>
+<td><p>Decorator which can be applied to functions, methods, and TestCases.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyppin.testing.trace_on_failure.trace_on_failure">
+<span class="sig-prename descclassname"><span class="pre">pyppin.testing.trace_on_failure.</span></span><span class="sig-name descname"><span class="pre">trace_on_failure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">TestCase</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">TextIOBase</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">daemons</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_assertion_failures</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/testing/trace_on_failure.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.testing.trace_on_failure.trace_on_failure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decorator which can be applied to functions, methods, and TestCases. If any exception happens
+while executing the item, dump a full stack trace (of all active threads) to output.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output</strong> – Where to write the output; defaults to stderr.</p></li>
+<li><p><strong>limit</strong> – As the argument to all_stacks.</p></li>
+<li><p><strong>daemons</strong> – Whether to include daemon threads.</p></li>
+<li><p><strong>group</strong> – If True, group together threads with identical traces.</p></li>
+<li><p><strong>exclude_assertion_failures</strong> – If this decorator is applied to a TestCase, then it will
+only print stack traces on exceptions, not on assertion failures from within the test.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 
 

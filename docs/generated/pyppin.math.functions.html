@@ -44,7 +44,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../readme.html">pyppin: A toolkit of Python basics</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="pyppin.base.html">pyppin.base</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pyppin.containers.html">pyppin.containers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.file.html">pyppin.file</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.iterators.html">pyppin.iterators</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="pyppin.math.html">pyppin.math</a><ul class="current">
@@ -100,7 +99,10 @@
   <section id="pyppin-math-functions">
 <h1>pyppin.math.functions<a class="headerlink" href="#pyppin-math-functions" title="Permalink to this heading">¶</a></h1>
 <p>[<a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/math/functions.py">View Source</a>]</p>
-<span class="target" id="module-pyppin.math.functions"></span><p>Abstract classes for math functions; used with histogram and plot_ascii.</p>
+<span class="target" id="module-pyppin.math.functions"></span><p>Create real-valued functions by interpolating data.</p>
+<p>Utilities like plot_ascii take a real-valued function, i.e. a <code class="docutils literal notranslate"><span class="pre">Callable[[float],</span> <span class="pre">float]</span></code>, as their
+argument. This library lets you turn a set of data points into an (interpolated) function that you
+can use there.</p>
 <p class="rubric">Classes</p>
 <table class="autosummary longtable docutils align-default">
 <colgroup>
@@ -109,37 +111,40 @@
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#pyppin.math.functions.FunctionFromSortedData" title="pyppin.math.functions.FunctionFromSortedData"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FunctionFromSortedData</span></code></a>(data)</p></td>
-<td><p>Base class for a bunch of Callable[[float], float] that are based on sorted (x, y) inputs at fixed data points.</p></td>
+<td><p>Base class for functions built out of a set of (x, y) data pairs.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#pyppin.math.functions.Interpolate" title="pyppin.math.functions.Interpolate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Interpolate</span></code></a>(data)</p></td>
-<td><p>A function that linearly interpolates between a sequence of values.</p></td>
+<td><p>Build a function by linearly interpolating (i.e.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#pyppin.math.functions.PiecewiseConstant" title="pyppin.math.functions.PiecewiseConstant"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PiecewiseConstant</span></code></a>(data)</p></td>
-<td><p>A piecewise-constant function.</p></td>
+<td><p>Build a piecewise constant function, i.e. one that gives constant values between one given x-value and the next.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyppin.math.functions.FunctionFromSortedData">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyppin.math.functions.</span></span><span class="sig-name descname"><span class="pre">FunctionFromSortedData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/math/functions.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.math.functions.FunctionFromSortedData" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Base class for a bunch of Callable[[float], float] that are based on sorted (x, y) inputs
-at fixed data points.</p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<p>Base class for functions built out of a set of (x, y) data pairs.</p>
+<p>All the subclasses of this are callable objects that behave like a function from float to float,
+and are constructed from a collection of (x, y) data pairs, either as a list or a dict. If
+provided as a list, no more than one y-value should be given per x-value!</p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pyppin.math.functions.Interpolate">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyppin.math.functions.</span></span><span class="sig-name descname"><span class="pre">Interpolate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/math/functions.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.math.functions.Interpolate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pyppin.math.functions.FunctionFromSortedData" title="pyppin.math.functions.FunctionFromSortedData"><code class="xref py py-class docutils literal notranslate"><span class="pre">FunctionFromSortedData</span></code></a></p>
-<p>A function that linearly interpolates between a sequence of values.</p>
-<p>This is useful if you want to plot or otherwise process a set of numbers.</p>
+<p>Build a function by linearly interpolating (i.e. drawing straight lines) between the given
+data points.</p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pyppin.math.functions.PiecewiseConstant">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyppin.math.functions.</span></span><span class="sig-name descname"><span class="pre">PiecewiseConstant</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/math/functions.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.math.functions.PiecewiseConstant" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pyppin.math.functions.FunctionFromSortedData" title="pyppin.math.functions.FunctionFromSortedData"><code class="xref py py-class docutils literal notranslate"><span class="pre">FunctionFromSortedData</span></code></a></p>
-<p>A piecewise-constant function.</p>
+<p>Build a piecewise constant function, i.e. one that gives constant values between one given
+x-value and the next.</p>
 </dd></dl>
 
 </section>

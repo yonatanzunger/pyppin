@@ -44,7 +44,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../readme.html">pyppin: A toolkit of Python basics</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="pyppin.base.html">pyppin.base</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pyppin.containers.html">pyppin.containers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.file.html">pyppin.file</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.iterators.html">pyppin.iterators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.math.html">pyppin.math</a></li>
@@ -93,7 +92,11 @@
   <section id="pyppin-os-list-files">
 <h1>pyppin.os.list_files<a class="headerlink" href="#pyppin-os-list-files" title="Permalink to this heading">¶</a></h1>
 <p>[<a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/os/list_files.py">View Source</a>]</p>
-<span class="target" id="module-pyppin.os.list_files"></span><p>(Correctly) yield all files (recursively) in a directory.</p>
+<span class="target" id="module-pyppin.os.list_files"></span><p>Recursively list all the files in a directory.</p>
+<p>“Wait, isn’t that what os.ScanDir is for?” you ask. Well… sorta. That function isn’t recursive for
+a reason – correctly recursively listing things in the presence of file system links and the like
+is surprisingly subtle and subject to exciting bugs. This function is here so that you never have to
+worry about that again.</p>
 <p class="rubric">Functions</p>
 <table class="autosummary longtable docutils align-default">
 <colgroup>

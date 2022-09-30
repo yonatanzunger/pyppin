@@ -11,6 +11,61 @@ from pyppin.text.formatter import Formatter
 
 
 class PrintCounter(object):
+    """A PrintCounter is a context manager that prints regular updates of progress.
+
+    It prints the updates on separate lines, without any VT100 formatting or the like, so it's
+    useful in situations where you're writing log files as well as on the console.
+
+    Its use is simple::
+
+        with PrintCounter() as counter:
+            ... do some big loop and occasionally call
+            counter.inc()
+
+    Every N calls to counter.inc(), or whenever at least Δ time has passed since the last call
+    to inc(), it will print out an update statement. The use of both count and time lets you
+    edeasily monitor both fast and slow operations and always get useful feedback.
+
+    You can also have "custom counters" by adding keyword arguments to inc(). These counters are
+    available in your format string as well to print out, but (unlike the primary counter) they
+    will *not* trigger printing.
+
+    Args:
+        print_every_n: If not None, print whenever it's been at least N counts since the last
+            print happened.
+        print_every_time: If not None, print whenever it's been at least X time since the last
+            print happened.
+        format: The string to print out. This is a standard Python format string, which receives
+            the arguments:
+                * count: int or float, the current count
+                * time: timedelta, the total elapsed time
+                * Any custom counts you created, int or float.
+        final_format: If given, the format to be used for the final print string. If None, equal
+            to 'format'. Note that the default deliberately uses the raw format for count, not
+            the SI one, so you get an exact final count!
+        start: The zero time for measurement; the default is now.
+        stream: Where to print the result to, or None to print to stdout.
+
+    Example
+    =======
+    Say you're transferring a bunch of files, and want to show progress on both bytes and files.
+    You decide you want the primary trigger of status updates to be when bytes sent moves, rather
+    than number of files, since individual files are probably big. So you do this::
+
+        with PrintCounter(
+            format='Transferred {files} files ({count:sib}B) in {time:td} ({size/time.seconds():sib}B/s)',
+        ) as counter:
+            for file in files:
+                for chunk in file:
+                    bytes_sent = send_some_data(chunk)
+                    counter.inc(bytes_sent)
+
+                counter.inc(0, files=1)  # Implement the file counter alone
+
+    Note the format strings like :sib and :td being used here -- you can find out more about those
+    in :doc:`pyppin.text.formatter`.
+    """
+
     def __init__(
         self,
         print_every_n: Optional[Union[int, float]] = 10000,
@@ -20,41 +75,6 @@ class PrintCounter(object):
         start: Optional[datetime] = None,
         stream: Optional[io.TextIOBase] = None,
     ) -> None:
-        """A PrintCounter is a context manager that prints regular updates of progress.
-
-        It prints the updates on separate lines, without any VT100 formatting or the like, so it's
-        useful in situations where you're writing log files as well as on the console.
-
-        Its use is simple:
-
-        with PrintCounter() as counter:
-            ... do some big loop and occasionally call
-            counter.inc()
-
-        Every N calls to counter.inc(), or whenever at least Δ time has passed since the last call
-        to inc(), it will print out an update statement. The use of both count and time lets you
-        edeasily monitor both fast and slow operations and always get useful feedback.
-
-        You can also have "custom counters" by adding keyword arguments to inc(). These counters are
-        available in your format string as well to print out, but (unlike the primary counter) they
-        will *not* trigger printing.
-
-        Args:
-            print_every_n: If not None, print whenever it's been at least N counts since the last
-                print happened.
-            print_every_time: If not None, print whenever it's been at least X time since the last
-                print happened.
-            format: The string to print out. This is a standard Python format string, which receives
-                the arguments:
-                    count: int or float, the current count
-                    time: timedelta, the total elapsed time
-                    **custom_counts: Any custom counts you created, int or float.
-            final_format: If given, the format to be used for the final print string. If None, equal
-                to 'format'. Note that the default deliberately uses the raw format for count, not
-                the SI one, so you get an exact final count!
-            start: The zero time for measurement; the default is now.
-            stream: Where to print the result to, or None to print to stdout.
-        """
         self.print_every_n = print_every_n
         self.print_every_time = print_every_time
         self.format = format

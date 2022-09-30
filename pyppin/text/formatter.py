@@ -1,7 +1,7 @@
-"""Tools to format numbers, times, etc., using the fancy functions in pyppin.text.
+"""Tools to format numbers, times, etc., using the fancy functions in :doc:`pyppin.text`.
 
 The most general way to use this is with the Formatter class in this file. In addition to all of the
-standard Python formatting, it supports a few new formats:
+standard Python formatting, it supports a few new formats::
 
     TYPE        FORMAT SPEC                                             RESULT
     int, float  [[fill]align][sign][width][.precision][(threshold)]si   SI (decimal scale)
@@ -9,6 +9,13 @@ standard Python formatting, it supports a few new formats:
     int, float  [[fill]align][sign][width][.precision][(threshold)]iec  SI (binary scale, IEC)
     timedelta   [[fill]align][sign][width]td                            time_delta_string
     timedelta   [[fill]align][width]rd                                  relative_time_string
+
+For example, you might format a timedelta as ``{var:50rd}`` to get a 50-character wide relative time
+string ("3 days from now"), or a number of bytes as ``{size:sib}B`` ("1.2GB").
+
+The simplest way to use these formats is with pyppin.text.formatter.Formatter, which is a standard
+Python `string Formatter <https://docs.python.org/3/library/string.html#custom-string-formatting>`_.
+Its ``format()`` method behaves just like ``str.format()``.
 """
 
 import string
