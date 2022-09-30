@@ -50,8 +50,8 @@ def sample(source: Iterable[DataType], count: int) -> List[DataType]:
         w = 1.0
 
         while True:
-            w *= math.exp(math.log(random.random()) / count)
-            skip = math.floor(math.log(random.random()) / math.log(1 - w)) + 1
+            w *= math.pow(random.random(), 1 / count)
+            skip = math.floor(math.log(random.random(), 1 - w)) + 1
             for k in range(skip):
                 value = next(it)
             result[random.randrange(count)] = value

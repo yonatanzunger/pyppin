@@ -60,7 +60,9 @@ def flex_decorator(decorator: Callable) -> Callable:
         )
 
     defaults = signature.kwonlydefaults or {}
-    kw_args_without_defaults = sorted(key for key in signature.kwonlyargs if key not in defaults)
+    kw_args_without_defaults = sorted(
+        key for key in signature.kwonlyargs if key not in defaults
+    )
 
     # We'll generate a poly decorator out of decorator, and return that. This means that
     # @flex_decorator def my_decorator(...) causes the symbol my_decorator to be defined as the
@@ -119,7 +121,9 @@ def flex_decorator(decorator: Callable) -> Callable:
             return inner_decorator
 
         else:
-            raise TypeError(f"The decorator {decorator.__name__} must be applied to a callable.")
+            raise TypeError(
+                f"The decorator {decorator.__name__} must be applied to a callable."
+            )
 
     # Also propagate the docstring, etc., from decorator onto the poly_decorator.
     return update_wrapper(poly_decorator, decorator)
