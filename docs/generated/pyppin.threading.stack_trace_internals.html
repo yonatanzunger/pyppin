@@ -55,7 +55,6 @@
 <li class="toctree-l3"><a class="reference internal" href="pyppin.threading.semaphore.html">pyppin.threading.semaphore</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyppin.threading.stack_trace.html">pyppin.threading.stack_trace</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">pyppin.threading.stack_trace_internals</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#warning">Warning:</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pyppin.threading.stack_trace_internals.TraceLineType"><code class="docutils literal notranslate"><span class="pre">TraceLineType</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pyppin.threading.stack_trace_internals.TraceLine"><code class="docutils literal notranslate"><span class="pre">TraceLine</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pyppin.threading.stack_trace_internals.ThreadStack"><code class="docutils literal notranslate"><span class="pre">ThreadStack</span></code></a></li>
@@ -104,12 +103,12 @@
 <span class="target" id="module-pyppin.threading.stack_trace_internals"></span><p>The actual meat of stack tracing.</p>
 <p>This file contains the “advanced” API which most users won’t need, as well as the implementation
 details; it lets you do things like examine and programmatically manipulate the threads of all
-stacks.</p>
-<section id="warning">
-<h2>Warning:<a class="headerlink" href="#warning" title="Permalink to this heading">¶</a></h2>
-<p>The non-public method sin this library are non-public for a reason; they are subtle and quick to
+stacks. Most users can stick to <a class="reference internal" href="pyppin.threading.stack_trace.html"><span class="doc">pyppin.threading.stack_trace</span></a> instead.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The non-public methods in this library are non-public for a reason; they are subtle and quick to
 anger. Do not mess with them unless you understand Python’s GC system quite well.</p>
-</section>
+</div>
 <p class="rubric">Functions</p>
 <table class="autosummary longtable docutils align-default">
 <colgroup>
@@ -139,13 +138,13 @@ anger. Do not mess with them unless you understand Python’s GC system quite we
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#pyppin.threading.stack_trace_internals.ThreadStack" title="pyppin.threading.stack_trace_internals.ThreadStack"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ThreadStack</span></code></a>(thread, stack, exception)</p></td>
-<td><p></p></td>
+<td><p>A ThreadStack represents a single thread and its stack info.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#pyppin.threading.stack_trace_internals.TraceLine" title="pyppin.threading.stack_trace_internals.TraceLine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TraceLine</span></code></a>(line, line_type)</p></td>
-<td><p></p></td>
+<td><p>One logical &quot;line&quot; of the stack trace, including a trailing newline.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#pyppin.threading.stack_trace_internals.TraceLineType" title="pyppin.threading.stack_trace_internals.TraceLineType"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TraceLineType</span></code></a>(value)</p></td>
-<td><p>An enumeration.</p></td>
+<td><p>The different kinds of line in a trace that may require different visual representation.</p></td>
 </tr>
 </tbody>
 </table>
@@ -153,54 +152,62 @@ anger. Do not mess with them unless you understand Python’s GC system quite we
 <dt class="sig sig-object py" id="pyppin.threading.stack_trace_internals.TraceLineType">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyppin.threading.stack_trace_internals.</span></span><span class="sig-name descname"><span class="pre">TraceLineType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/threading/stack_trace_internals.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.threading.stack_trace_internals.TraceLineType" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
-<p>An enumeration.</p>
+<p>The different kinds of line in a trace that may require different visual representation.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyppin.threading.stack_trace_internals.TraceLineType.THREAD_TITLE">
 <span class="sig-name descname"><span class="pre">THREAD_TITLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/threading/stack_trace_internals.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.threading.stack_trace_internals.TraceLineType.THREAD_TITLE" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>The “intro” block for a thread</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyppin.threading.stack_trace_internals.TraceLineType.TRACE_LINE">
 <span class="sig-name descname"><span class="pre">TRACE_LINE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/threading/stack_trace_internals.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.threading.stack_trace_internals.TraceLineType.TRACE_LINE" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>A part of the stack trace</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyppin.threading.stack_trace_internals.TraceLineType.EXCEPTION">
 <span class="sig-name descname"><span class="pre">EXCEPTION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/threading/stack_trace_internals.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.threading.stack_trace_internals.TraceLineType.EXCEPTION" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>An exception warning</p>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pyppin.threading.stack_trace_internals.TraceLine">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyppin.threading.stack_trace_internals.</span></span><span class="sig-name descname"><span class="pre">TraceLine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_type</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/threading/stack_trace_internals.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.threading.stack_trace_internals.TraceLine" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyppin.threading.stack_trace_internals.</span></span><span class="sig-name descname"><span class="pre">TraceLine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pyppin.threading.stack_trace_internals.TraceLineType" title="pyppin.threading.stack_trace_internals.TraceLineType"><span class="pre">TraceLineType</span></a></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/threading/stack_trace_internals.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.threading.stack_trace_internals.TraceLine" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">NamedTuple</span></code></p>
+<p>One logical “line” of the stack trace, including a trailing newline.</p>
+<p>It’s only a logical line; this may also include internal newlines.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyppin.threading.stack_trace_internals.TraceLine.line">
 <span class="sig-name descname"><span class="pre">line</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/threading/stack_trace_internals.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.threading.stack_trace_internals.TraceLine.line" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for field number 0</p>
+<dd><p>The actual text of the line.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyppin.threading.stack_trace_internals.TraceLine.line_type">
 <span class="sig-name descname"><span class="pre">line_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pyppin.threading.stack_trace_internals.TraceLineType" title="pyppin.threading.stack_trace_internals.TraceLineType"><span class="pre">TraceLineType</span></a></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/threading/stack_trace_internals.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.threading.stack_trace_internals.TraceLine.line_type" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for field number 1</p>
+<dd><p>How the line should be rendered.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyppin.threading.stack_trace_internals.TraceLine.prepend">
 <span class="sig-name descname"><span class="pre">prepend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pyppin.threading.stack_trace_internals.TraceLine" title="pyppin.threading.stack_trace_internals.TraceLine"><span class="pre">TraceLine</span></a></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/threading/stack_trace_internals.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.threading.stack_trace_internals.TraceLine.prepend" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Create a new <code class="docutils literal notranslate"><span class="pre">TraceLine</span></code> by prepending text to this one.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyppin.threading.stack_trace_internals.TraceLine.as_trace">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">as_trace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lines</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pyppin.threading.stack_trace_internals.TraceLineType" title="pyppin.threading.stack_trace_internals.TraceLineType"><span class="pre">TraceLineType</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">TraceLineType.TRACE_LINE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyppin.threading.stack_trace_internals.TraceLine" title="pyppin.threading.stack_trace_internals.TraceLine"><span class="pre">TraceLine</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/threading/stack_trace_internals.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.threading.stack_trace_internals.TraceLine.as_trace" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Convert a sequence of lines of text to a sequence of <code class="docutils literal notranslate"><span class="pre">TraceLines</span></code>.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyppin.threading.stack_trace_internals.TraceLine.blank">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">blank</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pyppin.threading.stack_trace_internals.TraceLine" title="pyppin.threading.stack_trace_internals.TraceLine"><span class="pre">TraceLine</span></a></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/threading/stack_trace_internals.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.threading.stack_trace_internals.TraceLine.blank" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>A blank <code class="docutils literal notranslate"><span class="pre">TraceLine</span></code>.</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -208,6 +215,13 @@ anger. Do not mess with them unless you understand Python’s GC system quite we
 <dt class="sig sig-object py" id="pyppin.threading.stack_trace_internals.ThreadStack">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyppin.threading.stack_trace_internals.</span></span><span class="sig-name descname"><span class="pre">ThreadStack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">thread</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Thread</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stack</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">StackSummary</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exception</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">BaseException</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/threading/stack_trace_internals.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.threading.stack_trace_internals.ThreadStack" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A ThreadStack represents a single thread and its stack info.</p>
+<p>You generally acquire these objects with functions like all_stacks, below.</p>
+<p>NB that self.exception is going to be a TracebackException object, <em>not</em> the original
+exception, in order to avoid all sorts of exciting reference counting cycles and other
+things that can make your life unpleasant. Net is that it’s safe to keep one of these
+objects around, you don’t need to do magical “dear-gods-delete-this-quickly” magic like with
+frame objects.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="pyppin.threading.stack_trace_internals.ThreadStack.thread_unknown">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">thread_unknown</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/threading/stack_trace_internals.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.threading.stack_trace_internals.ThreadStack.thread_unknown" title="Permalink to this definition">¶</a></dt>
@@ -223,17 +237,20 @@ anger. Do not mess with them unless you understand Python’s GC system quite we
 <dl class="py property">
 <dt class="sig sig-object py" id="pyppin.threading.stack_trace_internals.ThreadStack.thread_id">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">thread_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/threading/stack_trace_internals.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.threading.stack_trace_internals.ThreadStack.thread_id" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>The Python ID of this thread, if it’s started.</p>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="pyppin.threading.stack_trace_internals.ThreadStack.native_thread_id">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">native_thread_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/threading/stack_trace_internals.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.threading.stack_trace_internals.ThreadStack.native_thread_id" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>The native thread ID of this thread, if it’s started.</p>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="pyppin.threading.stack_trace_internals.ThreadStack.is_daemon">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_daemon</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/threading/stack_trace_internals.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.threading.stack_trace_internals.ThreadStack.is_daemon" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Whether this is a daemon thread.</p>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="pyppin.threading.stack_trace_internals.ThreadStack.formatted">
@@ -244,14 +261,19 @@ anger. Do not mess with them unless you understand Python’s GC system quite we
 <dl class="py property">
 <dt class="sig sig-object py" id="pyppin.threading.stack_trace_internals.ThreadStack.cluster_id">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cluster_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/threading/stack_trace_internals.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.threading.stack_trace_internals.ThreadStack.cluster_id" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns an int which is distinct if two threads have meaningfully different stack
-traces.</p>
+<dd><p>A “similarity identifier” for this thread’s stack trace.</p>
+<p>If two threads have the same cluster ID, then their stack traces are effectively identical
+and (if grouping is turned on) should be merged in rendering.</p>
+<p>This is especially useful if you have a bunch of “listener” or “worker” threads in your
+program which may be doing the same thing; it greatly simplifies the stack trace without
+losing data.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="pyppin.threading.stack_trace_internals.ThreadStack.name">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/threading/stack_trace_internals.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.threading.stack_trace_internals.ThreadStack.name" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>A name for this thread, suitable for use as a title in a trace.</p>
+</dd></dl>
 
 </dd></dl>
 

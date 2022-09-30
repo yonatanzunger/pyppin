@@ -2,11 +2,11 @@
 
 This file contains the "advanced" API which most users won't need, as well as the implementation
 details; it lets you do things like examine and programmatically manipulate the threads of all
-stacks.
+stacks. Most users can stick to :doc:`pyppin.threading.stack_trace` instead.
 
-Warning:
-========
-The non-public method sin this library are non-public for a reason; they are subtle and quick to
+Warning
+=======
+The non-public methods in this library are non-public for a reason; they are subtle and quick to
 anger. Do not mess with them unless you understand Python's GC system quite well.
 """
 
@@ -25,21 +25,32 @@ from typing import Dict, Iterable, Iterator, List, NamedTuple, Optional, TextIO,
 
 
 class TraceLineType(Enum):
-    # The "intro" block for a thread
+    """The different kinds of line in a trace that may require different visual representation."""
+
     THREAD_TITLE = 0
-    # A part of the stack trace
+    """The "intro" block for a thread"""
+
     TRACE_LINE = 1
-    # An exception warning
+    """A part of the stack trace"""
+
     EXCEPTION = 2
+    """An exception warning"""
 
 
 class TraceLine(NamedTuple):
-    # One "line" of the stack trace, including a trailing newline. This may also include internal
-    # newlines.
+    """One logical "line" of the stack trace, including a trailing newline.
+
+    It's only a logical line; this may also include internal newlines.
+    """
+
     line: str
+    """The actual text of the line."""
+
     line_type: TraceLineType
+    """How the line should be rendered."""
 
     def prepend(self, data: str) -> "TraceLine":
+        """Create a new ``TraceLine`` by prepending text to this one."""
         return self._replace(line=data + self.line)
 
     @classmethod
@@ -49,38 +60,39 @@ class TraceLine(NamedTuple):
         line_type: TraceLineType = TraceLineType.TRACE_LINE,
         prefix: str = "",
     ) -> Iterator["TraceLine"]:
+        """Convert a sequence of lines of text to a sequence of ``TraceLines``."""
         for line in lines:
             yield TraceLine(prefix + line, line_type)
 
     @classmethod
     def blank(cls) -> "TraceLine":
+        """A blank ``TraceLine``."""
         return TraceLine("\n", TraceLineType.TRACE_LINE)
 
 
 class ThreadStack(object):
+    """A ThreadStack represents a single thread and its stack info.
+
+    You generally acquire these objects with functions like all_stacks, below.
+
+    NB that self.exception is going to be a TracebackException object, *not* the original
+    exception, in order to avoid all sorts of exciting reference counting cycles and other
+    things that can make your life unpleasant. Net is that it's safe to keep one of these
+    objects around, you don't need to do magical "dear-gods-delete-this-quickly" magic like with
+    frame objects.
+    """
+
     def __init__(
         self,
         thread: Optional[threading.Thread],
         stack: Optional[traceback.StackSummary],
         exception: Optional[BaseException],
     ) -> None:
-        """A ThreadStack represents a single thread and its stack info.
-
-        You generally acquire these objects with functions like all_stacks, below.
-
-        NB that self.exception is going to be a TracebackException object, *not* the original
-        exception, in order to avoid all sorts of exciting reference counting cycles and other
-        things that can make your life unpleasant. Net is that it's safe to keep one of these
-        objects around, you don't need to do magical "dear-gods-delete-this-quickly" magic like with
-        frame objects.
-        """
         # These are public variables, and you can look at them!
         self.thread = thread
         self.stack = stack
         self.exception = (
-            traceback.TracebackException.from_exception(exception)
-            if exception
-            else None
+            traceback.TracebackException.from_exception(exception) if exception else None
         )
 
         self._formatted: Optional[List[TraceLine]] = None
@@ -98,14 +110,17 @@ class ThreadStack(object):
 
     @property
     def thread_id(self) -> Optional[int]:
+        """The Python ID of this thread, if it's started."""
         return self.thread.ident if self.thread is not None else None
 
     @property
     def native_thread_id(self) -> Optional[int]:
+        """The native thread ID of this thread, if it's started."""
         return self.thread.native_id if self.thread is not None else None
 
     @property
     def is_daemon(self) -> bool:
+        """Whether this is a daemon thread."""
         return self.thread is not None and self.thread.daemon
 
     @property
@@ -117,22 +132,29 @@ class ThreadStack(object):
 
     @property
     def cluster_id(self) -> int:
-        """Returns an int which is distinct if two threads have meaningfully different stack
-        traces.
+        """A "similarity identifier" for this thread's stack trace.
+
+        If two threads have the same cluster ID, then their stack traces are effectively identical
+        and (if grouping is turned on) should be merged in rendering.
+
+        This is especially useful if you have a bunch of "listener" or "worker" threads in your
+        program which may be doing the same thing; it greatly simplifies the stack trace without
+        losing data.
         """
         if self._cluster_id is None:
             self._cluster_id = hash(
                 tuple(
                     line.line
                     for line in self.formatted
-                    if line.line_type
-                    in (TraceLineType.TRACE_LINE, TraceLineType.EXCEPTION)
+                    if line.line_type in (TraceLineType.TRACE_LINE, TraceLineType.EXCEPTION)
                 )
             )
         return self._cluster_id
 
     @property
     def name(self) -> str:
+        """A name for this thread, suitable for use as a title in a trace."""
+
         if self.thread is None:
             if self.exception is None:
                 return "Unknown thread"
@@ -141,7 +163,9 @@ class ThreadStack(object):
 
         d = "daemon; " if self.thread.daemon else ""
         if self.thread.ident is not None:
-            return f'Thread "{self.thread.name}" ({d}{self.thread.ident}, TID {self.thread.native_id})'
+            return (
+                f'Thread "{self.thread.name}" ({d}{self.thread.ident}, TID {self.thread.native_id})'
+            )
         else:
             return f'Thread "{self.thread.name}" ({d}not started)'
 
@@ -234,9 +258,7 @@ class _FrameState(ABC):
 
     @staticmethod
     def make() -> "_FrameState":
-        return (
-            _FrameState310() if hasattr(sys, "_current_exceptions") else _FrameState39()
-        )
+        return _FrameState310() if hasattr(sys, "_current_exceptions") else _FrameState39()
 
 
 class _FrameState39(_FrameState):
@@ -261,9 +283,7 @@ class _FrameState39(_FrameState):
 
         return ThreadStack(
             thread=thread,
-            stack=traceback.extract_stack(frame, limit=limit)
-            if frame is not None
-            else None,
+            stack=traceback.extract_stack(frame, limit=limit) if frame is not None else None,
             exception=None,
         )
 
@@ -305,18 +325,12 @@ class _FrameState310(_FrameState):
         }
 
     def get_stack(self, thread: threading.Thread, limit: Optional[int]) -> ThreadStack:
-        exception = (
-            self.exceptions.get(thread.ident, None)
-            if thread.ident is not None
-            else None
-        )
+        exception = self.exceptions.get(thread.ident, None) if thread.ident is not None else None
         frame: Optional[FrameType]
         if exception is not None:
             # Use the exception's stack frame, not the one where we're executing the stack trace
             # printer!
-            frame = (
-                exception.__traceback__.tb_frame if exception.__traceback__ else None
-            )
+            frame = exception.__traceback__.tb_frame if exception.__traceback__ else None
         elif thread.ident is not None and thread.ident in self.frames:
             frame = self.frames[thread.ident]
         else:
@@ -324,9 +338,7 @@ class _FrameState310(_FrameState):
 
         return ThreadStack(
             thread=thread,
-            stack=traceback.extract_stack(frame, limit=limit)
-            if frame is not None
-            else None,
+            stack=traceback.extract_stack(frame, limit=limit) if frame is not None else None,
             exception=exception,
         )
 
@@ -388,9 +400,7 @@ def _format_stack_group(stacks: List[ThreadStack]) -> List[TraceLine]:
 ThreadGroup = Dict[int, List[ThreadStack]]
 
 
-def _append_group(
-    result: List[TraceLine], group: ThreadGroup, is_first: bool = False
-) -> None:
+def _append_group(result: List[TraceLine], group: ThreadGroup, is_first: bool = False) -> None:
     for index, stacks in enumerate(group.values()):
         if index or not is_first:
             result.append(TraceLine.blank())

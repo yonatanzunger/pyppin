@@ -1,22 +1,4 @@
-"""Tools to format numbers, times, etc., using the fancy functions in :doc:`pyppin.text`.
-
-The most general way to use this is with the Formatter class in this file. In addition to all of the
-standard Python formatting, it supports a few new formats::
-
-    TYPE        FORMAT SPEC                                             RESULT
-    int, float  [[fill]align][sign][width][.precision][(threshold)]si   SI (decimal scale)
-    int, float  [[fill]align][sign][width][.precision][(threshold)]sib  SI (binary scale)
-    int, float  [[fill]align][sign][width][.precision][(threshold)]iec  SI (binary scale, IEC)
-    timedelta   [[fill]align][sign][width]td                            time_delta_string
-    timedelta   [[fill]align][width]rd                                  relative_time_string
-
-For example, you might format a timedelta as ``{var:50rd}`` to get a 50-character wide relative time
-string ("3 days from now"), or a number of bytes as ``{size:sib}B`` ("1.2GB").
-
-The simplest way to use these formats is with pyppin.text.formatter.Formatter, which is a standard
-Python `string Formatter <https://docs.python.org/3/library/string.html#custom-string-formatting>`_.
-Its ``format()`` method behaves just like ``str.format()``.
-"""
+"""Tools to format numbers, times, etc., using the fancy functions in :doc:`pyppin.text`."""
 
 import string
 from datetime import timedelta
@@ -27,31 +9,72 @@ from pyppin.text.now_and_then import relative_time_string, time_delta_string
 from pyppin.text.si_prefix import Mode, si_prefix
 from pyppin.text.sign import Sign
 
+# The "advanced" interface to this class is really specialized, there are very few cases where
+# anyone would want to import that.
+__all__ = ['Formatter']
+
 
 class Formatter(string.Formatter):
-    """The simple way to do this formatting: use this formatter class."""
+    """A ``string.Formatter`` that includes several new formatting options.
+
+    Provides a Python `string Formatter
+    <https://docs.python.org/3/library/string.html#custom-string-formatting>`_ which, in addition
+    to all of the standard Python formatting, supports a few new formats:
+
+    +------------+----------------------+--------------------------------------------------------+
+    | Type       | Format specification | Renders as                                             |
+    +============+======================+========================================================+
+    | int, float | ``:si``              | :doc:`SI (decimal scale) <pyppin.text.si_prefix>`      |
+    +------------+----------------------+--------------------------------------------------------+
+    | int, float | ``:sib``             | :doc:`SI (binary scale) <pyppin.text.si_prefix>`       |
+    +------------+----------------------+--------------------------------------------------------+
+    | int, float | ``:iec``             | :doc:`SI (binary scale, IEC) <pyppin.text.si_prefix>`  |
+    +------------+----------------------+--------------------------------------------------------+
+    | timedelta  | ``:td``              | :doc:`time_delta_string <pyppin.text.now_and_then>`    |
+    +------------+----------------------+--------------------------------------------------------+
+    | timedelta  | ``:rd``              | :doc:`relative_time_string <pyppin.text.now_and_then>` |
+    +------------+----------------------+--------------------------------------------------------+
+
+    For example, you might format a timedelta as ``{delta:rd}`` to get a string like "3 days from
+    now", or a number of bytes as ``{size:sib}B`` to get a string like "1.2GB".
+
+    To use this class, simply create one of these objects and use its ``format()`` method the way
+    you would normally use ``str.format()``.
+
+    Options
+    =======
+    A wide range of options are available for each of these formats.
+
+    * ``si``, ``sib``, and ``iec`` accept ``[[fill]align][sign][width][.precision][(threshold)]``
+      as options. (e.g., ``{variable:>+30.2(1.2)si}`` would print ``variable`` as a decimal-scale
+      SI number, right-aligned in a 30-character wide block, showing a plus or minus sign, two
+      points after the decimal, and using a threshold of 1.2.) The fill, align, sign, and width
+      arguments are identical to the standard ones defined in Python's `custom string formatting
+      <https://docs.python.org/3/library/string.html#custom-string-formatting>`_ rules; the
+      precision and threshold are defined by the :doc:`si_prefix <pyppin.text.si_prefix>` function.
+    * ``td`` accepts ``[[fill]align][sign][width]``, using the standard Python meanings for each;
+      e.g., ``{delta:+30td}`` would print ``delta`` in a 30-character wide box with a plus or minus
+      sign.
+    * ``rd`` accepts ``[[fill]align][width]``, using the standard Python meanings for each.
+    """
 
     def format_field(self, value: Any, format_spec: str) -> str:
-        spec = PyppinFormat.parse(format_spec)
-        return (
-            super().format_field(value, format_spec)
-            if spec is None
-            else spec.format(value)
-        )
+        spec = _PyppinFormat.parse(format_spec)
+        return super().format_field(value, format_spec) if spec is None else spec.format(value)
 
 
 ################################################################################################
 # More advanced formatting tools below!
 
 
-class Alignment(Enum):
+class _Alignment(Enum):
     LEFT_ALIGN = 0
     RIGHT_ALIGN = 1
     CENTER_ALIGN = 2
     PAD_AFTER_SIGN = 3
 
 
-class Format(Enum):
+class _Format(Enum):
     SI_DECIMAL = 0
     SI_BINARY = 1
     SI_IEC = 2
@@ -59,24 +82,24 @@ class Format(Enum):
     RELATIVE_TIME = 4
 
 
-class PyppinFormat(NamedTuple):
-    format_spec: Format
+class _PyppinFormat(NamedTuple):
+    format_spec: _Format
     fill: str
-    align: Alignment
+    align: _Alignment
     sign: Sign
     width: Optional[int]
     threshold: float
     precision: int
 
     @classmethod
-    def parse(cls, format_spec: str) -> Optional["PyppinFormat"]:
+    def parse(cls, format_spec: str) -> Optional["_PyppinFormat"]:
         """Parse a format_spec.
 
-        Returns a PyppinFormat if this is a valid Pyppin format, or None otherwise.
+        Returns a _PyppinFormat if this is a valid Pyppin format, or None otherwise.
         """
         orig = format_spec
         # Parse an align value
-        align = Alignment.LEFT_ALIGN
+        align = _Alignment.LEFT_ALIGN
         fill = " "
         if format_spec and format_spec[0] in _ALIGN_CHARS:
             align = _ALIGN_CHARS[format_spec[0]]
@@ -103,9 +126,7 @@ class PyppinFormat(NamedTuple):
         if format_spec.startswith("("):
             end = format_spec.find(")")
             if end == -1:
-                raise ValueError(
-                    f"Bad format spec '{orig}': Unmatched ( in threshold value"
-                )
+                raise ValueError(f"Bad format spec '{orig}': Unmatched ( in threshold value")
             threshold = float(format_spec[1:end])
             format_spec = format_spec[end + 1 :]
         else:
@@ -117,7 +138,7 @@ class PyppinFormat(NamedTuple):
 
         format_type = _FORMAT_CHARS[format_spec]
 
-        return PyppinFormat(
+        return _PyppinFormat(
             format_spec=format_type,
             align=align,
             fill=fill,
@@ -128,7 +149,7 @@ class PyppinFormat(NamedTuple):
         )
 
     def format(self, value: object) -> str:
-        if self.format_spec in (Format.SI_DECIMAL, Format.SI_BINARY, Format.SI_IEC):
+        if self.format_spec in (_Format.SI_DECIMAL, _Format.SI_BINARY, _Format.SI_IEC):
             self._require(value, int, float)
             base = si_prefix(
                 value,  # type: ignore
@@ -137,10 +158,10 @@ class PyppinFormat(NamedTuple):
                 precision=self.precision,
                 sign=self.sign,
             )
-        elif self.format_spec == Format.TIME_DELTA:
+        elif self.format_spec == _Format.TIME_DELTA:
             self._require(value, timedelta)
             base = time_delta_string(value)  # type: ignore
-        elif self.format_spec == Format.RELATIVE_TIME:
+        elif self.format_spec == _Format.RELATIVE_TIME:
             self._require(value, timedelta)
             base = relative_time_string(value)  # type: ignore
         else:
@@ -150,45 +171,43 @@ class PyppinFormat(NamedTuple):
 
     def _require(self, value: object, *types: type) -> None:
         if not any(isinstance(value, type) for type in types):
-            raise ValueError(
-                f"Cannot format {type(value).__name__} as {self.format_spec}"
-            )
+            raise ValueError(f"Cannot format {type(value).__name__} as {self.format_spec}")
 
     def _pad(self, base: str) -> str:
         if self.width is None:
             return base
-        elif self.align == Alignment.PAD_AFTER_SIGN:
+        elif self.align == _Alignment.PAD_AFTER_SIGN:
             return base.zfill(self.width)
-        elif self.align == Alignment.LEFT_ALIGN:
+        elif self.align == _Alignment.LEFT_ALIGN:
             return base.ljust(self.width, self.fill)
-        elif self.align == Alignment.RIGHT_ALIGN:
+        elif self.align == _Alignment.RIGHT_ALIGN:
             return base.rjust(self.width, self.fill)
-        elif self.align == Alignment.CENTER_ALIGN:
+        elif self.align == _Alignment.CENTER_ALIGN:
             return base.center(self.width, self.fill)
         else:
             raise RuntimeError("Never happens")
 
 
 _ALIGN_CHARS = {
-    "<": Alignment.LEFT_ALIGN,
-    ">": Alignment.RIGHT_ALIGN,
-    "^": Alignment.CENTER_ALIGN,
-    "=": Alignment.PAD_AFTER_SIGN,
+    "<": _Alignment.LEFT_ALIGN,
+    ">": _Alignment.RIGHT_ALIGN,
+    "^": _Alignment.CENTER_ALIGN,
+    "=": _Alignment.PAD_AFTER_SIGN,
 }
 
 
 _FORMAT_CHARS = {
-    "si": Format.SI_DECIMAL,
-    "sib": Format.SI_BINARY,
-    "iec": Format.SI_IEC,
-    "td": Format.TIME_DELTA,
-    "rt": Format.RELATIVE_TIME,
+    "si": _Format.SI_DECIMAL,
+    "sib": _Format.SI_BINARY,
+    "iec": _Format.SI_IEC,
+    "td": _Format.TIME_DELTA,
+    "rt": _Format.RELATIVE_TIME,
 }
 
 _SI_MODE = {
-    Format.SI_DECIMAL: Mode.DECIMAL,
-    Format.SI_BINARY: Mode.BINARY,
-    Format.SI_IEC: Mode.IEC,
+    _Format.SI_DECIMAL: Mode.DECIMAL,
+    _Format.SI_BINARY: Mode.BINARY,
+    _Format.SI_IEC: Mode.IEC,
 }
 
 

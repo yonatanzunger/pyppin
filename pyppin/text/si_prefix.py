@@ -8,9 +8,16 @@ from pyppin.text.sign import Sign, format_sign
 
 
 class Mode(Enum):
+    """The kinds of units to use: what does "1k" mean?"""
+
     DECIMAL = 0
+    """Decimal SI units; 1k = 1,000."""
+
     BINARY = 1
+    """Binary SI units; 1k = 1,024, but use the ordinary symbols k, M, etc."""
+
     IEC = 2
+    """IEC units; 1k = 1,024, but write ki, Mi, etc., as per the IEC80000 standard."""
 
 
 def si_prefix(
@@ -30,10 +37,7 @@ def si_prefix(
 
     Args:
         value: The number to be formatted.
-        mode: Whether to use decimal or binary SI units. (See below for more info)
-            Decimal: 1k = 1000
-            Binary: 1k = 1024, but use the ordinary symbols k, M, etc.
-            IEC: 1k = 1024, but write ki, Mi, etc., as per the IEC80000 standard.
+        mode: Whether to use decimal or binary SI units.
         threshold: How far above the minimum for a prefix to go before using it. For example,
             if the threshold is set to 1.1 and we're in decimal mode, then 1050 will still be
             written as 1050, but 1100 will be written as 1.1k; likewise, 1050000 will be 1050k,
@@ -44,16 +48,19 @@ def si_prefix(
             that can't support Unicode.
         full_names: If True, then we will print out the full words for the SI prefixes ('Mega',
             'micro', etc) rather than the one-letter abbreviations ('M', 'μ', etc).
-            **NOTE:** There are no IEC-defined full names for negative-power prefixes, i.e. no
-            IEC equivalents to milli, micro, and so on. For *short* names we can use the IEC
-            convention of appending 'i' (mi, μi, etc), but there's no actual full name or rule
-            for it that works. As a result, setting mode=IEC, full_names=True will treat all
-            values less than one the same way prefix overflows are handled, with '2^-X' instead
-            of a name.
         sign: The sign convention we should use when formatting the value.
 
     Returns:
         A string representation of this number, using SI prefixes.
+
+    Note
+    ====
+    There are no IEC-defined full names for negative-power prefixes, i.e. no
+    IEC equivalents to milli, micro, and so on. For *short* names we can use the IEC
+    convention of appending 'i' (mi, μi, etc), but for the long names, there's no analogous
+    rule that works. As a result, setting ``mode=IEC, full_names=True`` will treat all
+    values less than one the same way prefix overflows are handled, with ``2^-X`` instead
+    of a name.
 
     Warning
     =======
@@ -147,9 +154,7 @@ def si_prefix(
 
     # Overflow: If the number is too big for an SI prefix! Switch to exponential notation.
     if index >= len(array):
-        return format_sign(
-            _exponential_notation(value, mode, precision), sign, is_negative
-        )
+        return format_sign(_exponential_notation(value, mode, precision), sign, is_negative)
 
     # Normal case
     reduced = math.pow(base, delta)
@@ -169,9 +174,7 @@ def _exponential_notation(value: float, mode: Mode, precision: int) -> str:
         return f"{format_str % reduced}*2^{int_power}"
 
 
-def _prefix_array(
-    mode: Mode, positive: bool, ascii_only: bool, full_names: bool
-) -> Sequence[str]:
+def _prefix_array(mode: Mode, positive: bool, ascii_only: bool, full_names: bool) -> Sequence[str]:
     """Return the appropriate array of prefixes to use."""
     if mode in (Mode.DECIMAL, Mode.BINARY):
         if positive:

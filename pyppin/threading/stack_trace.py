@@ -13,8 +13,8 @@ whenever there's an uncaught exception. (Note that if you do that, "an uncaught 
 If you want a more low-level API that lets you directly grab these stacks and manipulate them
 programmatically, that's found in :doc:`pyppin.threading.stack_trace_internals`.
 
-Note:
-=====
+Note
+====
 If you're printing out a stack trace when there's an exception being handled, in Python 3.9 or
 earlier the exception will be printed out *after* the stack trace, because there's no way to tie an
 exception to the thread that raised it. In Python 3.10 or later, this is fixed, and exceptions are
@@ -42,7 +42,9 @@ def print_all_stacks(
 
     Args:
         output: Where to write the output; defaults to stderr.
-        limit: As the argument to all_stacks.
+        limit: If set, the maximum number of stack trace entries to return per thread. (This has the
+            same meaning as the argument of the same name used in the `traceback
+            <https://docs.python.org/3/library/traceback.html>`_ module)
         daemons: Whether to include daemon threads.
         group: If True, group together threads with identical traces.
     """

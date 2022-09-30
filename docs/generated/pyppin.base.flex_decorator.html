@@ -114,25 +114,29 @@
 <span class="sig-prename descclassname"><span class="pre">pyppin.base.flex_decorator.</span></span><span class="sig-name descname"><span class="pre">flex_decorator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">decorator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/base/flex_decorator.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.base.flex_decorator.flex_decorator" title="Permalink to this definition">¶</a></dt>
 <dd><p>flex_decorator is a way to simplify writing Python decorators and improve their syntax.</p>
 <p>Usually, if you want to write a decorator without arguments, you have to write one kind of
-function, and the resulting syntax is &#64;foo def bar(), but if you want to write a decorator that
-takes arguments, you have to write a completely different function, and the resulting syntax is
-&#64;foo() def bar. While there are good reasons for this to be the implementation, it’s ugly and
-requires remembering too many things for both the writer and user of decorators.</p>
-<p>Instead, &#64;flex_decorator simplifies all of this. You simply need to write</p>
-<p>&#64;flex_decorator
-def my_decorator(target, <a href="#id1"><span class="problematic" id="id2">*</span></a>, arg, arg, …):</p>
-<blockquote>
-<div><p>… return the decorated “target”</p>
-</div></blockquote>
+function, and the resulting syntax is <code class="docutils literal notranslate"><span class="pre">&#64;foo</span> <span class="pre">def</span> <span class="pre">bar()</span></code>, but if you want to write a decorator
+that takes arguments, you have to write a completely different function, and the resulting
+syntax is <code class="docutils literal notranslate"><span class="pre">&#64;foo()</span> <span class="pre">def</span> <span class="pre">bar()</span></code>. While there are good reasons for this to be the implementation,
+it’s ugly and requires both the writer and user of decorators to remember too many things.</p>
+<p>Instead, <code class="docutils literal notranslate"><span class="pre">&#64;flex_decorator</span></code> simplifies all of this. You simply need to write:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@flex_decorator</span>
+<span class="k">def</span> <span class="nf">my_decorator</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="o">...</span><span class="p">):</span>
+   <span class="o">...</span> <span class="k">return</span> <span class="n">the</span> <span class="n">decorated</span> <span class="s2">&quot;target&quot;</span>
+</pre></div>
+</div>
 <p>You only write one function: it takes exactly one positional argument (the thing to be
 decorated), and arbitrarily many keyword arguments. You can then use the resulting decorator in
 two ways:</p>
-<p>&#64;my_decorator(arg=foo, arg=bar)
-def decorated_thing(…):</p>
-<p>or, if all of the arguments have default values, you can write</p>
-<p>&#64;my_decorator
-def decorated_thing(…):</p>
-<p>This is identical to &#64;my_decorator(), so users no longer need to remember which one to use.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@my_decorator</span><span class="p">(</span><span class="n">arg</span><span class="o">=</span><span class="n">foo</span><span class="p">,</span> <span class="n">arg</span><span class="o">=</span><span class="n">bar</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">decorated_thing</span><span class="p">(</span><span class="o">...</span><span class="p">):</span>
+</pre></div>
+</div>
+<p>or, if all of the arguments have default values, you can write:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@my_decorator</span>
+<span class="k">def</span> <span class="nf">decorated_thing</span><span class="p">(</span><span class="o">...</span><span class="p">):</span>
+</pre></div>
+</div>
+<p>This is identical to <code class="docutils literal notranslate"><span class="pre">&#64;my_decorator()</span></code>, so users no longer need to remember which one to use.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>There is a known conflict between this code and mypy. When you make a flex decorator

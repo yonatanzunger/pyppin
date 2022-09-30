@@ -103,31 +103,31 @@
 <p>[<a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/base/cache.py">View Source</a>]</p>
 <span class="target" id="module-pyppin.base.cache"></span><p>Caching decorators for functions and methods</p>
 <p>This file provides two decorators, <cite>&#64;cache</cite> (for functions) and <cite>&#64;cachemethod</cite> (for methods),
-which can be used to memoize the return values of the function. For example,:</p>
+which can be used to memoize the return values of the function. For example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyClass</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="nd">@cachemethod</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">,</span> <span class="n">val1</span><span class="p">,</span> <span class="n">val2</span><span class="p">:</span> <span class="n">val1</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">mymethod</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val1</span><span class="p">:</span> <span class="n">string</span><span class="p">,</span> <span class="n">val2</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="o">....</span>
 </pre></div>
 </div>
-<p>will cause <cite>mymethod</cite> to automatically cache its results in a dedicated dict, keyed only by
-<cite>val1</cite> – that is, calls with different values of <cite>val2</cite> will be assumed to always yield the same
-result.</p>
+<p>will cause <code class="docutils literal notranslate"><span class="pre">mymethod</span></code> to automatically cache its results in a dedicated dict, keyed only by
+<code class="docutils literal notranslate"><span class="pre">val1</span></code> – that is, calls with different values of <code class="docutils literal notranslate"><span class="pre">val2</span></code> will be assumed to always yield the
+same result.</p>
 <p>The decorators share most of their arguments and behavior:</p>
 <blockquote>
 <div><p><strong>cache:</strong> The cache to use for this method. Valid values are:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p>A class (such as <cite>dict</cite>, <cite>weakref.WeakValueDictionary</cite>, or any of the cache classes
-from <cite>cachetools</cite>); create a separate cache of this type for just this method. Any
-<cite>**kwargs</cite> passed to the decorator will be forwarded on to the cache’s constructor.</p></li>
+<li><p>A class (such as <code class="docutils literal notranslate"><span class="pre">dict</span></code>, <code class="docutils literal notranslate"><span class="pre">weakref.WeakValueDictionary</span></code>, or any of the cache classes
+from <code class="docutils literal notranslate"><span class="pre">cachetools</span></code>); create a separate cache of this type for just this method. Any
+<code class="docutils literal notranslate"><span class="pre">**kwargs</span></code> passed to the decorator will be forwarded on to the cache’s constructor.</p></li>
 <li><p>An explicit object to use as a cache. (Careful! <code class="docutils literal notranslate"><span class="pre">&#64;cachemethod(cache={})</span></code> will
 create a per-<em>class</em> dict and use it for every <em>instance</em>, which is rarely what
 you want!)</p></li>
-<li><p><cite>None</cite> to simply not cache.</p></li>
-<li><p>(<cite>&#64;cachemethod</cite> only) The (string) name of an instance variable of the class whose
+<li><p><code class="docutils literal notranslate"><span class="pre">None</span></code> to simply not cache.</p></li>
+<li><p>(<code class="docutils literal notranslate"><span class="pre">&#64;cachemethod</span></code> only) The (string) name of an instance variable of the class whose
 method is being decorated; this variable should usually be set up in the object
-<cite>__init__</cite> method.</p></li>
+<code class="docutils literal notranslate"><span class="pre">__init__</span></code> method.</p></li>
 </ul>
 <p>The default is dict, i.e. to use a per-method unbounded cache.</p>
 </div></blockquote>
@@ -138,19 +138,20 @@ method is being decorated; this variable should usually be set up in the object
 <li><p>An explicit lock object (typically a threading.Lock).</p></li>
 <li><p>True (equivalent to the class threading.Lock, the most common value to pass)</p></li>
 <li><p>False (to not lock the cache)</p></li>
-<li><p><cite>&#64;cachemethod</cite> only: The (string) name of an instance variable containing the lock.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&#64;cachemethod</span></code> only: The (string) name of an instance variable containing the lock.</p></li>
 </ul>
 <p>The default is False, i.e. to not lock the cache.</p>
 </div></blockquote>
 <p><strong>key:</strong> A function that maps the decorated function’s argument to the cache key.</p>
 <blockquote>
-<div><p>This function should take the same arguments (including <cite>self</cite> if appropriate) as the
+<div><p>This function should take the same arguments (including <code class="docutils literal notranslate"><span class="pre">self</span></code> if appropriate) as the
 decorated function or method, and returns a cache key to use given those values. The default
 is to infer a key function based on all function arguments and the id of self. Note that
 this default only works if all the arguments are hashable, and calls will raise
-<cite>ExplicitKeyNeeded</cite> if this is not true; you will very often want to override this default!</p>
+<code class="docutils literal notranslate"><span class="pre">ExplicitKeyNeeded</span></code> if this is not true; you will very often want to override this
+default!</p>
 </div></blockquote>
-<p>cache_exceptions: Whether exceptions raised by the function should also be cached.</p>
+<p><strong>cache_exceptions:</strong> Whether exceptions raised by the function should also be cached.</p>
 <blockquote>
 <div><p>If True and the function raises an exception, we will cache the <em>exception</em>, so that
 future calls to the function will get a cache hit and the response to that hit will
@@ -164,16 +165,18 @@ keyword argument <code class="docutils literal notranslate"><span class="pre">_s
 caching behavior when invoking it. Some particular useful arguments:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">wrappedfn(...,</span> <span class="pre">_skip=True)</span></code> will completely skip the cache.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">wrappedfn(...,</span> <span class="pre">_skip='r')</span></code> will always re-evaluate the function, and update the cache, so
-this can be used to forcibly refresh the cache entry for these arguments.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">wrappedfn(...,</span> <span class="pre">_skip='w')</span></code> will check, but not update, the cache; this is good if it’s a
-value that would be expensive to store in cache, or otherwise a scenario where
-updating the cache would be bad. (e.g., if there are two paths that hit a function,
-one of which is performance-critical and the other isn’t, and the second would have
-very different key distributions, you can pass this for the non-critical one so it
-will get the benefits of the cache when possible, but not pollute the cache for the
-first one)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">wrappedfn(...,</span> <span class="pre">_skip='r')</span></code> (“skip the cache read”) will always re-evaluate the underlying</p></li>
 </ul>
+<p>function, and update the cache, so this can be used to forcibly refresh the cache entry for these
+arguments.
+* <code class="docutils literal notranslate"><span class="pre">wrappedfn(...,</span> <span class="pre">_skip='w')</span></code> (“skip the cache write”) will check the cache and use its value on a
+hit, and on a cache miss will re-evaluate the function but <em>not</em> update the cache. There are two big
+cases where this is helpful: if it’s a value that would be expensive to store in the cache, or if
+you’re doing an “unusual operation” which you know isn’t going to get cache hits in the future, and
+writing it could pollute the cache. (For example, if there are two paths that hit a function, one of
+which is performance-critical and the other not, and the second would have a very different
+distribution of keys, then skipping the cache write for the non-critical operation guarantees that
+it won’t mess up the cache for the critical one.)</p>
 </section>
 <section id="checking-cache-presence">
 <h2>Checking cache presence<a class="headerlink" href="#checking-cache-presence" title="Permalink to this heading">¶</a></h2>

@@ -52,9 +52,6 @@
 <li class="toctree-l2 current"><a class="reference internal" href="pyppin.text.html">pyppin.text</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">pyppin.text.formatter</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#pyppin.text.formatter.Formatter"><code class="docutils literal notranslate"><span class="pre">Formatter</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pyppin.text.formatter.Alignment"><code class="docutils literal notranslate"><span class="pre">Alignment</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pyppin.text.formatter.Format"><code class="docutils literal notranslate"><span class="pre">Format</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pyppin.text.formatter.PyppinFormat"><code class="docutils literal notranslate"><span class="pre">PyppinFormat</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="pyppin.text.now_and_then.html">pyppin.text.now_and_then</a></li>
@@ -99,21 +96,6 @@
 <h1>pyppin.text.formatter<a class="headerlink" href="#pyppin-text-formatter" title="Permalink to this heading">¶</a></h1>
 <p>[<a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/formatter.py">View Source</a>]</p>
 <span class="target" id="module-pyppin.text.formatter"></span><p>Tools to format numbers, times, etc., using the fancy functions in <a class="reference internal" href="pyppin.text.html"><span class="doc">pyppin.text</span></a>.</p>
-<p>The most general way to use this is with the Formatter class in this file. In addition to all of the
-standard Python formatting, it supports a few new formats:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TYPE</span>        <span class="n">FORMAT</span> <span class="n">SPEC</span>                                             <span class="n">RESULT</span>
-<span class="nb">int</span><span class="p">,</span> <span class="nb">float</span>  <span class="p">[[</span><span class="n">fill</span><span class="p">]</span><span class="n">align</span><span class="p">][</span><span class="n">sign</span><span class="p">][</span><span class="n">width</span><span class="p">][</span><span class="o">.</span><span class="n">precision</span><span class="p">][(</span><span class="n">threshold</span><span class="p">)]</span><span class="n">si</span>   <span class="n">SI</span> <span class="p">(</span><span class="n">decimal</span> <span class="n">scale</span><span class="p">)</span>
-<span class="nb">int</span><span class="p">,</span> <span class="nb">float</span>  <span class="p">[[</span><span class="n">fill</span><span class="p">]</span><span class="n">align</span><span class="p">][</span><span class="n">sign</span><span class="p">][</span><span class="n">width</span><span class="p">][</span><span class="o">.</span><span class="n">precision</span><span class="p">][(</span><span class="n">threshold</span><span class="p">)]</span><span class="n">sib</span>  <span class="n">SI</span> <span class="p">(</span><span class="n">binary</span> <span class="n">scale</span><span class="p">)</span>
-<span class="nb">int</span><span class="p">,</span> <span class="nb">float</span>  <span class="p">[[</span><span class="n">fill</span><span class="p">]</span><span class="n">align</span><span class="p">][</span><span class="n">sign</span><span class="p">][</span><span class="n">width</span><span class="p">][</span><span class="o">.</span><span class="n">precision</span><span class="p">][(</span><span class="n">threshold</span><span class="p">)]</span><span class="n">iec</span>  <span class="n">SI</span> <span class="p">(</span><span class="n">binary</span> <span class="n">scale</span><span class="p">,</span> <span class="n">IEC</span><span class="p">)</span>
-<span class="n">timedelta</span>   <span class="p">[[</span><span class="n">fill</span><span class="p">]</span><span class="n">align</span><span class="p">][</span><span class="n">sign</span><span class="p">][</span><span class="n">width</span><span class="p">]</span><span class="n">td</span>                            <span class="n">time_delta_string</span>
-<span class="n">timedelta</span>   <span class="p">[[</span><span class="n">fill</span><span class="p">]</span><span class="n">align</span><span class="p">][</span><span class="n">width</span><span class="p">]</span><span class="n">rd</span>                                  <span class="n">relative_time_string</span>
-</pre></div>
-</div>
-<p>For example, you might format a timedelta as <code class="docutils literal notranslate"><span class="pre">{var:50rd}</span></code> to get a 50-character wide relative time
-string (“3 days from now”), or a number of bytes as <code class="docutils literal notranslate"><span class="pre">{size:sib}B</span></code> (“1.2GB”).</p>
-<p>The simplest way to use these formats is with pyppin.text.formatter.Formatter, which is a standard
-Python <a class="reference external" href="https://docs.python.org/3/library/string.html#custom-string-formatting">string Formatter</a>.
-Its <code class="docutils literal notranslate"><span class="pre">format()</span></code> method behaves just like <code class="docutils literal notranslate"><span class="pre">str.format()</span></code>.</p>
 <p class="rubric">Classes</p>
 <table class="autosummary longtable docutils align-default">
 <colgroup>
@@ -121,17 +103,8 @@ Its <code class="docutils literal notranslate"><span class="pre">format()</span>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pyppin.text.formatter.Alignment" title="pyppin.text.formatter.Alignment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Alignment</span></code></a>(value)</p></td>
-<td><p>An enumeration.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pyppin.text.formatter.Format" title="pyppin.text.formatter.Format"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Format</span></code></a>(value)</p></td>
-<td><p>An enumeration.</p></td>
-</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#pyppin.text.formatter.Formatter" title="pyppin.text.formatter.Formatter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Formatter</span></code></a>()</p></td>
-<td><p>The simple way to do this formatting: use this formatter class.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pyppin.text.formatter.PyppinFormat" title="pyppin.text.formatter.PyppinFormat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PyppinFormat</span></code></a>(format_spec, fill, align, sign, ...)</p></td>
-<td><p></p></td>
+<td><p>A <code class="docutils literal notranslate"><span class="pre">string.Formatter</span></code> that includes several new formatting options.</p></td>
 </tr>
 </tbody>
 </table>
@@ -139,129 +112,64 @@ Its <code class="docutils literal notranslate"><span class="pre">format()</span>
 <dt class="sig sig-object py" id="pyppin.text.formatter.Formatter">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyppin.text.formatter.</span></span><span class="sig-name descname"><span class="pre">Formatter</span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/formatter.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.formatter.Formatter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Formatter</span></code></p>
-<p>The simple way to do this formatting: use this formatter class.</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">string.Formatter</span></code> that includes several new formatting options.</p>
+<p>Provides a Python <a class="reference external" href="https://docs.python.org/3/library/string.html#custom-string-formatting">string Formatter</a> which, in addition
+to all of the standard Python formatting, supports a few new formats:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 24%" />
+<col style="width: 62%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Type</p></th>
+<th class="head"><p>Format specification</p></th>
+<th class="head"><p>Renders as</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>int, float</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">:si</span></code></p></td>
+<td><p><a class="reference internal" href="pyppin.text.si_prefix.html"><span class="doc">SI (decimal scale)</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>int, float</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">:sib</span></code></p></td>
+<td><p><a class="reference internal" href="pyppin.text.si_prefix.html"><span class="doc">SI (binary scale)</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>int, float</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">:iec</span></code></p></td>
+<td><p><a class="reference internal" href="pyppin.text.si_prefix.html"><span class="doc">SI (binary scale, IEC)</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>timedelta</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">:td</span></code></p></td>
+<td><p><a class="reference internal" href="pyppin.text.now_and_then.html"><span class="doc">time_delta_string</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>timedelta</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">:rd</span></code></p></td>
+<td><p><a class="reference internal" href="pyppin.text.now_and_then.html"><span class="doc">relative_time_string</span></a></p></td>
+</tr>
+</tbody>
+</table>
+<p>For example, you might format a timedelta as <code class="docutils literal notranslate"><span class="pre">{delta:rd}</span></code> to get a string like “3 days from
+now”, or a number of bytes as <code class="docutils literal notranslate"><span class="pre">{size:sib}B</span></code> to get a string like “1.2GB”.</p>
+<p>To use this class, simply create one of these objects and use its <code class="docutils literal notranslate"><span class="pre">format()</span></code> method the way
+you would normally use <code class="docutils literal notranslate"><span class="pre">str.format()</span></code>.</p>
+<p>A wide range of options are available for each of these formats.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">si</span></code>, <code class="docutils literal notranslate"><span class="pre">sib</span></code>, and <code class="docutils literal notranslate"><span class="pre">iec</span></code> accept <code class="docutils literal notranslate"><span class="pre">[[fill]align][sign][width][.precision][(threshold)]</span></code>
+as options. (e.g., <code class="docutils literal notranslate"><span class="pre">{variable:&gt;+30.2(1.2)si}</span></code> would print <code class="docutils literal notranslate"><span class="pre">variable</span></code> as a decimal-scale
+SI number, right-aligned in a 30-character wide block, showing a plus or minus sign, two
+points after the decimal, and using a threshold of 1.2.) The fill, align, sign, and width
+arguments are identical to the standard ones defined in Python’s <a class="reference external" href="https://docs.python.org/3/library/string.html#custom-string-formatting">custom string formatting</a> rules; the
+precision and threshold are defined by the <a class="reference internal" href="pyppin.text.si_prefix.html"><span class="doc">si_prefix</span></a> function.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">td</span></code> accepts <code class="docutils literal notranslate"><span class="pre">[[fill]align][sign][width]</span></code>, using the standard Python meanings for each;
+e.g., <code class="docutils literal notranslate"><span class="pre">{delta:+30td}</span></code> would print <code class="docutils literal notranslate"><span class="pre">delta</span></code> in a 30-character wide box with a plus or minus
+sign.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rd</span></code> accepts <code class="docutils literal notranslate"><span class="pre">[[fill]align][width]</span></code>, using the standard Python meanings for each.</p></li>
+</ul>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyppin.text.formatter.Formatter.format_field">
 <span class="sig-name descname"><span class="pre">format_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format_spec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/formatter.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.formatter.Formatter.format_field" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="pyppin.text.formatter.Alignment">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyppin.text.formatter.</span></span><span class="sig-name descname"><span class="pre">Alignment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/formatter.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.formatter.Alignment" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
-<p>An enumeration.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pyppin.text.formatter.Alignment.LEFT_ALIGN">
-<span class="sig-name descname"><span class="pre">LEFT_ALIGN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/formatter.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.formatter.Alignment.LEFT_ALIGN" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pyppin.text.formatter.Alignment.RIGHT_ALIGN">
-<span class="sig-name descname"><span class="pre">RIGHT_ALIGN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/formatter.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.formatter.Alignment.RIGHT_ALIGN" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pyppin.text.formatter.Alignment.CENTER_ALIGN">
-<span class="sig-name descname"><span class="pre">CENTER_ALIGN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/formatter.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.formatter.Alignment.CENTER_ALIGN" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pyppin.text.formatter.Alignment.PAD_AFTER_SIGN">
-<span class="sig-name descname"><span class="pre">PAD_AFTER_SIGN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/formatter.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.formatter.Alignment.PAD_AFTER_SIGN" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="pyppin.text.formatter.Format">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyppin.text.formatter.</span></span><span class="sig-name descname"><span class="pre">Format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/formatter.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.formatter.Format" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
-<p>An enumeration.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pyppin.text.formatter.Format.SI_DECIMAL">
-<span class="sig-name descname"><span class="pre">SI_DECIMAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/formatter.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.formatter.Format.SI_DECIMAL" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pyppin.text.formatter.Format.SI_BINARY">
-<span class="sig-name descname"><span class="pre">SI_BINARY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/formatter.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.formatter.Format.SI_BINARY" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pyppin.text.formatter.Format.SI_IEC">
-<span class="sig-name descname"><span class="pre">SI_IEC</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/formatter.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.formatter.Format.SI_IEC" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pyppin.text.formatter.Format.TIME_DELTA">
-<span class="sig-name descname"><span class="pre">TIME_DELTA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/formatter.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.formatter.Format.TIME_DELTA" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pyppin.text.formatter.Format.RELATIVE_TIME">
-<span class="sig-name descname"><span class="pre">RELATIVE_TIME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/formatter.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.formatter.Format.RELATIVE_TIME" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="pyppin.text.formatter.PyppinFormat">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyppin.text.formatter.</span></span><span class="sig-name descname"><span class="pre">PyppinFormat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">format_spec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">align</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sign</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precision</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/formatter.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.formatter.PyppinFormat" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">NamedTuple</span></code></p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pyppin.text.formatter.PyppinFormat.format_spec">
-<span class="sig-name descname"><span class="pre">format_spec</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pyppin.text.formatter.Format" title="pyppin.text.formatter.Format"><span class="pre">Format</span></a></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/formatter.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.formatter.PyppinFormat.format_spec" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for field number 0</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pyppin.text.formatter.PyppinFormat.fill">
-<span class="sig-name descname"><span class="pre">fill</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/formatter.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.formatter.PyppinFormat.fill" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for field number 1</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pyppin.text.formatter.PyppinFormat.align">
-<span class="sig-name descname"><span class="pre">align</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pyppin.text.formatter.Alignment" title="pyppin.text.formatter.Alignment"><span class="pre">Alignment</span></a></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/formatter.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.formatter.PyppinFormat.align" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for field number 2</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pyppin.text.formatter.PyppinFormat.sign">
-<span class="sig-name descname"><span class="pre">sign</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pyppin.text.sign.html#pyppin.text.sign.Sign" title="pyppin.text.sign.Sign"><span class="pre">Sign</span></a></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/formatter.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.formatter.PyppinFormat.sign" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for field number 3</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pyppin.text.formatter.PyppinFormat.width">
-<span class="sig-name descname"><span class="pre">width</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/formatter.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.formatter.PyppinFormat.width" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for field number 4</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pyppin.text.formatter.PyppinFormat.threshold">
-<span class="sig-name descname"><span class="pre">threshold</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/formatter.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.formatter.PyppinFormat.threshold" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for field number 5</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pyppin.text.formatter.PyppinFormat.precision">
-<span class="sig-name descname"><span class="pre">precision</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/formatter.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.formatter.PyppinFormat.precision" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for field number 6</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pyppin.text.formatter.PyppinFormat.parse">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">format_spec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyppin.text.formatter.PyppinFormat" title="pyppin.text.formatter.PyppinFormat"><span class="pre">PyppinFormat</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/formatter.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.formatter.PyppinFormat.parse" title="Permalink to this definition">¶</a></dt>
-<dd><p>Parse a format_spec.</p>
-<p>Returns a PyppinFormat if this is a valid Pyppin format, or None otherwise.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pyppin.text.formatter.PyppinFormat.format">
-<span class="sig-name descname"><span class="pre">format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/formatter.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.formatter.PyppinFormat.format" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

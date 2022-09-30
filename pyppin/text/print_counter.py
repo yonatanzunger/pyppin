@@ -85,9 +85,7 @@ class PrintCounter(object):
 
         self.count: Union[int, float] = 0
         self.custom_counts: Dict[str, Union[int, float]] = defaultdict(int)
-        self.next_print_time = (
-            self.start + self.print_every_time if self.print_every_time else None
-        )
+        self.next_print_time = self.start + self.print_every_time if self.print_every_time else None
         self.next_print_count = self.print_every_n
 
     def inc(self, count: Union[int, float] = 1, **custom: Union[int, float]) -> None:
@@ -125,16 +123,9 @@ class PrintCounter(object):
         format_string = self.final_format if is_final else self.format
         self.stream.write(
             self.formatter.format(
-                format_string,
-                count=self.count,
-                time=(now - self.start),
-                **self.custom_counts
+                format_string, count=self.count, time=(now - self.start), **self.custom_counts
             )
         )
         self.stream.write("\n")
-        self.next_print_time = (
-            now + self.print_every_time if self.print_every_time else None
-        )
-        self.next_print_count = (
-            self.count + self.print_every_n if self.print_every_n else None
-        )
+        self.next_print_time = now + self.print_every_time if self.print_every_time else None
+        self.next_print_count = self.count + self.print_every_n if self.print_every_n else None

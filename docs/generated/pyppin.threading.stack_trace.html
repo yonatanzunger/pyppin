@@ -54,7 +54,6 @@
 <li class="toctree-l3"><a class="reference internal" href="pyppin.threading.periodic_task.html">pyppin.threading.periodic_task</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyppin.threading.semaphore.html">pyppin.threading.semaphore</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">pyppin.threading.stack_trace</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#note">Note:</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pyppin.threading.stack_trace.print_all_stacks"><code class="docutils literal notranslate"><span class="pre">print_all_stacks()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pyppin.threading.stack_trace.print_all_stacks_on_failure"><code class="docutils literal notranslate"><span class="pre">print_all_stacks_on_failure()</span></code></a></li>
 </ul>
@@ -107,13 +106,13 @@ whenever there’s an uncaught exception. (Note that if you do that, “an uncau
 <code class="docutils literal notranslate"><span class="pre">KeyboardInterrupt</span></code>, so you can ctrl-C out of a deadlock and see what’s going on!)</p>
 <p>If you want a more low-level API that lets you directly grab these stacks and manipulate them
 programmatically, that’s found in <a class="reference internal" href="pyppin.threading.stack_trace_internals.html"><span class="doc">pyppin.threading.stack_trace_internals</span></a>.</p>
-<section id="note">
-<h2>Note:<a class="headerlink" href="#note" title="Permalink to this heading">¶</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
 <p>If you’re printing out a stack trace when there’s an exception being handled, in Python 3.9 or
 earlier the exception will be printed out <em>after</em> the stack trace, because there’s no way to tie an
 exception to the thread that raised it. In Python 3.10 or later, this is fixed, and exceptions are
 shown with the offending threads.</p>
-</section>
+</div>
 <p class="rubric">Functions</p>
 <table class="autosummary longtable docutils align-default">
 <colgroup>
@@ -137,7 +136,8 @@ shown with the offending threads.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>output</strong> – Where to write the output; defaults to stderr.</p></li>
-<li><p><strong>limit</strong> – As the argument to all_stacks.</p></li>
+<li><p><strong>limit</strong> – If set, the maximum number of stack trace entries to return per thread. (This has the
+same meaning as the argument of the same name used in the <a class="reference external" href="https://docs.python.org/3/library/traceback.html">traceback</a> module)</p></li>
 <li><p><strong>daemons</strong> – Whether to include daemon threads.</p></li>
 <li><p><strong>group</strong> – If True, group together threads with identical traces.</p></li>
 </ul>

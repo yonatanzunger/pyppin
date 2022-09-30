@@ -1,4 +1,4 @@
-pyppin.text.formatter
+﻿pyppin.text.formatter
 =====================
 
 
@@ -26,10 +26,7 @@ pyppin.text.formatter
 
    .. autosummary::
    
-      Alignment
-      Format
       Formatter
-      PyppinFormat
    
    
 

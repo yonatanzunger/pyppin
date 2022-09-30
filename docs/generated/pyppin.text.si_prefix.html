@@ -117,7 +117,7 @@
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#pyppin.text.si_prefix.Mode" title="pyppin.text.si_prefix.Mode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Mode</span></code></a>(value)</p></td>
-<td><p>An enumeration.</p></td>
+<td><p>The kinds of units to use: what does &quot;1k&quot; mean?</p></td>
 </tr>
 </tbody>
 </table>
@@ -125,21 +125,24 @@
 <dt class="sig sig-object py" id="pyppin.text.si_prefix.Mode">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyppin.text.si_prefix.</span></span><span class="sig-name descname"><span class="pre">Mode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/si_prefix.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.si_prefix.Mode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
-<p>An enumeration.</p>
+<p>The kinds of units to use: what does “1k” mean?</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyppin.text.si_prefix.Mode.DECIMAL">
 <span class="sig-name descname"><span class="pre">DECIMAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/si_prefix.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.si_prefix.Mode.DECIMAL" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Decimal SI units; 1k = 1,000.</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyppin.text.si_prefix.Mode.BINARY">
 <span class="sig-name descname"><span class="pre">BINARY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/si_prefix.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.si_prefix.Mode.BINARY" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Binary SI units; 1k = 1,024, but use the ordinary symbols k, M, etc.</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyppin.text.si_prefix.Mode.IEC">
 <span class="sig-name descname"><span class="pre">IEC</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/si_prefix.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.si_prefix.Mode.IEC" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>IEC units; 1k = 1,024, but write ki, Mi, etc., as per the IEC80000 standard.</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -154,10 +157,7 @@ turn 1,234,567 into 1.2M.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>value</strong> – The number to be formatted.</p></li>
-<li><p><strong>mode</strong> – Whether to use decimal or binary SI units. (See below for more info)
-Decimal: 1k = 1000
-Binary: 1k = 1024, but use the ordinary symbols k, M, etc.
-IEC: 1k = 1024, but write ki, Mi, etc., as per the IEC80000 standard.</p></li>
+<li><p><strong>mode</strong> – Whether to use decimal or binary SI units.</p></li>
 <li><p><strong>threshold</strong> – How far above the minimum for a prefix to go before using it. For example,
 if the threshold is set to 1.1 and we’re in decimal mode, then 1050 will still be
 written as 1050, but 1100 will be written as 1.1k; likewise, 1050000 will be 1050k,
@@ -167,13 +167,7 @@ and 1100000 will be 1.1M.</p></li>
 we use the ASCII letter u instead; this is important for some legacy environments
 that can’t support Unicode.</p></li>
 <li><p><strong>full_names</strong> – If True, then we will print out the full words for the SI prefixes (‘Mega’,
-‘micro’, etc) rather than the one-letter abbreviations (‘M’, ‘μ’, etc).
-<strong>NOTE:</strong> There are no IEC-defined full names for negative-power prefixes, i.e. no
-IEC equivalents to milli, micro, and so on. For <em>short</em> names we can use the IEC
-convention of appending ‘i’ (mi, μi, etc), but there’s no actual full name or rule
-for it that works. As a result, setting mode=IEC, full_names=True will treat all
-values less than one the same way prefix overflows are handled, with ‘2^-X’ instead
-of a name.</p></li>
+‘micro’, etc) rather than the one-letter abbreviations (‘M’, ‘μ’, etc).</p></li>
 <li><p><strong>sign</strong> – The sign convention we should use when formatting the value.</p></li>
 </ul>
 </dd>
@@ -181,6 +175,15 @@ of a name.</p></li>
 <dd class="field-even"><p>A string representation of this number, using SI prefixes.</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>There are no IEC-defined full names for negative-power prefixes, i.e. no
+IEC equivalents to milli, micro, and so on. For <em>short</em> names we can use the IEC
+convention of appending ‘i’ (mi, μi, etc), but for the long names, there’s no analogous
+rule that works. As a result, setting <code class="docutils literal notranslate"><span class="pre">mode=IEC,</span> <span class="pre">full_names=True</span></code> will treat all
+values less than one the same way prefix overflows are handled, with <code class="docutils literal notranslate"><span class="pre">2^-X</span></code> instead
+of a name.</p>
+</div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Very nasty things, including physical objects crashing into each other at high speeds, have
