@@ -1,8 +1,52 @@
-"""A flexible class for managing, computing with, and plotting histograms."""
+"""A flexible class for managing, computing with, and plotting histograms.
+
+This is an example ASCII plot, from the histogram used in the ``pyppin.iterators.sample``
+unittest::
+
+        |
+        |
+        |
+        |
+    0.0 +
+        |                                                         #
+        |                                                         ##
+        |                                                         ##
+        |                                                         ##
+    0.0 +                                                         ###
+        |                                                       # ###
+        |                                                       # ###
+        |                                                       # ### #
+        |                                                       # #####
+    0.0 +                                                      ## ######
+        |                                                      ## ######
+        |                                                      ## ######
+        |                                                      ## ######
+        |                                                      ## ######
+    0.0 +                                                    ###########
+        |                                                    ############
+        |                                                    #############
+        |                                                   ###############
+        |                                                   ###############
+    0.0 +                                                   ###############
+        |                                                  ################
+        |                                                  ################
+        |                                                  ################
+        |                                                  ################
+    0.0 +                                                 #################
+        |                                                 ###################
+        |                                                 ####################
+        |                                               # ####################
+        |                                               # ####################
+    0.0 +                                             # # ##################### #
+        |                                             # ####################### #
+        |                                           # # #########################
+        ++------+------+------+------+------+------+------+------+------+------+----
+         0.0    12.1   24.2   36.3   48.4   60.5   72.6   84.8   96.9   109.0  121.1
+"""
 
 import math
 from functools import cached_property
-from typing import List, Optional
+from typing import Callable, List, Optional, Tuple
 
 from pyppin.base import assert_not_none
 from pyppin.math import round_up_to
@@ -21,12 +65,12 @@ class Histogram(object):
         """
         self.bucketing = bucketing or Bucketing()
         self.data: List[int] = []
-        self.count: int = 0
-        self.total: float = 0
-        self.total_squared: float = 0
+        self._count: int = 0
+        self._total: float = 0
+        self._total_squared: float = 0
         # Store these separately from the buckets because we sometimes want exact values.
-        self.max: float = 0
-        self.min: float = 0
+        self._max: float = 0
+        self._min: float = 0
 
     def add(self, value: float, count: int = 1) -> None:
         """Add a value to the histogram.
@@ -40,11 +84,11 @@ class Histogram(object):
             self.data.extend([0] * (bucket - len(self.data) + 1))
 
         self.data[bucket] += count
-        self.count += count
-        self.total += count * value
-        self.total_squared += count * value * value
-        self.max = max(self.max, value)
-        self.min = min(self.min, value)
+        self._count += count
+        self._total += count * value
+        self._total_squared += count * value * value
+        self._max = max(self._max, value)
+        self._min = min(self._min, value)
 
     def combine(self, other: "Histogram") -> None:
         """Add another histogram to this histogram."""
@@ -53,32 +97,50 @@ class Histogram(object):
             self.data.extend([0] * (len(other.data) - len(self.data)))
         for index, value in enumerate(other.data):
             self.data[index] += value
-        self.count += other.count
-        self.total += other.total
-        self.total_squared += other.total_squared
-        self.max = max(self.max, other.max)
-        self.min = min(self.min, other.min)
+        self._count += other.count
+        self._total += other.total
+        self._total_squared += other.total_squared
+        self._max = max(self._max, other.max)
+        self._min = min(self._min, other.min)
+
+    @property
+    def min(self) -> float:
+        """The minimum value found in this histogram."""
+        return self._min
+
+    @property
+    def max(self) -> float:
+        """The maximum value found in this histogram."""
+        return self._max
+
+    @property
+    def count(self) -> int:
+        """The total number of values in this histogram."""
+        return self._count
+
+    @property
+    def total(self) -> float:
+        """The sum of values in this histogram."""
+        return self._total
 
     @property
     def mean(self) -> float:
         """The mean value of the data."""
-        return self.total / self.count
+        return self._total / self._count
 
     def percentile(self, n: float) -> float:
         """Return the value at the Nth percentile of this histogram, with n in [0, 100]."""
         if n <= 0:
-            return self.min
+            return self._min
         if n >= 100:
-            return self.max
-        target_count = int(self.count * n / 100)
+            return self._max
+        target_count = int(self._count * n / 100)
         current_count = 0
         for bucket, count in enumerate(self.data):
             if count + current_count >= target_count:
                 # We found it! Let's interpolate the position we need within the bucket.
                 previous_value = (
-                    self.min
-                    if bucket == 0
-                    else self.bucketing.value_for_bucket(bucket - 1)
+                    self._min if bucket == 0 else self.bucketing.value_for_bucket(bucket - 1)
                 )
                 current_value = self.bucketing.value_for_bucket(bucket)
                 fraction = (target_count - current_count) / count
@@ -96,7 +158,7 @@ class Histogram(object):
     def variance(self) -> float:
         """The distribution variance of the data."""
         mean = self.mean
-        mean_square = self.total_squared / self.count
+        mean_square = self._total_squared / self._count
         return mean_square - mean * mean
 
     @property
@@ -135,8 +197,12 @@ class Histogram(object):
             vfill=True,
         )
 
-    def histogram_values(self) -> PiecewiseConstant:
-        """Return a function that returns the counts in each bucket."""
+    def histogram_values(self) -> Callable[[float], float]:
+        """Return a function that looks like the histogram itself: For each value X, it returns
+        the count in the bucket containing X.
+
+        Note that this is *not* the same as the PDF, because buckets do not all have the same width!
+        """
         return PiecewiseConstant(
             [
                 (
@@ -147,17 +213,26 @@ class Histogram(object):
             ]
         )
 
-    def pdf(self) -> Interpolate:
+    def pdf(self) -> Callable[[float], float]:
         """Return the probability distribution function inferred from this histogram."""
         # For each bucket, the probability of any given *value* in the bucket is the count divided
         # by the bucket width. That's the key difference between the PDF and the raw histogram data!
         data = [
             (
                 self.bucketing.value_for_bucket(bucket),
-                count / (self.count * self.bucketing.bucket_width(bucket)),
+                count / (self._count * self.bucketing.bucket_width(bucket)),
             )
             for bucket, count in enumerate(self.data)
         ]
+        return Interpolate(data)
+
+    def cdf(self) -> Callable[[float], float]:
+        """Return the cumulative distribution function inferred from this histogram."""
+        data: List[Tuple[float, float]] = []
+        last_count = 0.0
+        for bucket, count in enumerate(self.data):
+            last_count += count / (self._count * self.bucketing.bucket_width(bucket))
+            data.append(self.bucketing.value_for_bucket(bucket), last_count)
         return Interpolate(data)
 
 
@@ -184,49 +259,54 @@ class Bucketing(object):
             raise ValueError("The linear step size for bucketing must be positive!")
         if max_linear_value is not None and exponential_multiplier <= 1:
             raise ValueError("The exponential step size for bucketing must be > 1!")
-        self.max_linear_value = (
-            round_up_to(max_linear_value, linear_steps)
-            if max_linear_value is not None
-            else None
+        self._max_linear_value = (
+            round_up_to(max_linear_value, linear_steps) if max_linear_value is not None else None
         )
         self.linear_steps = linear_steps
         self.exponential_multiplier = exponential_multiplier
 
     @cached_property
-    def first_exponential_bucket(self) -> int:
-        return int(assert_not_none(self.max_linear_value) / self.linear_steps) + 1
+    def _first_exponential_bucket(self) -> int:
+        """The index of the first bucket that uses exponential, rather than linear, sizes."""
+
+        return int(assert_not_none(self._max_linear_value) / self.linear_steps) + 1
 
     @cached_property
-    def log_max_linear_value(self) -> float:
-        return math.log(assert_not_none(self.max_linear_value))
+    def _log_max_linear_value(self) -> float:
+        """Log of the max linear value."""
+
+        return math.log(assert_not_none(self._max_linear_value))
 
     def bucket(self, value: float) -> int:
-        """Return the bucket for any given value."""
+        """Given a value to be added to the histogram, figure out which bucket it goes in."""
         # If the value is under the linear cap (C), then the bucket number is floor(v/s)
-        if self.max_linear_value is None or value < self.max_linear_value:
+        if self._max_linear_value is None or value < self._max_linear_value:
             return int(value / self.linear_steps)
         # Beyond C, the value is floor(C/s) + 1 + floor(log(v/C)/K)
-        log_beyond_cap = math.log(value) - self.log_max_linear_value
+        log_beyond_cap = math.log(value) - self._log_max_linear_value
         bucket_beyond_cap = int(log_beyond_cap / self.exponential_multiplier)
-        return self.first_exponential_bucket + bucket_beyond_cap
+        return self._first_exponential_bucket + bucket_beyond_cap
 
     def bucket_width(self, bucket: int) -> float:
-        if self.max_linear_value is None or bucket < self.first_exponential_bucket:
+        """Find the width (in the histogram's natural units) of a given bucket."""
+
+        if self._max_linear_value is None or bucket < self._first_exponential_bucket:
             return self.linear_steps
-        shifted = bucket - self.first_exponential_bucket + 1
+        shifted = bucket - self._first_exponential_bucket + 1
         return math.pow(self.exponential_multiplier, shifted)
 
     def value_for_bucket(self, bucket: int) -> float:
         """Return the (min) value for the indicated bucket."""
-        if self.max_linear_value is None or bucket < self.first_exponential_bucket:
+
+        if self._max_linear_value is None or bucket < self._first_exponential_bucket:
             return self.linear_steps * bucket
-        shifted = bucket - self.first_exponential_bucket + 1
-        return self.max_linear_value * math.pow(self.exponential_multiplier, shifted)
+        shifted = bucket - self._first_exponential_bucket + 1
+        return self._max_linear_value * math.pow(self.exponential_multiplier, shifted)
 
     def __eq__(self, other: object) -> bool:
         return (
             isinstance(other, Bucketing)
-            and other.max_linear_value == self.max_linear_value
+            and other.max_linear_value == self._max_linear_value
             and other.linear_steps == self.linear_steps
             and other.exponential_multiplier == self.exponential_multiplier
         )
