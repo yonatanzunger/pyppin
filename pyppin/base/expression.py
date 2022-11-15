@@ -14,10 +14,7 @@ from typing import (
     Union,
 )
 
-# XXX
-# - finish documentation
-# - can you define a function etc?
-# - warning about crashing Python interpreter
+from pyppin.base.overlay_dict import OverlayDict
 
 
 class Expression(object):
@@ -25,84 +22,166 @@ class Expression(object):
         self,
         expression: str,
         *,
-        variables: Container[str],
+        functions: Container[Callable] = [],
         allow_attribute_functions: bool = False,
+        variables: Optional[Container[str]] = None,
     ) -> None:
         """Expression implements "safe" evaluation of user-entered Python expressions.
 
-        Args:
-            expression: A Python expression to be turned into this object. This expression may use
-                any of the Python language, any of the "safe" built-in functions listed below in
-                SAFE_BUILTINS, and any variables or functions listed in the ``variables`` argument.
-                It may not engage in I/O
-            variables: A list of the names of all variables and functions which the expression
-                should be allowed to access.
-            allow_attribute_functions: If you have allowed a variable 'foo', and foo.bar is a
-                callable, then by default calls to foo.bar(...) will *not* be allowed. (Because
-                otherwise you could only pass an object to the expression by also allowing the
-                user to call arbitrary methods of it!) If you set this to true, such calls are
-                permitted.
-                Note that attribute *properties* are always permitted.
-        """
-
-        """An Expression is a "safe" version of a Python expression that can be parsed from
-        user input, and then evaluated. Expressions can contain all of the "basic" Python
-        operators, like arithmetic, array access, and so on, and can reference variables
-        which you provide at evaluation time. They are deliberately secured so that "dangerous"
-        operations (like ones that could mutate state) are not permitted; this is a sanitizer.
-
-        So for example, you could have a user-entered expression to compute a score for a Wombat,
-        then iterate over a database of Wombats and return the value for each of these.
+        This is safe in that it tries to ensure that the given expression cannot mutate the state of
+        the system (e.g. modifying attributes), execute I/O, or change the broader control flow.
+        However, it is not perfectly safe: Sufficiently complex expressions can crash the entire
+        interpreter! See compile() for details. Length-limiting the input may help.
 
         Args:
-            expression: A Python expression.
-            variables: The set of variable and function names which are allowed within the
-                expression. The "safe" Python built-in functions (abs, max, etc) are always
-                allowed. You will need to pass a dict containing the actual values of these
-                variables and functions when evaluating the expression.
-            allow_attribute_functions: If you have an allowed variable 'foo', and foo.bar is
-                a function, by default calls to it will *not* be allowed (for safety!); if you
-                set this to true, it is allowed.
+            expression: A Python expression to be turned into this object.
+            functions: A list of functions which may be used in expressions. By default, only the
+                "safe" builtin functions (see SAFE_BUILTINS, below) are permitted; any others
+                must be explicitly specified.
+            variables: If given, a list of variable names which may be referenced by the expression.
+                In this case, any reference to variables not in this list will raise a SyntaxError
+                at construction time. If not given, all variable names are permitted, and the actual
+                set of variables used can be checked with the ``variables`` property of this object.
+            allow_attribute_functions: By default, while all attributes of variables passed in to
+                the expression may be referenced, if the variable contains a function (e.g.,
+                x.foo()) then that function may *not* be called. If this is set to true, such
+                functions are permitted. This default makes it safe to pass objects which have
+                potentially dangerous methods for their data alone. Note that variable *properties*
+                are always accessible.
 
         Raises:
             SyntaxError: If the expression cannot be parsed, or if the expression attempted to
                 do something forbidden, like reference an unknown variable.
             ValueError: If the expression string contains NUL bytes for some reason.
         """
-        self._ast = ast.parse(expression, mode='eval')
-        _validate(self._ast, expression, set(variables), allow_attribute_functions)
-        self._fn = compile(self._ast, filename='<string>', mode='eval')
-        if self._fn.co_argcount:
-            raise SyntaxError(
-                'Expression expected arguments', ('<string>', 1, 0, expression, 1, len(expression))
-            )
+        # Our internal function dictionary has two layers.
+        self._fns = OverlayDict(Expression.SAFE_BUILTINS, {fn.__name__: fn for fn in functions})
 
-    def __call__(self, variables: Optional[Dict[str, Any]] = None) -> Any:
+        self._ast = ast.parse(expression, mode='eval')
+        context = _ValidationContext(
+            expression,
+            set(variables) if variables is not None else None,
+            self._fns,
+            allow_attribute_functions,
+        )
+        context.validate(self._ast)
+        self._fn = compile(self._ast, filename='<expression>', mode='eval')
+        assert self._fn.co_argcount == 0
+
+    def __call__(self, **kwargs: Any) -> Any:
         """Evaluate the expression, giving it access to any indicated variables.
 
         Args:
-            variables: Values for all the variables referenced by the expression. Every value in
-                self.variables should be found here!
+            **kwargs: All the variables which are to be passed to the expression. Note that if any
+                member of self.free_variables is not given here, you are very likely to get a
+                NameError. You may also replace functions by passing values for them here!
 
         Returns: The evaluated value of the expression.
 
         Raises:
             Any exception raised by the expression itself.
-            NameError: If some variable referenced was not given in variables.
+            NameError: If some variable referenced by the expression was not given in variables.
         """
-        return eval(self._fn, {}, variables)
+        return eval(self._fn, {}, OverlayDict(self._fns, kwargs).flatten())
 
     @property
     def variables(self) -> Tuple[str, ...]:
-        """List all variables referenced by this expression."""
+        """List all variables and functions referenced by this expression."""
         return self._fn.co_names
+
+    @property
+    def free_variables(self) -> Tuple[str, ...]:
+        """List all the "free" variables, i.e. the ones that must be specified by arguments when
+        calling the function.
+        """
+        return tuple(name for name in self.variables if not self.is_valid_function(name))
 
     @property
     def ast(self) -> ast.AST:
         return self._ast
 
+    def functions(self) -> Dict[str, Callable]:
+        return self._fns.flatten()
+
     def __str__(self) -> str:
         return ast.unparse(self._ast)
+
+    def is_valid_function(self, name: str) -> bool:
+        """Test if the given name is a valid function for use in this expression.
+
+        This is faster than checking if name is in self.functions().
+        """
+        return name in self._fns
+
+    # Deliberately excluded from this list:
+    #   May affect flow of control: breakpoint, exit, quit
+    #   May allow code injection: compile, eval, exec
+    #   May modify state: delattr, setattr
+    #   May access outside data: globals
+    #   Not usable in expressions: classmethod, staticmethod, property
+    #   Affects UI or IO: input, open, print
+    #   No clear reason to allow: copyright, credits, help, license
+    SAFE_BUILTINS = {
+        fn.__name__: fn
+        for fn in [
+            abs,
+            aiter,
+            all,
+            anext,
+            any,
+            ascii,
+            bin,
+            bool,
+            bytearray,
+            bytes,
+            callable,
+            chr,
+            complex,
+            dict,
+            dir,
+            divmod,
+            enumerate,
+            filter,
+            float,
+            format,
+            frozenset,
+            getattr,
+            hasattr,
+            hash,
+            hex,
+            id,
+            int,
+            isinstance,
+            issubclass,
+            iter,
+            len,
+            list,
+            locals,
+            map,
+            max,
+            memoryview,
+            min,
+            next,
+            object,
+            oct,
+            ord,
+            pow,
+            range,
+            repr,
+            reversed,
+            round,
+            set,
+            slice,
+            sorted,
+            str,
+            sum,
+            super,
+            tuple,
+            type,
+            vars,
+            zip,
+        ]
+    }
 
 
 # Below lives the meat of validation. The core idea is that we have a handler for *every* AST node
@@ -113,14 +192,15 @@ class Expression(object):
 
 class _ValidationContext(NamedTuple):
     expression: str
-    variables: Set[str]
+    variables: Optional[Set[str]]
+    functions: Dict[str, Callable]
     allow_attribute_functions: bool
 
     def fail(self, node: ast.AST, error: str) -> NoReturn:
         raise SyntaxError(
             error,
             (
-                '<string>',
+                '<expression>',
                 node.lineno,
                 node.col_offset,
                 self.expression,
@@ -129,120 +209,55 @@ class _ValidationContext(NamedTuple):
             ),
         )
 
+    def is_valid_name(self, name: Union[str, ast.Name]) -> bool:
+        if isinstance(name, ast.Name):
+            name = name.id
+        return self.variables is None or name in self.variables or name in self.functions
 
-_ACTION = Union[None, str, Callable[[ast.AST, _ValidationContext], bool]]
-HANDLERS: Dict[Type[ast.AST], _ACTION] = {}
+    def is_valid_function(self, name: str) -> bool:
+        return name in self.functions
 
+    def validate(self, node: ast.AST) -> None:
+        """Validate the safety of an AST.
 
-def _on(name: str, action: _ACTION) -> None:
-    """Define what we do when we see a node of a given type. This function is here so that we
-    can handle different Python versions which have different AST types. Note that this is both
-    a positive and negative list for security reasons! Unknown node types are *errors* by
-    default until we can manually say that they're kosher.
+        We don't use ast.NodeVisitor because its recursion isn't quite flexible enough for us,
+        but it's a really simple class anyway.
+        """
+        op = HANDLERS.get(type(node), _unknown_node)
+        already_recursed = False
+        if isinstance(op, str):
+            self.fail(node, op)
+        elif callable(op):
+            already_recursed = op(node, self)
 
-    The actions are:
-        None -- this node is fine
-        str -- this node is always an error
-        function -- call this when you find such a node. The arguments are the AST node and the
-            _ValidationContext; the return value should be false to allow the scanner to recurse
-            through all the node's children as usual, or true if the function has already taken
-            care of that itself.
-    """
-    if hasattr(ast, name):
-        HANDLERS[getattr(ast, name)] = action
+        if not already_recursed:
+            for field, value in ast.iter_fields(node):
+                if isinstance(value, list):
+                    for item in value:
+                        if isinstance(item, ast.AST):
+                            self.validate(item)
+                elif isinstance(value, ast.AST):
+                    self.validate(value)
 
 
 def _validate_name(node: ast.AST, context: _ValidationContext) -> bool:
     assert isinstance(node, ast.Name)
-    if node.id not in SAFE_BUILTINS and node.id not in context.variables:
+    if not context.is_valid_name(node):
         context.fail(node, f'Reference to unknown variable "{node.id}"')
     if not isinstance(node.ctx, ast.Load):
         context.fail(node, f'Attempt to mutate the variable "{node.id}"')
     return False
 
 
-def _unknown_node(node: ast.AST, context: _ValidationContext) -> bool:
-    context.fail(node, f'Operations of type {type(node)} are not supported in Expressions.')
-    return False
-
-
-# Deliberately excluded from this list:
-#   May affect flow of control: breakpoint, exit, quit
-#   May allow code injection: compile, eval, exec
-#   May modify state: delattr, setattr
-#   May access outside data: globals
-#   Not usable in expressions: classmethod, staticmethod, property
-#   Affects UI or IO: input, open, print
-#   No clear reason to allow: copyright, credits, help, license
-SAFE_BUILTINS = {
-    'abs',
-    'aiter',
-    'all',
-    'anext',
-    'any',
-    'ascii',
-    'bin',
-    'bool',
-    'bytearray',
-    'bytes',
-    'callable',
-    'chr',
-    'complex',
-    'dict',
-    'dir',
-    'divmod',
-    'enumerate',
-    'filter',
-    'float',
-    'format',
-    'frozenset',
-    'getattr',
-    'hasattr',
-    'hash',
-    'hex',
-    'id',
-    'int',
-    'isinstance',
-    'issubclass',
-    'iter',
-    'len',
-    'list',
-    'locals',
-    'map',
-    'max',
-    'memoryview',
-    'min',
-    'next',
-    'object',
-    'oct',
-    'ord',
-    'pow',
-    'range',
-    'repr',
-    'reversed',
-    'round',
-    'set',
-    'slice',
-    'sorted',
-    'str',
-    'sum',
-    'super',
-    'tuple',
-    'type',
-    'vars',
-    'zip',
-}
-
-
 def _validate_call(node: ast.AST, context: _ValidationContext) -> bool:
     assert isinstance(node, ast.Call)
     if isinstance(node.func, ast.Name):
-        if not (node.func.id in SAFE_BUILTINS or node.func.id in context.variables):
+        if not context.is_valid_function(node.func.id):
             context.fail(node, f'Attempt to call unknown function "{node.func.id}"')
     elif isinstance(node.func, ast.Attribute):
         if not isinstance(node.func.value, ast.Name):
             context.fail(node, "Strange attribute; what's its name? Never happens.")
-        if node.func.value.id not in context.variables:
+        if not context.is_valid_name(node.func.value):
             context.fail(
                 node,
                 f'Attempt to call function in unknown variable "{node.func.value.id}"',
@@ -270,7 +285,7 @@ def _validate_comprehension(node: ast.AST, context: _ValidationContext) -> bool:
             generator.target.ctx, ast.Store
         ):
             context.fail(node, 'Invalid generator expression')
-        if generator.target.id in context.variables:
+        if context.variables is not None and generator.target.id in context.variables:
             context.fail(
                 node, f'The comprehension variable "{generator.target.id}" masks a variable name'
             )
@@ -281,21 +296,51 @@ def _validate_comprehension(node: ast.AST, context: _ValidationContext) -> bool:
         context.variables.update(child_names)
 
         for generator in node.generators:
-            _validate_recursive(generator.iter, context)
+            context.validate(generator.iter)
             for condition in generator.ifs:
-                _validate_recursive(condition, context)
+                context.validate(condition)
         if hasattr(node, 'elt'):
-            _validate_recursive(node.elt, context)
+            context.validate(node.elt)
         if hasattr(node, 'key'):
-            _validate_recursive(node.key, context)
+            context.validate(node.key)
         if hasattr(node, 'value'):
-            _validate_recursive(node.value, context)
+            context.validate(node.value)
 
     finally:
         for child_name in child_names:
             context.variables.discard(child_name)
 
-    return True
+    return True  # We've already handled recursion
+
+
+def _unknown_node(node: ast.AST, context: _ValidationContext) -> bool:
+    context.fail(node, f'Operations of type {type(node)} are not supported in Expressions.')
+    return False
+
+
+###############################################################################################
+# Definition of how we validate each AST node.
+
+_ACTION = Union[None, str, Callable[[ast.AST, _ValidationContext], bool]]
+HANDLERS: Dict[Type[ast.AST], _ACTION] = {}
+
+
+def _on(name: str, action: _ACTION) -> None:
+    """Define what we do when we see a node of a given type. This function is here so that we
+    can handle different Python versions which have different AST types. Note that this is both
+    a positive and negative list for security reasons! Unknown node types are *errors* by
+    default until we can manually say that they're kosher.
+
+    The actions are:
+        None -- this node is fine
+        str -- this node is always an error
+        function -- call this when you find such a node. The arguments are the AST node and the
+            _ValidationContext; the return value should be false to allow the scanner to recurse
+            through all the node's children as usual, or true if the function has already taken
+            care of that itself.
+    """
+    if hasattr(ast, name):
+        HANDLERS[getattr(ast, name)] = action
 
 
 NO_ASSIGN = 'Variable assignment is not permitted in expressions'
@@ -411,64 +456,3 @@ _on("AsyncFunctionDef", NO_DECLARE)
 _on("Await", None)
 _on("AsyncFor", None)
 _on("AsyncWith", None)
-
-
-class _Validator(ast.NodeVisitor):
-    def __init__(self, context: _ValidationContext) -> None:
-        self.context = context
-
-    def visit(self, node: ast.AST) -> None:
-        op = HANDLERS.get(type(node), _unknown_node)
-        if isinstance(op, str):
-            self.context.fail(node, op)
-        elif callable(op):
-            child_names = op(node, self.context)
-
-        if child_names:
-            for child_name in child_names:
-                # This isn't *technically* a Python error but it's a bug magnet so we forbid it.
-                if child_name in self.context.variables:
-                    self.context.fail(
-                        node, f'The comprehension variable "{child_name}" masks a variable name'
-                    )
-
-        # Because this class is used just as a single-pass verifier, modifying our own instance
-        # variables is safe. Note that we also just verified that self.context.variables and
-        # child_names are disjoint.
-        try:
-            if child_names:
-                self.context.variables.update(child_names)
-            self.generic_visit(node)
-        finally:
-            for child_name in child_names or tuple():
-                self.context.variables.discard(child_name)
-
-
-def _validate(
-    tree: ast.AST, expression: str, variables: Set[str], allow_attribute_functions: bool
-) -> None:
-    """Validate the safety of an AST.
-
-    We don't use ast.NodeVisitor because its recursion isn't quite flexible enough for us, but it's
-    a really simple class anyway.
-    """
-    context = _ValidationContext(expression, variables, allow_attribute_functions)
-    _validate_recursive(tree, context)
-
-
-def _validate_recursive(node: ast.AST, context: _ValidationContext) -> None:
-    op = HANDLERS.get(type(node), _unknown_node)
-    already_recursed = False
-    if isinstance(op, str):
-        context.fail(node, op)
-    elif callable(op):
-        already_recursed = op(node, context)
-
-    if not already_recursed:
-        for field, value in ast.iter_fields(node):
-            if isinstance(value, list):
-                for item in value:
-                    if isinstance(item, ast.AST):
-                        _validate_recursive(item, context)
-            elif isinstance(value, ast.AST):
-                _validate_recursive(value, context)
