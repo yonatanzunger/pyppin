@@ -13,3 +13,4 @@ API
    pyppin.testing
    pyppin.text
    pyppin.threading
+   pyppin.util

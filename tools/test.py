@@ -16,7 +16,7 @@ def default_main() -> None:
     test_main()
     # Only lint against a single version, because otherwise this is going to get unmanageable as
     # different versions' linters disagree with each other.
-    if sys.hexversion >= 0x030A0000:
+    if sys.version[0] == 3 and sys.version[1] == 10:
         lint_main()
 
 
@@ -52,9 +52,7 @@ def main() -> None:
         elif command == "shell":
             main = interact
         else:
-            raise AssertionError(
-                f'Unknown command "{command}". Did you mean test or lint?'
-            )
+            raise AssertionError(f'Unknown command "{command}". Did you mean test or lint?')
 
     main()
 
