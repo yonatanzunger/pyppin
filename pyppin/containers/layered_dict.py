@@ -4,21 +4,34 @@ K = TypeVar('K', bound=Hashable)
 V = TypeVar('V')
 
 
-class OverlayDict(Dict[K, V]):
+class LayeredDict(Dict[K, V]):
     def __init__(self, *dicts: Dict[K, V]) -> None:
+        """A LayeredDict is simply a stack of Dict[K, V], with dicts higher in the stack
+        taking precedence over ones lower in the stack.
+
+        It's useful when you have several layers of overrides, but copying everything to a new dict
+        would be unnecessarily expensive.
+        """
         self.layers: List[Dict[K, V]] = list(dicts)
 
-    def push(self, layer: Union[Dict[K, V], 'OverlayDict[K, V]']) -> None:
-        if isinstance(layer, OverlayDict):
+    def push_layer(self, layer: Union[Dict[K, V], 'LayeredDict[K, V]']) -> None:
+        """Push a new layer (or an entire LayeredDict's worth of layers) on top of the stack."""
+        if isinstance(layer, LayeredDict):
             self.layers.extend(layer.layers)
         else:
             self.layers.append(layer)
 
-    def pop(self) -> Optional[Dict[K, V]]:
+    def pop_layer(self) -> Optional[Dict[K, V]]:
+        """Pop the topmost layer of the stack, if one is present."""
         return self.layers.pop() if self.layers else None
 
+    @property
+    def depth(self) -> int:
+        """How many layers do we have right now?"""
+        return len(self.layers)
+
     def __len__(self) -> int:
-        return len(set().union(self.layers))
+        return len(set().union(*self.layers))
 
     def __length_hint__(self) -> int:
         return max(len(layer) for layer in self.layers)
@@ -29,14 +42,14 @@ class OverlayDict(Dict[K, V]):
                 return layer[key]
         raise KeyError('Key not found')
 
-    def __setitem__(self, key: K) -> V:
+    def __setitem__(self, key: K, value: V) -> None:
         raise NotImplementedError(
-            "OverlayDicts are read-only; mutate the layers directly if needed"
+            "LayeredDicts are read-only; mutate the layers directly if needed"
         )
 
     def __delitem__(self, key: K) -> None:
         raise NotImplementedError(
-            "OverlayDicts are read-only; mutate the layers directly if needed"
+            "LayeredDicts are read-only; mutate the layers directly if needed"
         )
 
     def __iter__(self) -> Iterator[K]:

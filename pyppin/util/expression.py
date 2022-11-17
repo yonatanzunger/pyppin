@@ -14,7 +14,7 @@ from typing import (
     Union,
 )
 
-from pyppin.base.overlay_dict import OverlayDict
+from pyppin.containers.layered_dict import LayeredDict
 
 
 class Expression(object):
@@ -38,16 +38,16 @@ class Expression(object):
             functions: A list of functions which may be used in expressions. By default, only the
                 "safe" builtin functions (see SAFE_BUILTINS, below) are permitted; any others
                 must be explicitly specified.
-            variables: If given, a list of variable names which may be referenced by the expression.
-                In this case, any reference to variables not in this list will raise a SyntaxError
-                at construction time. If not given, all variable names are permitted, and the actual
-                set of variables used can be checked with the ``variables`` property of this object.
             allow_attribute_functions: By default, while all attributes of variables passed in to
                 the expression may be referenced, if the variable contains a function (e.g.,
                 x.foo()) then that function may *not* be called. If this is set to true, such
                 functions are permitted. This default makes it safe to pass objects which have
                 potentially dangerous methods for their data alone. Note that variable *properties*
                 are always accessible.
+            variables: If given, a list of variable names which may be referenced by the expression.
+                In this case, any reference to variables not in this list will raise a SyntaxError
+                at construction time. If not given, all variable names are permitted, and the actual
+                set of variables used can be checked with the ``variables`` property of this object.
 
         Raises:
             SyntaxError: If the expression cannot be parsed, or if the expression attempted to
@@ -55,7 +55,7 @@ class Expression(object):
             ValueError: If the expression string contains NUL bytes for some reason.
         """
         # Our internal function dictionary has two layers.
-        self._fns = OverlayDict(Expression.SAFE_BUILTINS, {fn.__name__: fn for fn in functions})
+        self._fns = LayeredDict(Expression.SAFE_BUILTINS, {fn.__name__: fn for fn in functions})
 
         self._ast = ast.parse(expression, mode='eval')
         context = _ValidationContext(
@@ -82,7 +82,7 @@ class Expression(object):
             Any exception raised by the expression itself.
             NameError: If some variable referenced by the expression was not given in variables.
         """
-        return eval(self._fn, {}, OverlayDict(self._fns, kwargs).flatten())
+        return eval(self._fn, {}, LayeredDict(self._fns, kwargs).flatten())
 
     @property
     def variables(self) -> Tuple[str, ...]:
@@ -98,12 +98,15 @@ class Expression(object):
 
     @property
     def ast(self) -> ast.AST:
+        """The AST representation of this function."""
         return self._ast
 
     def functions(self) -> Dict[str, Callable]:
+        """The dictionary of available functions callable by this function."""
         return self._fns.flatten()
 
     def __str__(self) -> str:
+        """A string representation of the expression. This may not be identical to the original."""
         return ast.unparse(self._ast)
 
     def is_valid_function(self, name: str) -> bool:

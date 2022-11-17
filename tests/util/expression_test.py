@@ -1,6 +1,6 @@
 import unittest
 
-from pyppin.base.expression import Expression
+from pyppin.util.expression import Expression
 
 
 class ExpressionTest(unittest.TestCase):
