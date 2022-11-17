@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyppin.file &mdash; pyppin  documentation</title>
+  <title>pyppin.util &mdash; pyppin  documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -20,8 +20,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="pyppin.file.dev_null" href="pyppin.file.dev_null.html" />
-    <link rel="prev" title="pyppin.base.registered_class" href="pyppin.base.registered_class.html" /> 
+    <link rel="next" title="pyppin.util.expression" href="pyppin.util.expression.html" />
+    <link rel="prev" title="pyppin.threading.stack_trace_internals" href="pyppin.threading.stack_trace_internals.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -44,20 +44,17 @@
 <li class="toctree-l1"><a class="reference internal" href="../readme.html">pyppin: A toolkit of Python basics</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="pyppin.base.html">pyppin.base</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">pyppin.file</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="pyppin.file.dev_null.html">pyppin.file.dev_null</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pyppin.file.memfile.html">pyppin.file.memfile</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pyppin.file.tee.html">pyppin.file.tee</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pyppin.file.types.html">pyppin.file.types</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="pyppin.file.html">pyppin.file</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.iterators.html">pyppin.iterators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.math.html">pyppin.math</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.os.html">pyppin.os</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.testing.html">pyppin.testing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.text.html">pyppin.text</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.threading.html">pyppin.threading</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pyppin.util.html">pyppin.util</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">pyppin.util</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.util.expression.html">pyppin.util.expression</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Using &amp; Contributing</a></li>
@@ -78,9 +75,9 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../api.html">API</a> &raquo;</li>
-      <li>pyppin.file</li>
+      <li>pyppin.util</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/generated/pyppin.file.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/generated/pyppin.util.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -88,10 +85,10 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="pyppin-file">
-<h1>pyppin.file<a class="headerlink" href="#pyppin-file" title="Permalink to this heading">¶</a></h1>
-<p>[<a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/file">Browse Source</a>]</p>
-<span class="target" id="module-pyppin.file"></span><p>Clean API’s for managing files and file systems.</p>
+  <section id="pyppin-util">
+<h1>pyppin.util<a class="headerlink" href="#pyppin-util" title="Permalink to this heading">¶</a></h1>
+<p>[<a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/util">Browse Source</a>]</p>
+<span class="target" id="module-pyppin.util"></span><p>Miscellaneous utilities.</p>
 <p class="rubric">Modules</p>
 <table class="autosummary longtable docutils align-default">
 <colgroup>
@@ -99,17 +96,8 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyppin.file.dev_null.html#module-pyppin.file.dev_null" title="pyppin.file.dev_null"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.file.dev_null</span></code></a></p></td>
-<td><p>An io.IOBase that behaves like /dev/null.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyppin.file.memfile.html#module-pyppin.file.memfile" title="pyppin.file.memfile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.file.memfile</span></code></a></p></td>
-<td><p>Allow access to a single block of RAM with multiple file API handles.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyppin.file.tee.html#module-pyppin.file.tee" title="pyppin.file.tee"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.file.tee</span></code></a></p></td>
-<td><p>An io.IOBase that lets you tee writes to multiple file targets.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyppin.file.types.html#module-pyppin.file.types" title="pyppin.file.types"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.file.types</span></code></a></p></td>
-<td><p>Type declarations for accessing files.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyppin.util.expression.html#module-pyppin.util.expression" title="pyppin.util.expression"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.util.expression</span></code></a></p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -119,8 +107,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="pyppin.base.registered_class.html" class="btn btn-neutral float-left" title="pyppin.base.registered_class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="pyppin.file.dev_null.html" class="btn btn-neutral float-right" title="pyppin.file.dev_null" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="pyppin.threading.stack_trace_internals.html" class="btn btn-neutral float-left" title="pyppin.threading.stack_trace_internals" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pyppin.util.expression.html" class="btn btn-neutral float-right" title="pyppin.util.expression" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

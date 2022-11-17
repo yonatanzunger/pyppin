@@ -2,7 +2,7 @@
 
 import inspect
 from functools import update_wrapper
-from typing import Any, Callable, TypeVar, Union, overload
+from typing import Any, Callable, Optional, TypeVar, Union, overload
 
 DecoratedFunction = TypeVar("DecoratedFunction", bound=Callable[..., Any])
 
@@ -98,7 +98,7 @@ def flex_decorator(decorator: Callable) -> Callable:
         ...
 
     def poly_decorator(
-        maybe_target: DecoratedFunction = None, /, **kwargs: Any
+        maybe_target: Optional[DecoratedFunction] = None, /, **kwargs: Any
     ) -> Union[DecoratedFunction, Callable[[DecoratedFunction], DecoratedFunction]]:
         if maybe_target is not None and not kwargs:
             # Call using the first syntax. This call mode only works if all the kwargs in decorator

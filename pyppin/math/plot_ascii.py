@@ -76,7 +76,9 @@ def plot_ascii(
                   0.0  0.7  1.4  2.1  2.7  3.4  4.1  4.8  5.5  6.2  6.8  7.5  8.2  8.9  9.6
     """
     height = height or width // 2
-    canvas = Canvas.for_plot(data, width=width, height=height, x_axis=x_axis, y_axis=y_axis)
+    canvas = Canvas.for_plot(
+        data, width=width, height=height, x_axis=x_axis, y_axis=y_axis
+    )
     canvas.plot(data, vfill=vfill, symbol=plot_symbol)
     return canvas.render()
 
@@ -158,13 +160,17 @@ class Canvas(object):
             # value.
             labeler = _LabelMaker(self.ymin, self.ymax)
             self.y_labels = {
-                self.image_to_screen_y(position): labeler(self.image_to_natural_y(position))
+                self.image_to_screen_y(position): labeler(
+                    self.image_to_natural_y(position)
+                )
                 for position in range(self.image_height - 1, -1, -5)
             }
 
         # The display width of the Y-axis labels, including the spacing char if required.
         y_label_width = (
-            (1 + max(len(label) for label in self.y_labels.values())) if self.y_labels else 0
+            (1 + max(len(label) for label in self.y_labels.values()))
+            if self.y_labels
+            else 0
         )
         # This is the padding we're going to show on rows where there isn't a Y label.
         self.y_axis_padding = " " * y_label_width
@@ -312,7 +318,9 @@ class Canvas(object):
             symbol: The character to use for the plot line.
         """
         if len(symbol) != 1:
-            raise ValueError(f'"{symbol}" is not a valid plot symbol; it needs to be one char.')
+            raise ValueError(
+                f'"{symbol}" is not a valid plot symbol; it needs to be one char.'
+            )
 
         for image_x in range(self.image_width):
             try:
@@ -334,11 +342,15 @@ class Canvas(object):
     def scatter_plot(self, data: List[Tuple[float, float]], symbol: str) -> None:
         """Add a scatter plot of (x, y) pairs."""
         if len(symbol) != 1:
-            raise ValueError(f'"{symbol}" is not a valid plot symbol; it needs to be one char.')
+            raise ValueError(
+                f'"{symbol}" is not a valid plot symbol; it needs to be one char.'
+            )
 
         for x, y in data:
             self.image[
-                self._image_to_index(self.natural_to_image_x(x), self.natural_to_image_y(y))
+                self._image_to_index(
+                    self.natural_to_image_x(x), self.natural_to_image_y(y)
+                )
             ] = symbol
 
     def render(self) -> str:

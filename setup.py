@@ -10,7 +10,7 @@ with open(
 
 setup(
     name="pyppin",
-    version="1.0.5",
+    version="1.0.6",
     description="Python tools collection",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -29,7 +29,7 @@ setup(
         "Tracker": "https://github.com/yonatanzunger/pyppin/issues",
         "Documentation": "https://yonatanzunger.github.io/pyppin/",
     },
-    python_requires=">=3.7",
+    python_requires=">=3.9",
     install_requires=[],
     packages=find_packages(exclude=["tests", "tools", "docs", "docs_src"]),
     test_suite="tests",
