@@ -1,8 +1,9 @@
 import ast
+import builtins
+import sys
 from typing import (
     Any,
     Callable,
-    Container,
     Dict,
     List,
     NamedTuple,
@@ -14,17 +15,15 @@ from typing import (
     Union,
 )
 
-from pyppin.containers.layered_dict import LayeredDict
-
 
 class Expression(object):
     def __init__(
         self,
         expression: str,
         *,
-        functions: Container[Callable] = [],
+        functions: List[Callable] = [],
         allow_attribute_functions: bool = False,
-        variables: Optional[Container[str]] = None,
+        variables: Optional[List[str]] = None,
     ) -> None:
         """Expression implements "safe" evaluation of user-entered Python expressions.
 
@@ -54,10 +53,11 @@ class Expression(object):
                 do something forbidden, like reference an unknown variable.
             ValueError: If the expression string contains NUL bytes for some reason.
         """
-        # Our internal function dictionary has two layers.
-        self._fns = LayeredDict(Expression.SAFE_BUILTINS, {fn.__name__: fn for fn in functions})
+        self._fns: Dict[str, Callable] = _dict_sum(
+            SAFE_BUILTINS, {fn.__name__: fn for fn in functions}
+        )
 
-        self._ast = ast.parse(expression, mode='eval')
+        self._ast = ast.parse(expression, mode="eval")
         context = _ValidationContext(
             expression,
             set(variables) if variables is not None else None,
@@ -65,7 +65,7 @@ class Expression(object):
             allow_attribute_functions,
         )
         context.validate(self._ast)
-        self._fn = compile(self._ast, filename='<expression>', mode='eval')
+        self._fn = compile(self._ast, filename="<expression>", mode="eval")
         assert self._fn.co_argcount == 0
 
     def __call__(self, **kwargs: Any) -> Any:
@@ -82,7 +82,7 @@ class Expression(object):
             Any exception raised by the expression itself.
             NameError: If some variable referenced by the expression was not given in variables.
         """
-        return eval(self._fn, {}, LayeredDict(self._fns, kwargs).flatten())
+        return eval(self._fn, {}, _dict_sum(self._fns, kwargs))
 
     @property
     def variables(self) -> Tuple[str, ...]:
@@ -94,7 +94,9 @@ class Expression(object):
         """List all the "free" variables, i.e. the ones that must be specified by arguments when
         calling the function.
         """
-        return tuple(name for name in self.variables if not self.is_valid_function(name))
+        return tuple(
+            name for name in self.variables if not self.is_valid_function(name)
+        )
 
     @property
     def ast(self) -> ast.AST:
@@ -103,7 +105,7 @@ class Expression(object):
 
     def functions(self) -> Dict[str, Callable]:
         """The dictionary of available functions callable by this function."""
-        return self._fns.flatten()
+        return self._fns
 
     def __str__(self) -> str:
         """A string representation of the expression. This may not be identical to the original."""
@@ -116,81 +118,185 @@ class Expression(object):
         """
         return name in self._fns
 
-    # Deliberately excluded from this list:
-    #   May affect flow of control: breakpoint, exit, quit
-    #   May allow code injection: compile, eval, exec
-    #   May modify state: delattr, setattr
-    #   May access outside data: globals
-    #   Not usable in expressions: classmethod, staticmethod, property
-    #   Affects UI or IO: input, open, print
-    #   No clear reason to allow: copyright, credits, help, license
-    SAFE_BUILTINS = {
-        fn.__name__: fn
-        for fn in [
-            abs,
-            aiter,
-            all,
-            anext,
-            any,
-            ascii,
-            bin,
-            bool,
-            bytearray,
-            bytes,
-            callable,
-            chr,
-            complex,
-            dict,
-            dir,
-            divmod,
-            enumerate,
-            filter,
-            float,
-            format,
-            frozenset,
-            getattr,
-            hasattr,
-            hash,
-            hex,
-            id,
-            int,
-            isinstance,
-            issubclass,
-            iter,
-            len,
-            list,
-            locals,
-            map,
-            max,
-            memoryview,
-            min,
-            next,
-            object,
-            oct,
-            ord,
-            pow,
-            range,
-            repr,
-            reversed,
-            round,
-            set,
-            slice,
-            sorted,
-            str,
-            sum,
-            super,
-            tuple,
-            type,
-            vars,
-            zip,
-        ]
-    }
-
 
 # Below lives the meat of validation. The core idea is that we have a handler for *every* AST node
 # type; some are allowed, some always fail with an error, and some have more detailed permissions
 # logic. The default behavior is to fail, so that if Python adds new operator types in the future,
 # they'll be banned by default (but existing operators will keep working).
+
+
+def _dict_sum(*dicts: dict) -> dict:
+    """Return the union of the given dicts, minimizing copies. Items later in dicts take priority
+    over items earlier in dicts.
+
+    This means that the return value may be one of the original dicts.
+    """
+    non_empty: Optional[dict] = None
+    count_non_empty = 0
+    for layer in dicts:
+        if layer:
+            count_non_empty += 1
+            non_empty = layer
+
+    if not count_non_empty:
+        return {}
+    elif count_non_empty == 1:
+        assert non_empty is not None
+        return non_empty
+
+    # Actually have multiple layers to merge.
+    result: dict = {}
+    for layer in dicts:
+        result.update(layer)
+    return result
+
+
+# Deliberately excluded from this list:
+#   May affect flow of control: breakpoint, exit, quit
+#   May allow code injection: compile, eval, exec
+#   May modify state: delattr, setattr
+#   May access outside data: globals
+#   Not usable in expressions: classmethod, staticmethod, property
+#   Affects UI or IO: input, open, print
+#   No clear reason to allow: copyright, credits, help, license
+# Note the getattr/hasattr lookup because the list of builtins changes with different Python
+# versions.
+SAFE_BUILTINS: Dict[str, Callable] = {
+    name: getattr(builtins, name)
+    for name in [
+        # Built-in functions
+        "abs",
+        "aiter",
+        "all",
+        "anext",
+        "any",
+        "ascii",
+        "bin",
+        "bool",
+        "bytearray",
+        "bytes",
+        "callable",
+        "chr",
+        "complex",
+        "dict",
+        "dir",
+        "divmod",
+        "enumerate",
+        "filter",
+        "float",
+        "format",
+        "frozenset",
+        "getattr",
+        "hasattr",
+        "hash",
+        "hex",
+        "id",
+        "int",
+        "isinstance",
+        "issubclass",
+        "iter",
+        "len",
+        "list",
+        "locals",
+        "map",
+        "max",
+        "memoryview",
+        "min",
+        "next",
+        "object",
+        "oct",
+        "ord",
+        "pow",
+        "range",
+        "repr",
+        "reversed",
+        "round",
+        "set",
+        "slice",
+        "sorted",
+        "str",
+        "sum",
+        "super",
+        "tuple",
+        "type",
+        "vars",
+        "zip",
+        # Other built-in types and so on
+        "False",
+        "True",
+        "Ellipsis",
+        "None",
+        "ArithmeticError",
+        "AssertionError",
+        "AttributeError",
+        "BaseException",
+        "BlockingIOError",
+        "BrokenPipeError",
+        "BufferError",
+        "BytesWarning",
+        "ChildProcessError",
+        "ConnectionAbortedError",
+        "ConnectionError",
+        "ConnectionRefusedError",
+        "ConnectionResetError",
+        "DeprecationWarning",
+        "EOFError",
+        "EncodingWarning",
+        "EnvironmentError",
+        "Exception",
+        "FileExistsError",
+        "FileNotFoundError",
+        "FloatingPointError",
+        "FutureWarning",
+        "GeneratorExit",
+        "IOError",
+        "ImportError",
+        "ImportWarning",
+        "IndentationError",
+        "IndexError",
+        "InterruptedError",
+        "IsADirectoryError",
+        "KeyError",
+        "KeyboardInterrupt",
+        "LookupError",
+        "MemoryError",
+        "ModuleNotFoundError",
+        "NameError",
+        "NotADirectoryError",
+        "NotImplemented",
+        "NotImplementedError",
+        "OSError",
+        "OverflowError",
+        "PendingDeprecationWarning",
+        "PermissionError",
+        "ProcessLookupError",
+        "RecursionError",
+        "ReferenceError",
+        "ResourceWarning",
+        "RuntimeError",
+        "RuntimeWarning",
+        "StopAsyncIteration",
+        "StopIteration",
+        "SyntaxError",
+        "SyntaxWarning",
+        "SystemError",
+        "SystemExit",
+        "TabError",
+        "TimeoutError",
+        "TypeError",
+        "UnboundLocalError",
+        "UnicodeDecodeError",
+        "UnicodeEncodeError",
+        "UnicodeError",
+        "UnicodeTranslateError",
+        "UnicodeWarning",
+        "UserWarning",
+        "ValueError",
+        "Warning",
+        "ZeroDivisionError",
+    ]
+    if hasattr(builtins, name)
+}
 
 
 class _ValidationContext(NamedTuple):
@@ -200,22 +306,26 @@ class _ValidationContext(NamedTuple):
     allow_attribute_functions: bool
 
     def fail(self, node: ast.AST, error: str) -> NoReturn:
-        raise SyntaxError(
-            error,
+        payload = (
             (
-                '<expression>',
+                "<expression>",
                 node.lineno,
                 node.col_offset,
                 self.expression,
                 node.end_lineno,
                 node.end_col_offset,
-            ),
+            )
+            if sys.hexversion >= 0x030A0000
+            else ("<expression>", node.lineno, node.col_offset, self.expression)
         )
+        raise SyntaxError(error, payload)
 
     def is_valid_name(self, name: Union[str, ast.Name]) -> bool:
         if isinstance(name, ast.Name):
             name = name.id
-        return self.variables is None or name in self.variables or name in self.functions
+        return (
+            self.variables is None or name in self.variables or name in self.functions
+        )
 
     def is_valid_function(self, name: str) -> bool:
         return name in self.functions
@@ -269,55 +379,62 @@ def _validate_call(node: ast.AST, context: _ValidationContext) -> bool:
             context.fail(
                 node,
                 f'Attempt to call method of "{node.func.value.id}" but calling methods '
-                f'of variables has been explicitly forbidden.',
+                f"of variables has been explicitly forbidden.",
             )
     else:
-        context.fail(node, "Attempted to call something that is neither a name nor an attribute.")
+        context.fail(
+            node, "Attempted to call something that is neither a name nor an attribute."
+        )
 
     return False
 
 
 def _validate_comprehension(node: ast.AST, context: _ValidationContext) -> bool:
-    if not hasattr(node, 'generators'):
-        context.fail(node, f'Encountered a {type(node)} with no generators??')
+    if not hasattr(node, "generators"):
+        context.fail(node, f"Encountered a {type(node)} with no generators??")
 
     # Here we need some custom recursion, because we're defining names in an inner scope!
     child_names: List[str] = []
-    for generator in node.generators:
+    for generator in node.generators:  # type: ignore
         if not isinstance(generator.target, ast.Name) or not isinstance(
             generator.target.ctx, ast.Store
         ):
-            context.fail(node, 'Invalid generator expression')
+            context.fail(node, "Invalid generator expression")
         if context.variables is not None and generator.target.id in context.variables:
             context.fail(
-                node, f'The comprehension variable "{generator.target.id}" masks a variable name'
+                node,
+                f'The comprehension variable "{generator.target.id}" masks a variable name',
             )
         child_names.append(generator.target.id)
 
     # We'll modify the context recursively.
     try:
-        context.variables.update(child_names)
+        if context.variables is not None:
+            context.variables.update(child_names)
 
-        for generator in node.generators:
+        for generator in node.generators:  # type: ignore
             context.validate(generator.iter)
             for condition in generator.ifs:
                 context.validate(condition)
-        if hasattr(node, 'elt'):
-            context.validate(node.elt)
-        if hasattr(node, 'key'):
-            context.validate(node.key)
-        if hasattr(node, 'value'):
-            context.validate(node.value)
+        if hasattr(node, "elt"):
+            context.validate(node.elt)  # type: ignore
+        if hasattr(node, "key"):
+            context.validate(node.key)  # type: ignore
+        if hasattr(node, "value"):
+            context.validate(node.value)  # type: ignore
 
     finally:
-        for child_name in child_names:
-            context.variables.discard(child_name)
+        if context.variables is not None:
+            for child_name in child_names:
+                context.variables.discard(child_name)
 
     return True  # We've already handled recursion
 
 
 def _unknown_node(node: ast.AST, context: _ValidationContext) -> bool:
-    context.fail(node, f'Operations of type {type(node)} are not supported in Expressions.')
+    context.fail(
+        node, f"Operations of type {type(node)} are not supported in Expressions."
+    )
     return False
 
 
@@ -346,11 +463,11 @@ def _on(name: str, action: _ACTION) -> None:
         HANDLERS[getattr(ast, name)] = action
 
 
-NO_ASSIGN = 'Variable assignment is not permitted in expressions'
-NO_DELETE = 'Variable deletion is not permitted in expressions'
-NO_DECLARE = 'Declariung objects, classes, or functions is not permitted in expressions'
-NO_IMPORT = 'Importing objects is not permitted in expressions'
-NO_CONTROL = 'Control flow operations are not permitted in expressions'
+NO_ASSIGN = "Variable assignment is not permitted in expressions"
+NO_DELETE = "Variable deletion is not permitted in expressions"
+NO_DECLARE = "Declariung objects, classes, or functions is not permitted in expressions"
+NO_IMPORT = "Importing objects is not permitted in expressions"
+NO_CONTROL = "Control flow operations are not permitted in expressions"
 
 _on("Expression", None)
 _on("Module", None)
@@ -452,8 +569,8 @@ _on("arg", None)
 _on("Return", NO_CONTROL)
 _on("Yield", NO_CONTROL)
 _on("YieldFrom", NO_CONTROL)
-_on("Global", 'Modifying global variables is not permitted in expressions')
-_on("Nonlocal", 'Modifying nonlocal variables is not permitted in expressions')
+_on("Global", "Modifying global variables is not permitted in expressions")
+_on("Nonlocal", "Modifying nonlocal variables is not permitted in expressions")
 _on("ClassDef", NO_DECLARE)
 _on("AsyncFunctionDef", NO_DECLARE)
 _on("Await", None)

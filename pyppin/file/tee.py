@@ -71,7 +71,7 @@ class RawTee(Tee, io.RawIOBase):
     def seek(self, offset: int, whence: int = io.SEEK_SET, /) -> int:
         pos: Optional[int] = None
         for child in self.children:
-            if child.seekable:
+            if child.seekable():
                 pos = child.seek(offset, whence)
         return pos or 0
 
@@ -117,7 +117,7 @@ class TextTee(Tee, io.TextIOBase):
     def seek(self, offset: int, whence: int = io.SEEK_SET, /) -> int:
         pos: Optional[int] = None
         for child in self.children:
-            if child.seekable:
+            if child.seekable():
                 pos = child.seek(offset, whence)
         return pos or 0
 

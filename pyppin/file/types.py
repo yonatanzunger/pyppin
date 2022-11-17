@@ -36,24 +36,29 @@ from pyppin.base import assert_not_none
 # logic.
 if not hasattr(ctypes, "_CData"):
 
-    class _CData(object):
+    class _CData(ABC):
         @classmethod
+        @abstractmethod
         def from_buffer(cls, source: "MutableBytesLikeObject", offset: int) -> "_CData":
             ...
 
         @classmethod
+        @abstractmethod
         def from_buffer_copy(cls, source: "BytesLikeObject", offset: int) -> "_CData":
             ...
 
         @classmethod
+        @abstractmethod
         def from_address(cls, address: int) -> "_CData":
             ...
 
         @classmethod
+        @abstractmethod
         def from_param(cls, obj: Any) -> "_CData":
             ...
 
         @classmethod
+        @abstractmethod
         def in_dll(cls, library: ctypes.CDLL, name: str) -> "_CData":
             ...
 
@@ -379,11 +384,11 @@ class _UnbufferedBinaryFileHandle(io.RawIOBase):
 
     def readline(self, size: Optional[int] = -1) -> bytes:
         # TODO
-        pass
+        return bytes()
 
     def readlines(self, hint: Optional[int] = -1) -> List[bytes]:
         # TODO
-        pass
+        return []
 
     def seek(self, offset: int, whence: int = os.SEEK_SET) -> int:
         if whence == os.SEEK_SET:

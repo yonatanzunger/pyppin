@@ -14,7 +14,7 @@ import io
 import sys
 import threading
 import traceback
-from abc import ABC
+from abc import ABC, abstractmethod
 from collections import defaultdict
 from enum import Enum
 from types import FrameType
@@ -236,10 +236,12 @@ class _FrameState(ABC):
     requires Python 3.10+, and a "lousy" way that works on earlier versions.
     """
 
+    @abstractmethod
     def get_stack(self, thread: threading.Thread, limit: Optional[int]) -> ThreadStack:
         """Get a ThreadStack for a single thread."""
         ...
 
+    @abstractmethod
     def get_all_stacks(self, limit: Optional[int], daemons: bool) -> List[ThreadStack]:
         """Get all the ThreadStacks."""
         ...

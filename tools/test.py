@@ -14,7 +14,10 @@ if REPO_ROOT not in sys.path:
 
 def default_main() -> None:
     test_main()
-    lint_main()
+    # Only lint against a single version, because otherwise this is going to get unmanageable as
+    # different versions' linters disagree with each other.
+    if sys.hexversion >= 0x030A0000:
+        lint_main()
 
 
 def import_remaining() -> None:

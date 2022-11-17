@@ -97,9 +97,9 @@ class Histogram(object):
             self.data.extend([0] * (len(other.data) - len(self.data)))
         for index, value in enumerate(other.data):
             self.data[index] += value
-        self._count += other.count
-        self._total += other.total
-        self._total_squared += other.total_squared
+        self._count += other._count
+        self._total += other._total
+        self._total_squared += other._total_squared
         self._max = max(self._max, other.max)
         self._min = min(self._min, other.min)
 
@@ -140,7 +140,9 @@ class Histogram(object):
             if count + current_count >= target_count:
                 # We found it! Let's interpolate the position we need within the bucket.
                 previous_value = (
-                    self._min if bucket == 0 else self.bucketing.value_for_bucket(bucket - 1)
+                    self._min
+                    if bucket == 0
+                    else self.bucketing.value_for_bucket(bucket - 1)
                 )
                 current_value = self.bucketing.value_for_bucket(bucket)
                 fraction = (target_count - current_count) / count
@@ -232,7 +234,7 @@ class Histogram(object):
         last_count = 0.0
         for bucket, count in enumerate(self.data):
             last_count += count / (self._count * self.bucketing.bucket_width(bucket))
-            data.append(self.bucketing.value_for_bucket(bucket), last_count)
+            data.append((self.bucketing.value_for_bucket(bucket), last_count))
         return Interpolate(data)
 
 
@@ -260,7 +262,9 @@ class Bucketing(object):
         if max_linear_value is not None and exponential_multiplier <= 1:
             raise ValueError("The exponential step size for bucketing must be > 1!")
         self._max_linear_value = (
-            round_up_to(max_linear_value, linear_steps) if max_linear_value is not None else None
+            round_up_to(max_linear_value, linear_steps)
+            if max_linear_value is not None
+            else None
         )
         self.linear_steps = linear_steps
         self.exponential_multiplier = exponential_multiplier
@@ -306,7 +310,7 @@ class Bucketing(object):
     def __eq__(self, other: object) -> bool:
         return (
             isinstance(other, Bucketing)
-            and other.max_linear_value == self._max_linear_value
+            and other._max_linear_value == self._max_linear_value
             and other.linear_steps == self.linear_steps
             and other.exponential_multiplier == self.exponential_multiplier
         )

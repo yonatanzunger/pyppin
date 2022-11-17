@@ -29,7 +29,7 @@ setup(
         "Tracker": "https://github.com/yonatanzunger/pyppin/issues",
         "Documentation": "https://yonatanzunger.github.io/pyppin/",
     },
-    python_requires=">=3.7",
+    python_requires=">=3.9",
     install_requires=[],
     packages=find_packages(exclude=["tests", "tools", "docs", "docs_src"]),
     test_suite="tests",
