@@ -92,7 +92,8 @@
   <section id="pyppin-util-expression">
 <h1>pyppin.util.expression<a class="headerlink" href="#pyppin-util-expression" title="Permalink to this heading">¶</a></h1>
 <p>[<a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/util/expression.py">View Source</a>]</p>
-<span class="target" id="module-pyppin.util.expression"></span><p class="rubric">Classes</p>
+<span class="target" id="module-pyppin.util.expression"></span><p>Safe evaluation of Python expressions.</p>
+<p class="rubric">Classes</p>
 <table class="autosummary longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
@@ -100,7 +101,7 @@
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#pyppin.util.expression.Expression" title="pyppin.util.expression.Expression"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Expression</span></code></a>(expression, *[, functions, ...])</p></td>
-<td><p></p></td>
+<td><p>Expression implements &quot;safe&quot; evaluation of user-entered Python expressions.</p></td>
 </tr>
 </tbody>
 </table>
@@ -108,6 +109,38 @@
 <dt class="sig sig-object py" id="pyppin.util.expression.Expression">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyppin.util.expression.</span></span><span class="sig-name descname"><span class="pre">Expression</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expression</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">functions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_attribute_functions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/util/expression.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.util.expression.Expression" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Expression implements “safe” evaluation of user-entered Python expressions.</p>
+<p>This is safe in that it tries to ensure that the given expression cannot mutate the state of
+the system (e.g. modifying attributes), execute I/O, or change the broader control flow.
+However, it is not perfectly safe: Sufficiently complex expressions can crash the entire
+interpreter! See compile() for details. Length-limiting the input may help.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>expression</strong> – A Python expression to be turned into this object.</p></li>
+<li><p><strong>functions</strong> – A list of functions which may be used in expressions. By default, only the
+“safe” builtin functions (see SAFE_BUILTINS, below) are permitted; any others
+must be explicitly specified.</p></li>
+<li><p><strong>allow_attribute_functions</strong> – By default, while all attributes of variables passed in to
+the expression may be referenced, if the variable contains a function (e.g.,
+x.foo()) then that function may <em>not</em> be called. If this is set to true, such
+functions are permitted. This default makes it safe to pass objects which have
+potentially dangerous methods for their data alone. Note that variable <em>properties</em>
+are always accessible.</p></li>
+<li><p><strong>variables</strong> – If given, a list of variable names which may be referenced by the expression.
+In this case, any reference to variables not in this list will raise a SyntaxError
+at construction time. If not given, all variable names are permitted, and the actual
+set of variables used can be checked with the <code class="docutils literal notranslate"><span class="pre">variables</span></code> property of this object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>SyntaxError</strong> – If the expression cannot be parsed, or if the expression attempted to
+    do something forbidden, like reference an unknown variable.</p></li>
+<li><p><strong>ValueError</strong> – If the expression string contains NUL bytes for some reason.</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py property">
 <dt class="sig sig-object py" id="pyppin.util.expression.Expression.variables">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">variables</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/util/expression.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.util.expression.Expression.variables" title="Permalink to this definition">¶</a></dt>

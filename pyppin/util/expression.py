@@ -1,3 +1,5 @@
+"""Safe evaluation of Python expressions."""
+
 import ast
 import builtins
 import sys
@@ -17,6 +19,35 @@ from typing import (
 
 
 class Expression(object):
+    """Expression implements "safe" evaluation of user-entered Python expressions.
+
+    This is safe in that it tries to ensure that the given expression cannot mutate the state of
+    the system (e.g. modifying attributes), execute I/O, or change the broader control flow.
+    However, it is not perfectly safe: Sufficiently complex expressions can crash the entire
+    interpreter! See compile() for details. Length-limiting the input may help.
+
+    Args:
+        expression: A Python expression to be turned into this object.
+        functions: A list of functions which may be used in expressions. By default, only the
+            "safe" builtin functions (see SAFE_BUILTINS, below) are permitted; any others
+            must be explicitly specified.
+        allow_attribute_functions: By default, while all attributes of variables passed in to
+            the expression may be referenced, if the variable contains a function (e.g.,
+            x.foo()) then that function may *not* be called. If this is set to true, such
+            functions are permitted. This default makes it safe to pass objects which have
+            potentially dangerous methods for their data alone. Note that variable *properties*
+            are always accessible.
+        variables: If given, a list of variable names which may be referenced by the expression.
+            In this case, any reference to variables not in this list will raise a SyntaxError
+            at construction time. If not given, all variable names are permitted, and the actual
+            set of variables used can be checked with the ``variables`` property of this object.
+
+    Raises:
+        SyntaxError: If the expression cannot be parsed, or if the expression attempted to
+            do something forbidden, like reference an unknown variable.
+        ValueError: If the expression string contains NUL bytes for some reason.
+    """
+
     def __init__(
         self,
         expression: str,
@@ -25,34 +56,6 @@ class Expression(object):
         allow_attribute_functions: bool = False,
         variables: Optional[List[str]] = None,
     ) -> None:
-        """Expression implements "safe" evaluation of user-entered Python expressions.
-
-        This is safe in that it tries to ensure that the given expression cannot mutate the state of
-        the system (e.g. modifying attributes), execute I/O, or change the broader control flow.
-        However, it is not perfectly safe: Sufficiently complex expressions can crash the entire
-        interpreter! See compile() for details. Length-limiting the input may help.
-
-        Args:
-            expression: A Python expression to be turned into this object.
-            functions: A list of functions which may be used in expressions. By default, only the
-                "safe" builtin functions (see SAFE_BUILTINS, below) are permitted; any others
-                must be explicitly specified.
-            allow_attribute_functions: By default, while all attributes of variables passed in to
-                the expression may be referenced, if the variable contains a function (e.g.,
-                x.foo()) then that function may *not* be called. If this is set to true, such
-                functions are permitted. This default makes it safe to pass objects which have
-                potentially dangerous methods for their data alone. Note that variable *properties*
-                are always accessible.
-            variables: If given, a list of variable names which may be referenced by the expression.
-                In this case, any reference to variables not in this list will raise a SyntaxError
-                at construction time. If not given, all variable names are permitted, and the actual
-                set of variables used can be checked with the ``variables`` property of this object.
-
-        Raises:
-            SyntaxError: If the expression cannot be parsed, or if the expression attempted to
-                do something forbidden, like reference an unknown variable.
-            ValueError: If the expression string contains NUL bytes for some reason.
-        """
         self._fns: Dict[str, Callable] = _dict_sum(
             SAFE_BUILTINS, {fn.__name__: fn for fn in functions}
         )
@@ -94,9 +97,7 @@ class Expression(object):
         """List all the "free" variables, i.e. the ones that must be specified by arguments when
         calling the function.
         """
-        return tuple(
-            name for name in self.variables if not self.is_valid_function(name)
-        )
+        return tuple(name for name in self.variables if not self.is_valid_function(name))
 
     @property
     def ast(self) -> ast.AST:
@@ -323,9 +324,7 @@ class _ValidationContext(NamedTuple):
     def is_valid_name(self, name: Union[str, ast.Name]) -> bool:
         if isinstance(name, ast.Name):
             name = name.id
-        return (
-            self.variables is None or name in self.variables or name in self.functions
-        )
+        return self.variables is None or name in self.variables or name in self.functions
 
     def is_valid_function(self, name: str) -> bool:
         return name in self.functions
@@ -382,9 +381,7 @@ def _validate_call(node: ast.AST, context: _ValidationContext) -> bool:
                 f"of variables has been explicitly forbidden.",
             )
     else:
-        context.fail(
-            node, "Attempted to call something that is neither a name nor an attribute."
-        )
+        context.fail(node, "Attempted to call something that is neither a name nor an attribute.")
 
     return False
 
@@ -432,9 +429,7 @@ def _validate_comprehension(node: ast.AST, context: _ValidationContext) -> bool:
 
 
 def _unknown_node(node: ast.AST, context: _ValidationContext) -> bool:
-    context.fail(
-        node, f"Operations of type {type(node)} are not supported in Expressions."
-    )
+    context.fail(node, f"Operations of type {type(node)} are not supported in Expressions.")
     return False
 
 
