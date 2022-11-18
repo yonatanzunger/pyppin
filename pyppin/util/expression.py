@@ -97,7 +97,9 @@ class Expression(object):
         """List all the "free" variables, i.e. the ones that must be specified by arguments when
         calling the function.
         """
-        return tuple(name for name in self.variables if not self.is_valid_function(name))
+        return tuple(
+            name for name in self.variables if not self.is_valid_function(name)
+        )
 
     @property
     def ast(self) -> ast.AST:
@@ -324,7 +326,9 @@ class _ValidationContext(NamedTuple):
     def is_valid_name(self, name: Union[str, ast.Name]) -> bool:
         if isinstance(name, ast.Name):
             name = name.id
-        return self.variables is None or name in self.variables or name in self.functions
+        return (
+            self.variables is None or name in self.variables or name in self.functions
+        )
 
     def is_valid_function(self, name: str) -> bool:
         return name in self.functions
@@ -381,7 +385,9 @@ def _validate_call(node: ast.AST, context: _ValidationContext) -> bool:
                 f"of variables has been explicitly forbidden.",
             )
     else:
-        context.fail(node, "Attempted to call something that is neither a name nor an attribute.")
+        context.fail(
+            node, "Attempted to call something that is neither a name nor an attribute."
+        )
 
     return False
 
@@ -429,7 +435,9 @@ def _validate_comprehension(node: ast.AST, context: _ValidationContext) -> bool:
 
 
 def _unknown_node(node: ast.AST, context: _ValidationContext) -> bool:
-    context.fail(node, f"Operations of type {type(node)} are not supported in Expressions.")
+    context.fail(
+        node, f"Operations of type {type(node)} are not supported in Expressions."
+    )
     return False
 
 

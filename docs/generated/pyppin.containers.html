@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyppin.os &mdash; pyppin  documentation</title>
+  <title>pyppin.containers &mdash; pyppin  documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -20,8 +20,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="pyppin.os.bulk_import" href="pyppin.os.bulk_import.html" />
-    <link rel="prev" title="pyppin.math.plot_ascii" href="pyppin.math.plot_ascii.html" /> 
+    <link rel="next" title="pyppin.containers.ring_buffer" href="pyppin.containers.ring_buffer.html" />
+    <link rel="prev" title="pyppin.base.registered_class" href="pyppin.base.registered_class.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -44,15 +44,14 @@
 <li class="toctree-l1"><a class="reference internal" href="../readme.html">pyppin: A toolkit of Python basics</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="pyppin.base.html">pyppin.base</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pyppin.containers.html">pyppin.containers</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">pyppin.containers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.containers.ring_buffer.html">pyppin.containers.ring_buffer</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.file.html">pyppin.file</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.iterators.html">pyppin.iterators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.math.html">pyppin.math</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">pyppin.os</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="pyppin.os.bulk_import.html">pyppin.os.bulk_import</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pyppin.os.list_files.html">pyppin.os.list_files</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="pyppin.os.html">pyppin.os</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.testing.html">pyppin.testing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.text.html">pyppin.text</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyppin.threading.html">pyppin.threading</a></li>
@@ -77,9 +76,9 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../api.html">API</a> &raquo;</li>
-      <li>pyppin.os</li>
+      <li>pyppin.containers</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/generated/pyppin.os.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/generated/pyppin.containers.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -87,10 +86,10 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="pyppin-os">
-<h1>pyppin.os<a class="headerlink" href="#pyppin-os" title="Permalink to this heading">¶</a></h1>
-<p>[<a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/os">Browse Source</a>]</p>
-<span class="target" id="module-pyppin.os"></span><p>OS and directory utilities.</p>
+  <section id="pyppin-containers">
+<h1>pyppin.containers<a class="headerlink" href="#pyppin-containers" title="Permalink to this heading">¶</a></h1>
+<p>[<a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/containers">Browse Source</a>]</p>
+<span class="target" id="module-pyppin.containers"></span><p>Useful container classes.</p>
 <p class="rubric">Modules</p>
 <table class="autosummary longtable docutils align-default">
 <colgroup>
@@ -98,11 +97,8 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyppin.os.bulk_import.html#module-pyppin.os.bulk_import" title="pyppin.os.bulk_import"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.os.bulk_import</span></code></a></p></td>
-<td><p>A function to import an entire directory; useful with registered classes!</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyppin.os.list_files.html#module-pyppin.os.list_files" title="pyppin.os.list_files"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.os.list_files</span></code></a></p></td>
-<td><p>Recursively list all the files in a directory.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyppin.containers.ring_buffer.html#module-pyppin.containers.ring_buffer" title="pyppin.containers.ring_buffer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyppin.containers.ring_buffer</span></code></a></p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -112,8 +108,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="pyppin.math.plot_ascii.html" class="btn btn-neutral float-left" title="pyppin.math.plot_ascii" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="pyppin.os.bulk_import.html" class="btn btn-neutral float-right" title="pyppin.os.bulk_import" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="pyppin.base.registered_class.html" class="btn btn-neutral float-left" title="pyppin.base.registered_class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pyppin.containers.ring_buffer.html" class="btn btn-neutral float-right" title="pyppin.containers.ring_buffer" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -10,7 +10,3 @@ Other classes to maybe add:
   * Abstract file system, mountable system
     => In another library: GCS, AWS, etc file systems.
   * Maybe even tools for talking to Google's damnable Docs APIs?
-* containers/
-  * Ring buffer
-* math/
-  * expression tree
