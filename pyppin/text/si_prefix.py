@@ -200,9 +200,9 @@ def _prefix_array(
         return _NEGATIVE_IEC_UNICODE
 
 
-_POSITIVE_SI = "kMGTPEZY"
-_NEGATIVE_SI_ASCII = "munpfazy"
-_NEGATIVE_SI_UNICODE = "mμnpfazy"
+_POSITIVE_SI = "kMGTPEZYRQ"
+_NEGATIVE_SI_ASCII = "munpfazyrq"
+_NEGATIVE_SI_UNICODE = "mμnpfazyrq"
 # Note the spaces before long forms!
 _POSITIVE_LONG_SI = [
     " kilo",
@@ -213,6 +213,8 @@ _POSITIVE_LONG_SI = [
     " exa",
     " zetta",
     " yotta",
+    " ronna",
+    " quetta",
 ]
 _NEGATIVE_LONG_SI = [
     " milli",
@@ -223,9 +225,11 @@ _NEGATIVE_LONG_SI = [
     " atto",
     " zepto",
     " yocto",
+    " ronto",
+    " quecto",
 ]
 
-_POSITIVE_IEC = ["Ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi", "Yi"]
+_POSITIVE_IEC = ["Ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi", "Yi", "Ri", "Qi"]
 _NEGATIVE_IEC_ASCII = [x + "i" for x in _NEGATIVE_SI_ASCII]
 _NEGATIVE_IEC_UNICODE = [x + "i" for x in _NEGATIVE_SI_UNICODE]
 _POSITIVE_LONG_IEC = [
@@ -237,5 +241,7 @@ _POSITIVE_LONG_IEC = [
     " exbi",
     " zebi",
     " yobi",
+    " ronni",
+    " quetti",
 ]
 _NEGATIVE_LONG_IEC: List[str] = []  # See comment on the full_names arg to si_prefix
