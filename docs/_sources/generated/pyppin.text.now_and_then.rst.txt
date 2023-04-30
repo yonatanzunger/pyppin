@@ -1,4 +1,4 @@
-﻿pyppin.text.now\_and\_then
+pyppin.text.now\_and\_then
 ==========================
 
 

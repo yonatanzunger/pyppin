@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pyppin.text.tty &mdash; pyppin  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pyppin.threading" href="pyppin.threading.html" />
+    <link rel="prev" title="pyppin.text.sign" href="pyppin.text.sign.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> pyppin
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../readme.html">pyppin: A toolkit of Python basics</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="pyppin.base.html">pyppin.base</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyppin.containers.html">pyppin.containers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyppin.file.html">pyppin.file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyppin.iterators.html">pyppin.iterators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyppin.math.html">pyppin.math</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyppin.os.html">pyppin.os</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyppin.testing.html">pyppin.testing</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="pyppin.text.html">pyppin.text</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="pyppin.text.formatter.html">pyppin.text.formatter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.text.now_and_then.html">pyppin.text.now_and_then</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.text.print_counter.html">pyppin.text.print_counter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.text.si_prefix.html">pyppin.text.si_prefix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyppin.text.sign.html">pyppin.text.sign</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">pyppin.text.tty</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pyppin.text.tty.TTY"><code class="docutils literal notranslate"><span class="pre">TTY</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyppin.text.tty.tty"><code class="docutils literal notranslate"><span class="pre">tty()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyppin.threading.html">pyppin.threading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyppin.util.html">pyppin.util</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Using &amp; Contributing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pyppin</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../api.html">API</a> &raquo;</li>
+          <li><a href="pyppin.text.html">pyppin.text</a> &raquo;</li>
+      <li>pyppin.text.tty</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/generated/pyppin.text.tty.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pyppin-text-tty">
+<h1>pyppin.text.tty<a class="headerlink" href="#pyppin-text-tty" title="Permalink to this heading">¶</a></h1>
+<p>[<a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/tty.py">View Source</a>]</p>
+<span class="target" id="module-pyppin.text.tty"></span><p>Tools to do TTY color formatting in print() statements.</p>
+<p class="rubric">Functions</p>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pyppin.text.tty.tty" title="pyppin.text.tty.tty"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tty</span></code></a>(*codes[, text, file])</p></td>
+<td><p>Generate text for print() statements with color controls in it.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Classes</p>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pyppin.text.tty.TTY" title="pyppin.text.tty.TTY"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TTY</span></code></a>(value)</p></td>
+<td><p>An enumeration.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyppin.text.tty.TTY">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyppin.text.tty.</span></span><span class="sig-name descname"><span class="pre">TTY</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/tty.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.tty.TTY" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">IntEnum</span></code></p>
+<p>An enumeration.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyppin.text.tty.TTY.RESET">
+<span class="sig-name descname"><span class="pre">RESET</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/tty.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.tty.TTY.RESET" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyppin.text.tty.TTY.BRIGHT">
+<span class="sig-name descname"><span class="pre">BRIGHT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/tty.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.tty.TTY.BRIGHT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyppin.text.tty.TTY.DIM">
+<span class="sig-name descname"><span class="pre">DIM</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/tty.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.tty.TTY.DIM" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyppin.text.tty.TTY.UNDERSCORE">
+<span class="sig-name descname"><span class="pre">UNDERSCORE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/tty.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.tty.TTY.UNDERSCORE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyppin.text.tty.TTY.BLINK">
+<span class="sig-name descname"><span class="pre">BLINK</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/tty.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.tty.TTY.BLINK" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyppin.text.tty.TTY.REVERSE">
+<span class="sig-name descname"><span class="pre">REVERSE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">7</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/tty.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.tty.TTY.REVERSE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyppin.text.tty.TTY.HIDDEN">
+<span class="sig-name descname"><span class="pre">HIDDEN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">8</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/tty.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.tty.TTY.HIDDEN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyppin.text.tty.TTY.BLACK">
+<span class="sig-name descname"><span class="pre">BLACK</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">30</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/tty.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.tty.TTY.BLACK" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyppin.text.tty.TTY.RED">
+<span class="sig-name descname"><span class="pre">RED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">31</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/tty.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.tty.TTY.RED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyppin.text.tty.TTY.GREEN">
+<span class="sig-name descname"><span class="pre">GREEN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">32</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/tty.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.tty.TTY.GREEN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyppin.text.tty.TTY.YELLOW">
+<span class="sig-name descname"><span class="pre">YELLOW</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">33</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/tty.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.tty.TTY.YELLOW" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyppin.text.tty.TTY.BLUE">
+<span class="sig-name descname"><span class="pre">BLUE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">34</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/tty.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.tty.TTY.BLUE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyppin.text.tty.TTY.MAGENTA">
+<span class="sig-name descname"><span class="pre">MAGENTA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">35</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/tty.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.tty.TTY.MAGENTA" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyppin.text.tty.TTY.CYAN">
+<span class="sig-name descname"><span class="pre">CYAN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">36</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/tty.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.tty.TTY.CYAN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyppin.text.tty.TTY.WHITE">
+<span class="sig-name descname"><span class="pre">WHITE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">37</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/tty.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.tty.TTY.WHITE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyppin.text.tty.TTY.BG_BLACK">
+<span class="sig-name descname"><span class="pre">BG_BLACK</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">40</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/tty.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.tty.TTY.BG_BLACK" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyppin.text.tty.TTY.BG_RED">
+<span class="sig-name descname"><span class="pre">BG_RED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">41</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/tty.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.tty.TTY.BG_RED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyppin.text.tty.TTY.BG_GREEN">
+<span class="sig-name descname"><span class="pre">BG_GREEN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">42</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/tty.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.tty.TTY.BG_GREEN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyppin.text.tty.TTY.BG_YELLOW">
+<span class="sig-name descname"><span class="pre">BG_YELLOW</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">43</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/tty.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.tty.TTY.BG_YELLOW" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyppin.text.tty.TTY.BG_BLUE">
+<span class="sig-name descname"><span class="pre">BG_BLUE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">44</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/tty.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.tty.TTY.BG_BLUE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyppin.text.tty.TTY.BG_MAGENTA">
+<span class="sig-name descname"><span class="pre">BG_MAGENTA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">45</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/tty.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.tty.TTY.BG_MAGENTA" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyppin.text.tty.TTY.BG_CYAN">
+<span class="sig-name descname"><span class="pre">BG_CYAN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">46</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/tty.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.tty.TTY.BG_CYAN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyppin.text.tty.TTY.BG_WHITE">
+<span class="sig-name descname"><span class="pre">BG_WHITE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">47</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/tty.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.tty.TTY.BG_WHITE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyppin.text.tty.tty">
+<span class="sig-prename descclassname"><span class="pre">pyppin.text.tty.</span></span><span class="sig-name descname"><span class="pre">tty</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*codes:</span> <span class="pre">~pyppin.text.tty.TTY</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text:</span> <span class="pre">~typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file:</span> <span class="pre">~typing.Any</span> <span class="pre">=</span> <span class="pre">&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdout&gt;'</span> <span class="pre">mode='w'</span> <span class="pre">encoding='utf-8'&gt;</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/tty.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.tty.tty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate text for print() statements with color controls in it.</p>
+<p>To use it, simply put commands into a string you’re printing:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">tty</span><span class="p">(</span><span class="n">TTY</span><span class="o">.</span><span class="n">RED</span><span class="p">)</span><span class="si">}</span><span class="s2">Some text</span><span class="si">{</span><span class="n">tty</span><span class="p">(</span><span class="n">TTY</span><span class="o">.</span><span class="n">RESET</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You can set multiple properties at a time, like bright + red. Don’t forget to RESET when you
+want the effect to end, or it <em>will</em> continue to affect text even into succeeding print
+statements! If you want to wrap an entire string in an effect, we’ll help you out:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">tty</span><span class="p">(</span><span class="n">TTY</span><span class="o">.</span><span class="n">RED</span><span class="p">,</span> <span class="n">TTY</span><span class="o">.</span><span class="n">BRIGHT</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Some text&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>If you’re using this in any function other than print(), you might want to pass the “file”
+attribute to tty, which lets the function figure out if the thing you’re writing to supports
+VT100 color control codes at all. (e.g., normal text files don’t!) If it doesn’t, it’ll suppress
+the codes for you.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>codes</strong> – The list of display attributes to turn on</p></li>
+<li><p><strong>file</strong> – The file you’re writing to</p></li>
+<li><p><strong>text</strong> – If given, format the entire string by wrapping it as &lt;codes&gt;&lt;text&gt;&lt;reset&gt;; the output
+of this function can be printed directly without having to worry about RESETing
+afterwards. By default, this function just returns &lt;codes&gt; to turn on the behavior.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pyppin.text.sign.html" class="btn btn-neutral float-left" title="pyppin.text.sign" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pyppin.threading.html" class="btn btn-neutral float-right" title="pyppin.threading" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Yonatan Zunger.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

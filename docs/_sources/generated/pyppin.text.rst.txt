@@ -20,6 +20,7 @@
       pyppin.text.print_counter
       pyppin.text.si_prefix
       pyppin.text.sign
+      pyppin.text.tty
    
    
 
