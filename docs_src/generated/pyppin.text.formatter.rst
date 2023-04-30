@@ -1,4 +1,4 @@
-﻿pyppin.text.formatter
+pyppin.text.formatter
 =====================
 
 
