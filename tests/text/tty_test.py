@@ -24,9 +24,10 @@ class TTYTest(unittest.TestCase):
     def test_non_vt100(self) -> None:
         self.assertEqual("", tty(TTY.BRIGHT, TTY.RED, file=NonVT100File()))
         self.assertEqual(
-            "Hello World", tty(TTY.BRIGHT, TTY.RED, text="Hello World", file=NonVT100File())
+            "Hello World",
+            tty(TTY.BRIGHT, TTY.RED, text="Hello World", file=NonVT100File()),
         )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

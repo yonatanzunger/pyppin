@@ -59,7 +59,7 @@ def tty(*codes: TTY, text: Optional[str] = None, file: Any = sys.stdout) -> str:
             of this function can be printed directly without having to worry about RESETing
             afterwards. By default, this function just returns <codes> to turn on the behavior.
     """
-    if not hasattr(file, 'isatty') or not file.isatty():
+    if not hasattr(file, "isatty") or not file.isatty():
         return text or ""
 
     seq = ";".join(str(code.value) for code in codes)

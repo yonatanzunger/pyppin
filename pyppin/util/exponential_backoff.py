@@ -1,11 +1,11 @@
 """Call a function in a retry loop with exponential backoff."""
 
+import random
 import time
-from random import random
 from typing import Callable, List, Optional, Type, TypeVar, Union
 from urllib.error import HTTPError
 
-ReturnType = TypeVar('ReturnType')
+ReturnType = TypeVar("ReturnType")
 
 # TODO: The calling syntax of this function is very unsatisfactory. I find myself forgetting the key
 # lambdas, and I wrote this thing! What I would really like is to be able to say
@@ -21,7 +21,7 @@ ReturnType = TypeVar('ReturnType')
 
 
 def retry(
-    function: Callable[[None], ReturnType],
+    function: Callable[[], ReturnType],
     retry: Union[List[Type[Exception]], Callable[[Exception], bool]],
     max_attempts: Optional[int] = None,
     initial_delay: float = 0.1,
@@ -118,7 +118,9 @@ class _BackoffCounter(object):
         _sleep: Callable[[float], None] = time.sleep,
     ) -> None:
         self.retry = (
-            (lambda x: any(isinstance(x, t) for t in retry)) if isinstance(retry, list) else retry
+            (lambda x: any(isinstance(x, t) for t in retry))
+            if isinstance(retry, list)
+            else retry
         )
         self.attempt = 0
         self.max_attempts = max_attempts

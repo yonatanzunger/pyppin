@@ -20,7 +20,7 @@ class ExponentialBackoffTest(unittest.TestCase):
             nonlocal counter
             counter += 1
             if counter < 3:
-                raise RuntimeError(f'Oh no! #{counter}')
+                raise RuntimeError(f"Oh no! #{counter}")
             return 3
 
         sleep = FakeSleep()
@@ -31,11 +31,17 @@ class ExponentialBackoffTest(unittest.TestCase):
 
     def test_max_attempts(self) -> None:
         def fail_forever() -> int:
-            raise RuntimeError('Never works!')
+            raise RuntimeError("Never works!")
 
         sleep = FakeSleep()
         with self.assertRaises(RuntimeError):
-            retry(fail_forever, retry=[RuntimeError], max_attempts=5, max_delay=1, _sleep=sleep)
+            retry(
+                fail_forever,
+                retry=[RuntimeError],
+                max_attempts=5,
+                max_delay=1,
+                _sleep=sleep,
+            )
         self.assertEqual([0.1, 0.2, 0.4, 0.8, 1], sleep.times)
 
     def test_nonretriable_error(self) -> None:
@@ -45,9 +51,9 @@ class ExponentialBackoffTest(unittest.TestCase):
             nonlocal counter
             counter += 1
             if counter == 1:
-                raise RuntimeError('This is retriable')
+                raise RuntimeError("This is retriable")
             elif counter == 2:
-                raise ValueError('This is not retriable')
+                raise ValueError("This is not retriable")
             else:
                 return 3
 
