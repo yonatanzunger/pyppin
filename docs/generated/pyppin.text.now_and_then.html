@@ -1,22 +1,19 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>pyppin.text.now_and_then &mdash; pyppin  documentation</title>
-      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
   
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -29,11 +26,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> pyppin
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            pyppin
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -85,10 +86,10 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../api.html">API</a> &raquo;</li>
-          <li><a href="pyppin.text.html">pyppin.text</a> &raquo;</li>
-      <li>pyppin.text.now_and_then</li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../api.html">API</a></li>
+          <li class="breadcrumb-item"><a href="pyppin.text.html">pyppin.text</a></li>
+      <li class="breadcrumb-item active">pyppin.text.now_and_then</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/generated/pyppin.text.now_and_then.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -99,21 +100,17 @@
            <div itemprop="articleBody">
              
   <section id="pyppin-text-now-and-then">
-<h1>pyppin.text.now_and_then<a class="headerlink" href="#pyppin-text-now-and-then" title="Permalink to this heading">¶</a></h1>
+<h1>pyppin.text.now_and_then<a class="headerlink" href="#pyppin-text-now-and-then" title="Link to this heading">¶</a></h1>
 <p>[<a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/now_and_then.py">View Source</a>]</p>
-<span class="target" id="module-pyppin.text.now_and_then"></span><p>Produce human-readable strings expressing relative time for status pages and debugging.</p>
+<p id="module-pyppin.text.now_and_then">Produce human-readable strings expressing relative time for status pages and debugging.</p>
 <p class="rubric">Functions</p>
 <table class="autosummary longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#pyppin.text.now_and_then.now_and_then" title="pyppin.text.now_and_then.now_and_then"><code class="xref py py-obj docutils literal notranslate"><span class="pre">now_and_then</span></code></a>(now, then[, julian, format])</p></td>
 <td><p>Output a string '{then}, {duration} ago' or '{then}, {duration} from now', or the like, expressing &quot;then&quot; in terms of &quot;now.&quot; This tends to be useful in debugging and status pages.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#pyppin.text.now_and_then.relative_time_string" title="pyppin.text.now_and_then.relative_time_string"><code class="xref py py-obj docutils literal notranslate"><span class="pre">relative_time_string</span></code></a>(delta[, julian])</p></td>
-<td><p>Express a time delta in words, e.g.</p></td>
+<td><p>Express a time delta in words, e.g. &quot;15 seconds ago&quot; or &quot;3 years from now.&quot;.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#pyppin.text.now_and_then.time_delta_string" title="pyppin.text.now_and_then.time_delta_string"><code class="xref py py-obj docutils literal notranslate"><span class="pre">time_delta_string</span></code></a>(delta[, julian, sign_mode])</p></td>
 <td><p>Like relative_time_string, but using a sign_mode (-, +, etc) instead of &quot;ago&quot; and &quot;from now.&quot;</p></td>
@@ -122,10 +119,6 @@
 </table>
 <p class="rubric">Classes</p>
 <table class="autosummary longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#pyppin.text.now_and_then.Formats" title="pyppin.text.now_and_then.Formats"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Formats</span></code></a>()</p></td>
 <td><p>This class just wraps some handy constants to pass as 'format' to now_and_then.</p></td>
@@ -134,14 +127,14 @@
 </table>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyppin.text.now_and_then.now_and_then">
-<span class="sig-prename descclassname"><span class="pre">pyppin.text.now_and_then.</span></span><span class="sig-name descname"><span class="pre">now_and_then</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">now</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">then</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">julian</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/now_and_then.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.now_and_then.now_and_then" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyppin.text.now_and_then.</span></span><span class="sig-name descname"><span class="pre">now_and_then</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">now</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">then</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">julian</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/now_and_then.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.now_and_then.now_and_then" title="Link to this definition">¶</a></dt>
 <dd><p>Output a string ‘{then}, {duration} ago’ or ‘{then}, {duration} from now’, or the like,
 expressing “then” in terms of “now.” This tends to be useful in debugging and status pages.</p>
 <p>For hopefully obvious reasons, don’t use this in outside-facing UI’s; this code is 100%
 English-based, and would be virtually impossible to localize, as different cultures express
 temporal relationships differently.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>now</strong> – The current time, which we use as a baseline. If not given, we use right now.</p></li>
 <li><p><strong>then</strong> – The time we want to express</p></li>
@@ -160,30 +153,30 @@ anyway!</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pyppin.text.now_and_then.Formats">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyppin.text.now_and_then.</span></span><span class="sig-name descname"><span class="pre">Formats</span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/now_and_then.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.now_and_then.Formats" title="Permalink to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyppin.text.now_and_then.</span></span><span class="sig-name descname"><span class="pre">Formats</span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/now_and_then.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.now_and_then.Formats" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>This class just wraps some handy constants to pass as ‘format’ to now_and_then.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyppin.text.now_and_then.Formats.LONG_FORMAT">
-<span class="sig-name descname"><span class="pre">LONG_FORMAT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'%A,</span> <span class="pre">%B</span> <span class="pre">%d,</span> <span class="pre">%Y</span> <span class="pre">%X'</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/now_and_then.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.now_and_then.Formats.LONG_FORMAT" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">LONG_FORMAT</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'%A,</span> <span class="pre">%B</span> <span class="pre">%d,</span> <span class="pre">%Y</span> <span class="pre">%X'</span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/now_and_then.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.now_and_then.Formats.LONG_FORMAT" title="Link to this definition">¶</a></dt>
 <dd><p>A standard “long” format, ‘Monday, July 18, 2022 15﹕20﹕23’</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyppin.text.now_and_then.Formats.LOCAL_DATETIME">
-<span class="sig-name descname"><span class="pre">LOCAL_DATETIME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'%c'</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/now_and_then.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.now_and_then.Formats.LOCAL_DATETIME" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">LOCAL_DATETIME</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'%c'</span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/now_and_then.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.now_and_then.Formats.LOCAL_DATETIME" title="Link to this definition">¶</a></dt>
 <dd><p>The localized datetime format, e.g. ‘Wed Jul 18 15﹕20﹕23 1988’</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyppin.text.now_and_then.Formats.LOCAL_DATE_ONLY">
-<span class="sig-name descname"><span class="pre">LOCAL_DATE_ONLY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'%x'</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/now_and_then.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.now_and_then.Formats.LOCAL_DATE_ONLY" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">LOCAL_DATE_ONLY</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'%x'</span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/now_and_then.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.now_and_then.Formats.LOCAL_DATE_ONLY" title="Link to this definition">¶</a></dt>
 <dd><p>The localized date-only format, e.g. ‘Wed Jul 18 1988’</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyppin.text.now_and_then.Formats.LOCAL_TIME_ONLY">
-<span class="sig-name descname"><span class="pre">LOCAL_TIME_ONLY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'%X'</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/now_and_then.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.now_and_then.Formats.LOCAL_TIME_ONLY" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">LOCAL_TIME_ONLY</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'%X'</span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/now_and_then.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.now_and_then.Formats.LOCAL_TIME_ONLY" title="Link to this definition">¶</a></dt>
 <dd><p>The localized time-only format, e.g. ‘15﹕20﹕23’</p>
 </dd></dl>
 
@@ -191,10 +184,10 @@ anyway!</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyppin.text.now_and_then.relative_time_string">
-<span class="sig-prename descclassname"><span class="pre">pyppin.text.now_and_then.</span></span><span class="sig-name descname"><span class="pre">relative_time_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">delta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">timedelta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">julian</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/now_and_then.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.now_and_then.relative_time_string" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyppin.text.now_and_then.</span></span><span class="sig-name descname"><span class="pre">relative_time_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">delta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">timedelta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">julian</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/now_and_then.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.now_and_then.relative_time_string" title="Link to this definition">¶</a></dt>
 <dd><p>Express a time delta in words, e.g. “15 seconds ago” or “3 years from now.”</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>delta</strong> – The time to be expressed.</p></li>
 <li><p><strong>julian</strong> – If True, use Julian (astronomical) years; otherwise, use Gregorian years.</p></li>
@@ -205,7 +198,7 @@ anyway!</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyppin.text.now_and_then.time_delta_string">
-<span class="sig-prename descclassname"><span class="pre">pyppin.text.now_and_then.</span></span><span class="sig-name descname"><span class="pre">time_delta_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">delta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">timedelta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">julian</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sign_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pyppin.text.sign.html#pyppin.text.sign.Sign" title="pyppin.text.sign.Sign"><span class="pre">Sign</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Sign.NEGATIVE_ONLY</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/now_and_then.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.now_and_then.time_delta_string" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyppin.text.now_and_then.</span></span><span class="sig-name descname"><span class="pre">time_delta_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">delta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">timedelta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">julian</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sign_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pyppin.text.sign.html#pyppin.text.sign.Sign" title="pyppin.text.sign.Sign"><span class="pre">Sign</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Sign.NEGATIVE_ONLY</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/now_and_then.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.now_and_then.time_delta_string" title="Link to this definition">¶</a></dt>
 <dd><p>Like relative_time_string, but using a sign_mode (-, +, etc) instead of “ago” and “from now.”</p>
 <p>So for example, it may yield “+3 years” or “-15 seconds” rather than “3 years from now” and
 “15 seconds ago.”</p>

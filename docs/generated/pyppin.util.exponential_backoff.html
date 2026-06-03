@@ -1,22 +1,19 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>pyppin.util.exponential_backoff &mdash; pyppin  documentation</title>
-      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
   
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -29,11 +26,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> pyppin
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            pyppin
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -79,10 +80,10 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../api.html">API</a> &raquo;</li>
-          <li><a href="pyppin.util.html">pyppin.util</a> &raquo;</li>
-      <li>pyppin.util.exponential_backoff</li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../api.html">API</a></li>
+          <li class="breadcrumb-item"><a href="pyppin.util.html">pyppin.util</a></li>
+      <li class="breadcrumb-item active">pyppin.util.exponential_backoff</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/generated/pyppin.util.exponential_backoff.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -93,27 +94,23 @@
            <div itemprop="articleBody">
              
   <section id="pyppin-util-exponential-backoff">
-<h1>pyppin.util.exponential_backoff<a class="headerlink" href="#pyppin-util-exponential-backoff" title="Permalink to this heading">¶</a></h1>
+<h1>pyppin.util.exponential_backoff<a class="headerlink" href="#pyppin-util-exponential-backoff" title="Link to this heading">¶</a></h1>
 <p>[<a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/util/exponential_backoff.py">View Source</a>]</p>
-<span class="target" id="module-pyppin.util.exponential_backoff"></span><p>Call a function in a retry loop with exponential backoff.</p>
+<p id="module-pyppin.util.exponential_backoff">Call a function in a retry loop with exponential backoff.</p>
 <p class="rubric">Functions</p>
 <table class="autosummary longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#pyppin.util.exponential_backoff.http_500s" title="pyppin.util.exponential_backoff.http_500s"><code class="xref py py-obj docutils literal notranslate"><span class="pre">http_500s</span></code></a>(e)</p></td>
 <td><p>Helper function: Pass this to retry() to retry HTTP 500's.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pyppin.util.exponential_backoff.retry" title="pyppin.util.exponential_backoff.retry"><code class="xref py py-obj docutils literal notranslate"><span class="pre">retry</span></code></a>(function, retry[, max_attempts, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pyppin.util.exponential_backoff.retry" title="pyppin.util.exponential_backoff.retry"><code class="xref py py-obj docutils literal notranslate"><span class="pre">retry</span></code></a>(function, ...)</p></td>
 <td><p>Call a function in a retry loop with exponential backoff.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyppin.util.exponential_backoff.retry">
-<span class="sig-prename descclassname"><span class="pre">pyppin.util.exponential_backoff.</span></span><span class="sig-name descname"><span class="pre">retry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">function:</span> <span class="pre">~typing.Callable[[],</span> <span class="pre">~pyppin.util.exponential_backoff.ReturnType],</span> <span class="pre">retry:</span> <span class="pre">~typing.Union[~typing.List[~typing.Type[Exception]],</span> <span class="pre">~typing.Callable[[Exception],</span> <span class="pre">bool]],</span> <span class="pre">max_attempts:</span> <span class="pre">~typing.Optional[int]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">initial_delay:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.1,</span> <span class="pre">multiplier:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">2,</span> <span class="pre">max_delay:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">2,</span> <span class="pre">jitter:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0,</span> <span class="pre">_sleep:</span> <span class="pre">~typing.Callable[[float],</span> <span class="pre">None]</span> <span class="pre">=</span> <span class="pre">&lt;built-in</span> <span class="pre">function</span> <span class="pre">sleep&gt;</span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ReturnType</span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/util/exponential_backoff.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.util.exponential_backoff.retry" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyppin.util.exponential_backoff.</span></span><span class="sig-name descname"><span class="pre">retry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">function:</span> <span class="pre">~typing.Callable[[],</span> <span class="pre">~pyppin.util.exponential_backoff.ReturnType],</span> <span class="pre">retry:</span> <span class="pre">~typing.List[~typing.Type[Exception]]</span> <span class="pre">|</span> <span class="pre">~typing.Callable[[Exception],</span> <span class="pre">bool],</span> <span class="pre">max_attempts:</span> <span class="pre">int</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">initial_delay:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.1,</span> <span class="pre">multiplier:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">2,</span> <span class="pre">max_delay:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">2,</span> <span class="pre">jitter:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0,</span> <span class="pre">_sleep:</span> <span class="pre">~typing.Callable[[float],</span> <span class="pre">None]</span> <span class="pre">=</span> <span class="pre">&lt;built-in</span> <span class="pre">function</span> <span class="pre">sleep&gt;</span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ReturnType</span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/util/exponential_backoff.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.util.exponential_backoff.retry" title="Link to this definition">¶</a></dt>
 <dd><p>Call a function in a retry loop with exponential backoff.</p>
 <p>Some operations like RPC’s can finish in three ways: successfully, with a non-retriable error
 (like an HTTP 4xx), or with a retriable error (like an HTTP 5xx). In the latter case, you want
@@ -146,7 +143,7 @@ this.” If you’re retrying HTTP requests, you might want to use the ‘http_5
 file for that.</p>
 <p>Other arguments control how retrying works in more detail.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>function</strong> – A zero-argument function that does the thing you want to call.</p></li>
 <li><p><strong>retry</strong> – A filter for which errors you want to retry. This can either be a list of Exception
@@ -170,7 +167,7 @@ case, sticking in maybe 0.05sec of jitter should make the problem go away.</p></
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyppin.util.exponential_backoff.http_500s">
-<span class="sig-prename descclassname"><span class="pre">pyppin.util.exponential_backoff.</span></span><span class="sig-name descname"><span class="pre">http_500s</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">e</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Exception</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/util/exponential_backoff.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.util.exponential_backoff.http_500s" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyppin.util.exponential_backoff.</span></span><span class="sig-name descname"><span class="pre">http_500s</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">e</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Exception</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/util/exponential_backoff.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.util.exponential_backoff.http_500s" title="Link to this definition">¶</a></dt>
 <dd><p>Helper function: Pass this to retry() to retry HTTP 500’s.</p>
 </dd></dl>
 

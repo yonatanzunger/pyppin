@@ -1,22 +1,19 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>pyppin.text.sign &mdash; pyppin  documentation</title>
-      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
   
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -29,11 +26,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> pyppin
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            pyppin
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -83,10 +84,10 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../api.html">API</a> &raquo;</li>
-          <li><a href="pyppin.text.html">pyppin.text</a> &raquo;</li>
-      <li>pyppin.text.sign</li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../api.html">API</a></li>
+          <li class="breadcrumb-item"><a href="pyppin.text.html">pyppin.text</a></li>
+      <li class="breadcrumb-item active">pyppin.text.sign</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/generated/pyppin.text.sign.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -97,15 +98,11 @@
            <div itemprop="articleBody">
              
   <section id="pyppin-text-sign">
-<h1>pyppin.text.sign<a class="headerlink" href="#pyppin-text-sign" title="Permalink to this heading">¶</a></h1>
+<h1>pyppin.text.sign<a class="headerlink" href="#pyppin-text-sign" title="Link to this heading">¶</a></h1>
 <p>[<a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/sign.py">View Source</a>]</p>
-<span class="target" id="module-pyppin.text.sign"></span><p>Common classes for printf-like sign-printing conventions.</p>
+<p id="module-pyppin.text.sign">Common classes for printf-like sign-printing conventions.</p>
 <p class="rubric">Functions</p>
 <table class="autosummary longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#pyppin.text.sign.format_sign" title="pyppin.text.sign.format_sign"><code class="xref py py-obj docutils literal notranslate"><span class="pre">format_sign</span></code></a>(formatted_unsigned, sign_mode, ...)</p></td>
 <td><p>Apply a Sign to a formatted number.</p></td>
@@ -114,27 +111,23 @@
 </table>
 <p class="rubric">Classes</p>
 <table class="autosummary longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pyppin.text.sign.Sign" title="pyppin.text.sign.Sign"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Sign</span></code></a>(value)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pyppin.text.sign.Sign" title="pyppin.text.sign.Sign"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Sign</span></code></a>(*values)</p></td>
 <td><p>Equivalent to printf's &quot;-&quot; option, controlling when plus and minus signs should be shown.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyppin.text.sign.Sign">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyppin.text.sign.</span></span><span class="sig-name descname"><span class="pre">Sign</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/sign.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.sign.Sign" title="Permalink to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyppin.text.sign.</span></span><span class="sig-name descname"><span class="pre">Sign</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/sign.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.sign.Sign" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
 <p>Equivalent to printf’s “-” option, controlling when plus and minus signs should be shown.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyppin.text.sign.Sign.NEGATIVE_ONLY">
-<span class="sig-name descname"><span class="pre">NEGATIVE_ONLY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/sign.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.sign.Sign.NEGATIVE_ONLY" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">NEGATIVE_ONLY</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/sign.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.sign.Sign.NEGATIVE_ONLY" title="Link to this definition">¶</a></dt>
 <dd><p>show signs only for negative numbers.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The default, equivalent to printf -</p>
 </dd>
 </dl>
@@ -142,10 +135,10 @@
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyppin.text.sign.Sign.POSITIVE_AND_NEGATIVE">
-<span class="sig-name descname"><span class="pre">POSITIVE_AND_NEGATIVE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/sign.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.sign.Sign.POSITIVE_AND_NEGATIVE" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">POSITIVE_AND_NEGATIVE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/sign.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.sign.Sign.POSITIVE_AND_NEGATIVE" title="Link to this definition">¶</a></dt>
 <dd><p>Show signs for both positive and negative numbers.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Equivalent to printf +</p>
 </dd>
 </dl>
@@ -153,10 +146,10 @@
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyppin.text.sign.Sign.SPACE_FOR_POSITIVE">
-<span class="sig-name descname"><span class="pre">SPACE_FOR_POSITIVE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/sign.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.sign.Sign.SPACE_FOR_POSITIVE" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">SPACE_FOR_POSITIVE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/sign.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.sign.Sign.SPACE_FOR_POSITIVE" title="Link to this definition">¶</a></dt>
 <dd><p>Show minus sign for negative and space for positive.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Equivalent to printf space</p>
 </dd>
 </dl>
@@ -164,14 +157,14 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyppin.text.sign.Sign.parse">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">format_spec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyppin.text.sign.Sign" title="pyppin.text.sign.Sign"><span class="pre">Sign</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/sign.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.sign.Sign.parse" title="Permalink to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">format_spec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyppin.text.sign.Sign" title="pyppin.text.sign.Sign"><span class="pre">Sign</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/sign.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.sign.Sign.parse" title="Link to this definition">¶</a></dt>
 <dd><p>Parse a leading printf sign from a format_spec.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The sign that should be used.
 str: The remaining format_spec.</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="#pyppin.text.sign.Sign" title="pyppin.text.sign.Sign">Sign</a></p>
 </dd>
 </dl>
@@ -181,10 +174,10 @@ str: The remaining format_spec.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyppin.text.sign.format_sign">
-<span class="sig-prename descclassname"><span class="pre">pyppin.text.sign.</span></span><span class="sig-name descname"><span class="pre">format_sign</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">formatted_unsigned</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sign_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pyppin.text.sign.Sign" title="pyppin.text.sign.Sign"><span class="pre">Sign</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_negative</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/sign.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.sign.format_sign" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyppin.text.sign.</span></span><span class="sig-name descname"><span class="pre">format_sign</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">formatted_unsigned</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sign_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pyppin.text.sign.Sign" title="pyppin.text.sign.Sign"><span class="pre">Sign</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_negative</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/text/sign.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.text.sign.format_sign" title="Link to this definition">¶</a></dt>
 <dd><p>Apply a Sign to a formatted number.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>formatted_unsigned</strong> – The number as rendered, not including any sign information. (i.e.,
 a rendering of the absolute value of the number)</p></li>
@@ -192,7 +185,7 @@ a rendering of the absolute value of the number)</p></li>
 <li><p><strong>is_negative</strong> – Whether the number is negative.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The number formatted with the correct sign.</p>
 </dd>
 </dl>

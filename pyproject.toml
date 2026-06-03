@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "pyppin"
-version = "1.0.7"
+version = "1.1.0"
 description = "Python tools collection"
 readme = "README.md"
 requires-python = ">=3.9"
@@ -16,6 +16,12 @@ classifiers = [
     "License :: OSI Approved :: Apache Software License",
     "Intended Audience :: Developers",
     "Programming Language :: Python",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
 ]
 dependencies = []
 
@@ -26,6 +32,7 @@ Documentation = "https://yonatanzunger.github.io/pyppin/"
 
 [dependency-groups]
 dev = ["pytest", "ruff", "pyright"]
+docs = ["sphinx", "sphinx-rtd-theme", "recommonmark", "sphinx-autosummary-accessors"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["pyppin"]

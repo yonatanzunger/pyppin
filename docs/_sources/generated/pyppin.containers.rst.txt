@@ -15,7 +15,7 @@
       :toctree:
       :recursive:
    
-      pyppin.containers.ring_buffer
+      ring_buffer
    
    
 

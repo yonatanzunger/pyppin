@@ -15,8 +15,8 @@
       :toctree:
       :recursive:
    
-      pyppin.os.bulk_import
-      pyppin.os.list_files
+      bulk_import
+      list_files
    
    
 

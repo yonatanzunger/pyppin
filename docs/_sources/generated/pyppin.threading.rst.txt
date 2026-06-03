@@ -15,10 +15,10 @@
       :toctree:
       :recursive:
    
-      pyppin.threading.periodic_task
-      pyppin.threading.semaphore
-      pyppin.threading.stack_trace
-      pyppin.threading.stack_trace_internals
+      periodic_task
+      semaphore
+      stack_trace
+      stack_trace_internals
    
    
 

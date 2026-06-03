@@ -24,9 +24,10 @@ def ensure_requirements() -> bool:
         import recommonmark  # noqa
         import sphinx  # noqa
     except ImportError:
-        reqs_file = os.path.abspath(os.path.join(REPO_ROOT, "tools/requirements.txt"))
-        rel_path = os.path.relpath(os.getcwd(), reqs_file)
-        logging.error(f"Required PIP packages are missing. Please run `pip install -r {rel_path}")
+        logging.error(
+            "The documentation dependencies are missing. Run this script through uv so they're "
+            "installed, with `uv run --group docs python tools/docs.py`."
+        )
         return False
 
     if not find_command("make"):
