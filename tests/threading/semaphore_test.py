@@ -1,3 +1,6 @@
+# These tests deliberately name the first method parameter "test" instead of "self" so the nested
+# helper classes can refer to it unambiguously (see the comment in SemaphoreTest).
+# pyright: reportSelfClsParameterName=false
 import threading
 import unittest
 from typing import List

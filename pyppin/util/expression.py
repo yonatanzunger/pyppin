@@ -15,6 +15,7 @@ from typing import (
     Tuple,
     Type,
     Union,
+    cast,
 )
 
 
@@ -52,7 +53,7 @@ class Expression(object):
         self,
         expression: str,
         *,
-        functions: List[Callable] = None,
+        functions: Optional[List[Callable]] = None,
         allow_attribute_functions: bool = False,
         variables: Optional[List[str]] = None,
     ) -> None:
@@ -309,17 +310,20 @@ class _ValidationContext(NamedTuple):
     allow_attribute_functions: bool
 
     def fail(self, node: ast.AST, error: str) -> NoReturn:
+        # The nodes we report on always carry source position info; the base ast.AST type doesn't
+        # declare it, so cast to ast.expr (which does) to read it.
+        located = cast(ast.expr, node)
         payload = (
             (
                 "<expression>",
-                node.lineno,
-                node.col_offset,
+                located.lineno,
+                located.col_offset,
                 self.expression,
-                node.end_lineno,
-                node.end_col_offset,
+                located.end_lineno,
+                located.end_col_offset,
             )
             if sys.hexversion >= 0x030A0000
-            else ("<expression>", node.lineno, node.col_offset, self.expression)
+            else ("<expression>", located.lineno, located.col_offset, self.expression)
         )
         raise SyntaxError(error, payload)
 

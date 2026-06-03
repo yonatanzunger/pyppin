@@ -83,7 +83,7 @@ class MemFile(FileLikeObject):
         if buffer is not None:
             # Transform this into a byte buffer, no matter what format we received (e.g. an array of
             # something)
-            buffer = memoryview(buffer).cast("B")
+            buffer = memoryview(buffer).cast("B")  # pyright: ignore[reportArgumentType]
             bufsize = len(buffer)
             if size > bufsize:
                 raise ValueError(
@@ -97,7 +97,7 @@ class MemFile(FileLikeObject):
         return read_size, buffer
 
     def pwrite(self, offset: int, data: BytesLikeObject) -> int:
-        data = memoryview(data).cast("B")
+        data = memoryview(data).cast("B")  # pyright: ignore[reportArgumentType]
         size = len(data)
         if offset >= len(self._data):
             self._data = self._data + bytes(offset - len(self._data)) + data

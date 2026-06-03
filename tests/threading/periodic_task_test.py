@@ -78,8 +78,8 @@ class PeriodicTaskTest(unittest.TestCase):
 
         # We'll use SIGFPE because it's one of the few that's defined on all systems.
 
+        old_handler = signal.signal(signal.SIGFPE, onsignal)
         try:
-            old_handler = signal.signal(signal.SIGFPE, onsignal)
             task = PeriodicTask(
                 periodic,
                 period=10,

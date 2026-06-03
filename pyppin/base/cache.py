@@ -331,7 +331,7 @@ class _CacheCore(Generic[KeyType, ValueType]):
                 if self.cache_exceptions and isinstance(result, Exception):
                     raise result
                 else:
-                    return result
+                    return result  # pyright: ignore[reportReturnType]  # cached value type is erased
 
         # Handle cache misses
         try:
@@ -426,7 +426,8 @@ class _WrappedDescriptor(Generic[ValueType]):
         pass to the _WrappedMethod and thus into methods like __call__ and incache.
         """
         self.core = core
-        functools.update_wrapper(self, core.function)
+        # update_wrapper wants a function; a descriptor instance is close enough at runtime.
+        functools.update_wrapper(self, core.function)  # pyright: ignore[reportArgumentType]
 
     def __get__(self, instance: Any, owner: Any = None) -> _WrappedMethod:
         return _WrappedMethod(self.core, instance or owner)

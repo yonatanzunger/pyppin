@@ -91,7 +91,7 @@ class RegisteredClass(type):
         }
 
     def __new__(
-        metaclass,
+        metaclass,  # pyright: ignore[reportSelfClsParameterName]  # metaclass __new__: first arg is the metaclass
         name: str,
         bases: Tuple[Type],
         namespace: Dict[str, Any],
@@ -131,7 +131,7 @@ class RegisteredClass(type):
         def subclasses(superclass: "RegisteredClass") -> Dict[str, "RegisteredClass"]:
             return RegisteredClass.subclasses(superclass)
 
-        class_.get_subclass = classmethod(get_subclass)
-        class_.subclasses = classmethod(subclasses)
+        class_.get_subclass = classmethod(get_subclass)  # type: ignore
+        class_.subclasses = classmethod(subclasses)  # type: ignore
 
         return class_

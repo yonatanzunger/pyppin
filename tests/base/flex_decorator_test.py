@@ -1,3 +1,5 @@
+# @flex_decorator produces decorators whose type pyright can't follow; the usages here are correct.
+# pyright: reportUntypedFunctionDecorator=false
 import unittest
 from typing import Any, Callable, Tuple
 

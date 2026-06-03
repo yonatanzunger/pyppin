@@ -210,7 +210,7 @@ class Canvas(object):
 
     @classmethod
     def for_plot(
-        self,
+        cls,
         data: Callable[[float], float],
         width: int,
         height: int,

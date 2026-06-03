@@ -52,7 +52,10 @@ def sample(source: Iterable[DataType], count: int) -> List[DataType]:
         while True:
             w *= math.pow(random.random(), 1 / count)
             skip = math.floor(math.log(random.random(), 1 - w)) + 1
-            for _k in range(skip):
+            # Advance skip times in total, keeping the last value seen. Pull the first one
+            # unconditionally so value is always bound (skip is always >= 1 here).
+            value = next(it)
+            for _k in range(skip - 1):
                 value = next(it)
             result[random.randrange(count)] = value
 

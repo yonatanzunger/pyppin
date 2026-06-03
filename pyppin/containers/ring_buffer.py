@@ -1,6 +1,6 @@
 from collections.abc import MutableSequence
 from itertools import islice
-from typing import Iterable, Iterator, List, Optional, Tuple, TypeVar, Union, overload
+from typing import Iterable, Iterator, List, Optional, Tuple, TypeVar, Union, cast, overload
 
 T = TypeVar("T")
 
@@ -101,6 +101,8 @@ class RingBuffer(MutableSequence[T]):
         # The messy case: self[slice] = [values]
         assert isinstance(index, slice)
         assert hasattr(value, "__iter__")
+        # Past this point we're always in the slice case, so value is the iterable overload.
+        value = cast(Iterable[T], value)
 
         # We'll start with some cases that we check *before* normalizing index, because a 'None'
         # stop value might mean something different here.

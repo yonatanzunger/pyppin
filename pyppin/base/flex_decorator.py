@@ -93,7 +93,7 @@ def flex_decorator(decorator: Callable) -> Callable:
         **kwargs: Any,
     ) -> Callable[[DecoratedFunction], DecoratedFunction]: ...
 
-    def poly_decorator(
+    def poly_decorator(  # pyright: ignore[reportInconsistentOverload]  # impl unifies both overloads
         maybe_target: Optional[DecoratedFunction] = None, /, **kwargs: Any
     ) -> Union[DecoratedFunction, Callable[[DecoratedFunction], DecoratedFunction]]:
         if maybe_target is not None and not kwargs:

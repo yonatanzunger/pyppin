@@ -84,15 +84,15 @@ class RawTee(Tee, io.RawIOBase):
             pos = child.truncate(size)
         return pos or 0
 
-    def write(self, b: BytesLikeObject, /) -> Optional[int]:
+    def write(self, b: BytesLikeObject, /) -> Optional[int]:  # pyright: ignore[reportIncompatibleMethodOverride]
         pos: Optional[int] = None
         for child in self.children:
             pos = child.write(b)  # type: ignore
         return pos
 
-    def writelines(self, lines: Iterable[BytesLikeObject], /) -> None:
+    def writelines(self, lines: Iterable[BytesLikeObject], /) -> None:  # pyright: ignore[reportIncompatibleMethodOverride]
         for child in self.children:
-            child.writelines(lines)
+            child.writelines(lines)  # pyright: ignore[reportArgumentType]
 
 
 class TextTee(Tee, io.TextIOBase):

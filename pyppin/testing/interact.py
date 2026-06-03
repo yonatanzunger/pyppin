@@ -2,7 +2,7 @@
 
 import code
 import sys
-from typing import Callable, Iterable, Optional
+from typing import Any, Callable, Dict, Iterable, Optional
 
 
 def interact(
@@ -50,15 +50,19 @@ def interact(
     if _test_commands is not None:
         command = iter(_test_commands)
 
-        def _test_input(prompt: str = "") -> str:
-            nonlocal command
+        def _read_test_input(prompt: str = "") -> str:
             try:
                 return next(command)
             except StopIteration:
                 raise EOFError() from None
 
+        _test_input = _read_test_input
+
     # Now, grab the local and global variables from the stack layer from which we were invoked.
     stack = sys._getframe(1)
+    # Bind nestedlocals up front so the `del` in the finally can't itself raise UnboundLocalError
+    # (masking an earlier failure) if building it throws.
+    nestedlocals: Dict[str, Any] = {}
     try:
         # Annoying bug we need to work around: The `code` library doesn't propagate globals into its
         # child frame at all, which would lead to unexpected surprises like "you can't see global

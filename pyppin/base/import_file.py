@@ -47,7 +47,9 @@ def import_file(
     sys.modules[name] = module
 
     try:
-        assert_not_none(spec.loader).exec_module(module)
+        # spec.loader is typed as the bare Loader ABC, which typeshed doesn't annotate with
+        # exec_module; every real loader implements it.
+        assert_not_none(spec.loader).exec_module(module)  # pyright: ignore[reportAttributeAccessIssue]
     except Exception as e:
         if preserved is not None:
             sys.modules[name] = preserved
