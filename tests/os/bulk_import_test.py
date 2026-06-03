@@ -1,6 +1,7 @@
 import sys
 import unittest
 from pathlib import Path
+from typing import List
 
 from pyppin.os.bulk_import import bulk_import
 
@@ -26,16 +27,37 @@ class BulkImportTest(unittest.TestCase):
             del sys.modules[name]
         self.assertEqual([], list(ImportableThing.subclasses()))  # type: ignore
 
-    def testVisitorAllowsClass3(self) -> None:
+    def testVisitor(self) -> None:
+        # The visitor is called on every file we see, primarily for its side effects; here we
+        # just record them. Returning false for class1.py also proves it can exclude a file.
+        visited: List[str] = []
+
         def visitor(p: Path) -> bool:
-            return p.suffix == ".py" or p.name == "class3.txt"
+            visited.append(p.name)
+            return p.name != "class1.py"
 
         names = bulk_import(
             TEST_PATH.joinpath("bulk_import_test_data"), root=TEST_PATH, visitor=visitor
         )
 
+        # The visitor saw every file in the directory, including the non-importable (.txt)
+        # ones and the underscore files (the exclude patterns only stop directory recursion).
         self.assertEqual(
-            ["Class1", "Class2", "Class3"],
+            [
+                "__init__.py",
+                "_def.py",
+                "class1.py",
+                "class2.py",
+                "class3.txt",
+                "notpython.txt",
+            ],
+            sorted(visited),
+        )
+
+        # ...but only class2 was actually imported: class1 was vetoed by the visitor, and the
+        # .txt files aren't importable Python.
+        self.assertEqual(
+            ["Class2"],
             sorted(list(ImportableThing.subclasses())),  # type: ignore
         )
 
