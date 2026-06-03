@@ -5,7 +5,7 @@ import re
 import sys
 from pathlib import Path
 from types import ModuleType
-from typing import Dict, List, Optional, Union
+from typing import Callable, Dict, List, Optional, Union
 
 from pyppin.base.import_file import import_file
 from pyppin.os.list_files import list_files
@@ -26,6 +26,7 @@ def bulk_import(
     exclude: List[str] = DEFAULT_EXCLUDE,
     verbose: bool = False,
     root: Optional[Union[str, Path]] = None,
+    visitor: Optional[Callable[[Path], bool]] = None,
 ) -> Dict[str, ModuleType]:
     """Import all Python files in a given directory.
 
@@ -42,6 +43,8 @@ def bulk_import(
             path. By default, it is the same as path. It is often useful to pass your
             repository root here, which will lead to package names that are consistent
             with your repository structure as a whole.
+        visitor: If given, this will be called on all files seen (even non-importable
+            types). If the function returns false, the file will be skipped.
 
     Returns:
         A dict of all the modules found.
@@ -81,11 +84,16 @@ def bulk_import(
 
     pats = [re.compile(p) for p in exclude]
 
+    visitor = visitor or (lambda x: True)
+
     for file in list_files(
         path,
         recursive=recursive,
         select=lambda p: not any(pat.match(p.name) for pat in pats),
     ):
+        if not visitor(file):
+            continue
+
         # The set of file types that can actually be imported.
         if file.suffix not in importlib.machinery.all_suffixes():
             continue
