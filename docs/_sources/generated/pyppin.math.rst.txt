@@ -15,9 +15,9 @@
       :toctree:
       :recursive:
    
-      pyppin.math.functions
-      pyppin.math.histogram
-      pyppin.math.plot_ascii
+      functions
+      histogram
+      plot_ascii
    
    
 

@@ -39,38 +39,44 @@ if not hasattr(ctypes, "_CData"):
     class _CData(ABC):
         @classmethod
         @abstractmethod
-        def from_buffer(cls, source: "MutableBytesLikeObject", offset: int) -> "_CData":
-            ...
+        def from_buffer(cls, source: "MutableBytesLikeObject", offset: int) -> "_CData": ...
 
         @classmethod
         @abstractmethod
-        def from_buffer_copy(cls, source: "BytesLikeObject", offset: int) -> "_CData":
-            ...
+        def from_buffer_copy(cls, source: "BytesLikeObject", offset: int) -> "_CData": ...
 
         @classmethod
         @abstractmethod
-        def from_address(cls, address: int) -> "_CData":
-            ...
+        def from_address(cls, address: int) -> "_CData": ...
 
         @classmethod
         @abstractmethod
-        def from_param(cls, obj: Any) -> "_CData":
-            ...
+        def from_param(cls, obj: Any) -> "_CData": ...
 
         @classmethod
         @abstractmethod
-        def in_dll(cls, library: ctypes.CDLL, name: str) -> "_CData":
-            ...
+        def in_dll(cls, library: ctypes.CDLL, name: str) -> "_CData": ...
 
-    setattr(ctypes, "_CData", _CData)
+    ctypes._CData = _CData  # pyright: ignore[reportGeneralTypeIssues]
 
 
 """The signature for parameter types of data operations in the Python io library."""
 BytesLikeObject = Union[
-    bytes, bytearray, array.array, memoryview, mmap, ctypes._CData, PickleBuffer
+    bytes,
+    bytearray,
+    array.array,
+    memoryview,
+    mmap,
+    ctypes._CData,  # pyright: ignore[reportGeneralTypeIssues]
+    PickleBuffer,
 ]
 MutableBytesLikeObject = Union[
-    bytearray, array.array, memoryview, mmap, ctypes._CData, PickleBuffer
+    bytearray,
+    array.array,
+    memoryview,
+    mmap,
+    ctypes._CData,  # pyright: ignore[reportGeneralTypeIssues]
+    PickleBuffer,
 ]
 OpenFile = Union[io.RawIOBase, io.BufferedIOBase, io.TextIOBase]
 
@@ -197,9 +203,9 @@ class FileLikeObject(ABC):
         if options.readable and options.writable:
             buffered = io.BufferedRandom(rawfile, options.byte_buffering)
         elif options.readable:
-            buffered = io.BufferedReader(rawfile, options.byte_buffering)
+            buffered = io.BufferedReader(rawfile, options.byte_buffering)  # pyright: ignore[reportArgumentType]
         else:
-            buffered = io.BufferedWriter(rawfile, options.byte_buffering)
+            buffered = io.BufferedWriter(rawfile, options.byte_buffering)  # pyright: ignore[reportArgumentType]
 
         if options.binary:
             return buffered
@@ -416,7 +422,7 @@ class _UnbufferedBinaryFileHandle(io.RawIOBase):
     def writable(self) -> bool:
         return self._writable
 
-    def writelines(self, lines: Iterable[BytesLikeObject]) -> None:
+    def writelines(self, lines: Iterable[BytesLikeObject]) -> None:  # pyright: ignore[reportIncompatibleMethodOverride]
         for line in lines:
             self.write(line)
 
@@ -431,13 +437,13 @@ class _UnbufferedBinaryFileHandle(io.RawIOBase):
     def readall(self) -> bytes:
         return assert_not_none(self.read())
 
-    def readinto(self, b: MutableBytesLikeObject) -> int:
+    def readinto(self, b: MutableBytesLikeObject) -> int:  # pyright: ignore[reportIncompatibleMethodOverride]
         self._check(False)
         actual_size, _ = self.file.pread(self._pos, len(b), buffer=b)  # type: ignore
         self._pos += actual_size
         return actual_size
 
-    def write(self, b: BytesLikeObject) -> int:
+    def write(self, b: BytesLikeObject) -> int:  # pyright: ignore[reportIncompatibleMethodOverride]
         self._check(True)
         bytes_written = self.file.pwrite(self._pos, b)
         self._pos += bytes_written

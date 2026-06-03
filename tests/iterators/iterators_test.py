@@ -26,7 +26,7 @@ class IteratorsTest(unittest.TestCase):
         # Map from N ∈ [0, STREAM_LENGTH) to the number of times N was picked
         counts: Dict[int, int] = defaultdict(int)
 
-        for test_pass in range(TEST_COUNT):
+        for _test_pass in range(TEST_COUNT):
             result = sample(range(STREAM_LENGTH), SAMPLE_COUNT)
             self.assertEqual(SAMPLE_COUNT, len(result))
             for value in result:

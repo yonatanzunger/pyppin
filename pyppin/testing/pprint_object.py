@@ -31,8 +31,6 @@ def pprint_object(
 
 def _as_dict(thing: Any, recurse: Set[str]) -> Dict[str, Any]:
     return {
-        attr: _as_dict(getattr(thing, attr), recurse)
-        if attr in recurse
-        else getattr(thing, attr)
+        attr: _as_dict(getattr(thing, attr), recurse) if attr in recurse else getattr(thing, attr)
         for attr in dir(thing)
     }

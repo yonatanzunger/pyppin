@@ -1,4 +1,4 @@
-﻿pyppin.testing.trace\_on\_failure
+pyppin.testing.trace\_on\_failure
 =================================
 
 

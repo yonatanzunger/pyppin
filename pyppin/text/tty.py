@@ -1,4 +1,5 @@
 """Tools to do TTY color formatting in print() statements."""
+
 import sys
 from enum import IntEnum
 from typing import Any, Optional

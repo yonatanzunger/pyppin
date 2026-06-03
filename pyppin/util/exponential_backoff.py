@@ -118,9 +118,7 @@ class _BackoffCounter(object):
         _sleep: Callable[[float], None] = time.sleep,
     ) -> None:
         self.retry = (
-            (lambda x: any(isinstance(x, t) for t in retry))
-            if isinstance(retry, list)
-            else retry
+            (lambda x: any(isinstance(x, t) for t in retry)) if isinstance(retry, list) else retry
         )
         self.attempt = 0
         self.max_attempts = max_attempts

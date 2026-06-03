@@ -1,15 +1,19 @@
 To build a new release:
 
 * Basic setup
-  * Run `tox`. If lint raises any errors, run `tox lint -- --fix`
-  * Make sure the fields in setup.py are correct.
-  * Bump the version number in setup.py.
+  * Run `uv run ruff format` and `uv run ruff check --fix` to format and lint.
+  * Run `uv run pytest` and make sure all tests pass.
+  * Run `uv run pyright` and make sure there are no type errors.
+  * CI (.github/workflows/test.yml) runs the above on Python 3.9 and 3.14 (the oldest
+    supported and current versions); you can check both locally with
+    `uv run --python 3.9 pytest` and `uv run --python 3.14 pytest`.
+  * Make sure the fields in pyproject.toml ([project]) are correct.
+  * Bump the version number in pyproject.toml.
 * Image preparation
   * Make sure that docs_src/api.rst contains all the subdirectories of pyppin.
-  * Compile fresh docs by running tools/docs.py.
+  * Compile fresh docs by running `uv run --group docs python tools/docs.py`.
 * Commit all changes and push to master.
 
-Once master is ready, make a build image and push to prod:
-* python setup.py bdist_wheel
-* python setup.py install
-* twine upload dist/*
+Once master is ready, build and push to prod:
+* uv build
+* uv publish

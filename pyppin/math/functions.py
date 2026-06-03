@@ -6,7 +6,7 @@ can use there.
 """
 
 import bisect
-from abc import ABC
+from abc import ABC, abstractmethod
 from typing import Dict, List, Tuple, Union
 
 
@@ -18,9 +18,7 @@ class FunctionFromSortedData(ABC):
     provided as a list, no more than one y-value should be given per x-value!
     """
 
-    def __init__(
-        self, data: Union[List[Tuple[float, float]], Dict[float, float]]
-    ) -> None:
+    def __init__(self, data: Union[List[Tuple[float, float]], Dict[float, float]]) -> None:
         if isinstance(data, dict):
             self.data = sorted(list(data.items()))
         else:
@@ -42,6 +40,7 @@ class FunctionFromSortedData(ABC):
         else:
             self.xmin = self.xmax = self.ymin = self.ymax = 0.0
 
+    @abstractmethod
     def __call__(self, arg: float) -> float:
         raise NotImplementedError()
 

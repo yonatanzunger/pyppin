@@ -15,12 +15,12 @@
       :toctree:
       :recursive:
    
-      pyppin.text.formatter
-      pyppin.text.now_and_then
-      pyppin.text.print_counter
-      pyppin.text.si_prefix
-      pyppin.text.sign
-      pyppin.text.tty
+      formatter
+      now_and_then
+      print_counter
+      si_prefix
+      sign
+      tty
    
    
 

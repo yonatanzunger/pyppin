@@ -55,9 +55,7 @@ class PeriodicTask(threading.Thread):
         self.cond = threading.Condition(self.lock)
         self.last: float = 0
         self.next: float = 0
-        self.period: float = (
-            period.total_seconds() if isinstance(period, timedelta) else period
-        )
+        self.period: float = period.total_seconds() if isinstance(period, timedelta) else period
         assert self.period > 0
         self.stop = False
         # For testing: If this isn't None, it's what we expect to happen during the next pass
@@ -112,15 +110,11 @@ class PeriodicTask(threading.Thread):
                 now = self.clock()
                 if now < self.next:
                     if self._expect_run is True:
-                        raise AssertionError(
-                            f"Unexpected wait: next is {self.next} now is {now}"
-                        )
+                        raise AssertionError(f"Unexpected wait: next is {self.next} now is {now}")
                     self.cond.wait(timeout=self.next - now)
                     continue
                 elif self._expect_run is False:
-                    raise AssertionError(
-                        f"Unexpected not-wait: next is {self.next} now is {now}"
-                    )
+                    raise AssertionError(f"Unexpected not-wait: next is {self.next} now is {now}")
 
                 self.last = now
                 self.next = now + self.period

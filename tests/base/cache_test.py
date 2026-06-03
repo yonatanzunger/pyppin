@@ -1,3 +1,6 @@
+# The @cache/@cachemethod decorators intentionally erase their wrapped function's type, so pyright
+# can't see the wrapper API (.incache, the _skip= kwarg). Those accesses are correct at runtime.
+# pyright: reportAttributeAccessIssue=false, reportFunctionMemberAccess=false, reportCallIssue=false, reportUntypedFunctionDecorator=false
 import threading
 import unittest
 from typing import Any, Dict

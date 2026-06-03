@@ -1,4 +1,5 @@
 """Mathematical utilities."""
+
 from typing import Iterable, Tuple
 
 

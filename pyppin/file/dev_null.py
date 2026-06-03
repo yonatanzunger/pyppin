@@ -55,13 +55,14 @@ class RawDevNull(DevNull, io.RawIOBase):
     def readlines(self, hint: int = -1, /) -> List[bytes]:
         return []
 
-    def readinto(self, b: MutableBytesLikeObject, /) -> Optional[int]:
+    # These deliberately widen the stdlib IO signatures to accept any BytesLikeObject.
+    def readinto(self, b: MutableBytesLikeObject, /) -> Optional[int]:  # pyright: ignore[reportIncompatibleMethodOverride]
         return None
 
-    def write(self, b: BytesLikeObject, /) -> Optional[int]:
+    def write(self, b: BytesLikeObject, /) -> Optional[int]:  # pyright: ignore[reportIncompatibleMethodOverride]
         return None
 
-    def writelines(self, lines: Iterable[BytesLikeObject], /) -> None:
+    def writelines(self, lines: Iterable[BytesLikeObject], /) -> None:  # pyright: ignore[reportIncompatibleMethodOverride]
         pass
 
 

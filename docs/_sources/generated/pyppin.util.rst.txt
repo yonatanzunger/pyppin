@@ -15,8 +15,8 @@
       :toctree:
       :recursive:
    
-      pyppin.util.exponential_backoff
-      pyppin.util.expression
+      exponential_backoff
+      expression
    
    
 

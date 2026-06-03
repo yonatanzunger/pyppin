@@ -1,4 +1,4 @@
-﻿pyppin.base.cache
+pyppin.base.cache
 =================
 
 

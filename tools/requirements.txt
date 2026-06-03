@@ -1,8 +1,0 @@
-black
-cpplint
-flake8
-isort
-mypy
-recommonmark
-sphinx
-sphinx_rtd_theme

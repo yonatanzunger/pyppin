@@ -13,9 +13,7 @@ class TestingRingBuffer(RingBuffer[T]):
         self.list: List[T] = []
         super().__init__(capacity, value)
 
-    def __setitem__(
-        self, index: Union[int, slice], value: Union[T, Iterable[T]]
-    ) -> None:
+    def __setitem__(self, index: Union[int, slice], value: Union[T, Iterable[T]]) -> None:
         super().__setitem__(index, value)  # type: ignore
         self.list.__setitem__(index, value)  # type: ignore
         self.list = self.list[-self.capacity :] if self.capacity else []
@@ -87,9 +85,7 @@ class RingBufferTest(unittest.TestCase):
         buf = TestingRingBuffer[str](4, ["one", "two", "three", "four"])
         self.assertEqual(4, buf.capacity)
         self._expect(buf, ["one", "two", "three", "four"])
-        self.assertEqual(
-            0, buf._start
-        )  # White-box check that we're looking at the right case
+        self.assertEqual(0, buf._start)  # White-box check that we're looking at the right case
 
         self.assertEqual(["one", "two", "three", "four"], buf[:])
         self.assertEqual(["two", "three", "four"], buf[1:])

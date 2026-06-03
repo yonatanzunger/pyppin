@@ -1,22 +1,19 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>pyppin.base.lazyinit &mdash; pyppin  documentation</title>
-      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
   
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -29,11 +26,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> pyppin
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            pyppin
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -83,10 +84,10 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../api.html">API</a> &raquo;</li>
-          <li><a href="pyppin.base.html">pyppin.base</a> &raquo;</li>
-      <li>pyppin.base.lazyinit</li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../api.html">API</a></li>
+          <li class="breadcrumb-item"><a href="pyppin.base.html">pyppin.base</a></li>
+      <li class="breadcrumb-item active">pyppin.base.lazyinit</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/generated/pyppin.base.lazyinit.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -97,15 +98,11 @@
            <div itemprop="articleBody">
              
   <section id="pyppin-base-lazyinit">
-<h1>pyppin.base.lazyinit<a class="headerlink" href="#pyppin-base-lazyinit" title="Permalink to this heading">¶</a></h1>
+<h1>pyppin.base.lazyinit<a class="headerlink" href="#pyppin-base-lazyinit" title="Link to this heading">¶</a></h1>
 <p>[<a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/base/lazyinit.py">View Source</a>]</p>
-<span class="target" id="module-pyppin.base.lazyinit"></span><p>An instance method decorator to make initializers execute once, on demand.</p>
+<p id="module-pyppin.base.lazyinit">An instance method decorator to make initializers execute once, on demand.</p>
 <p class="rubric">Functions</p>
 <table class="autosummary longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#pyppin.base.lazyinit.lazyinit" title="pyppin.base.lazyinit.lazyinit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lazyinit</span></code></a>(method)</p></td>
 <td><p>An instance method decorator to make it lazy-init and execute once.</p></td>
@@ -117,18 +114,18 @@
 </table>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyppin.base.lazyinit.lazyinit">
-<span class="sig-prename descclassname"><span class="pre">pyppin.base.lazyinit.</span></span><span class="sig-name descname"><span class="pre">lazyinit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">T</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">_LazyInitializedProperty</span><span class="p"><span class="pre">[</span></span><span class="pre">T</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/base/lazyinit.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.base.lazyinit.lazyinit" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyppin.base.lazyinit.</span></span><span class="sig-name descname"><span class="pre">lazyinit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">T</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">_LazyInitializedProperty</span><span class="p"><span class="pre">[</span></span><span class="pre">T</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/base/lazyinit.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.base.lazyinit.lazyinit" title="Link to this definition">¶</a></dt>
 <dd><p>An instance method decorator to make it lazy-init and execute once.</p>
 <p>The resulting variable behaves like a property, where the function is only invoked once
 and the result memoized.</p>
 <p>Why would you do this? It makes it really easy to write complicated initializers!:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyClass</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MyClass</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="nd">@lazyinit</span>
-    <span class="k">def</span> <span class="nf">fooService</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FooService</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fooService</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FooService</span><span class="p">:</span>
         <span class="o">...</span> <span class="n">do</span> <span class="n">something</span> <span class="n">complicated</span> <span class="n">to</span> <span class="n">create</span> <span class="n">a</span> <span class="n">FooService</span>
 
     <span class="nd">@lazyinit</span>
-    <span class="k">def</span> <span class="nf">barService</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BarService</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">barService</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BarService</span><span class="p">:</span>
         <span class="c1"># Note how you can use one lazy-init in another. Don&#39;t create infinite loops,</span>
         <span class="c1"># for obvious reasons.</span>
         <span class="k">return</span> <span class="n">BarService</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fooService</span><span class="p">,</span> <span class="s2">&quot;bar&quot;</span><span class="p">)</span>
@@ -142,7 +139,7 @@ called.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyppin.base.lazyinit.reset_all">
-<span class="sig-prename descclassname"><span class="pre">pyppin.base.lazyinit.</span></span><span class="sig-name descname"><span class="pre">reset_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">holder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/base/lazyinit.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.base.lazyinit.reset_all" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyppin.base.lazyinit.</span></span><span class="sig-name descname"><span class="pre">reset_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">holder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference external" href="https://github.com/yonatanzunger/pyppin/tree/master/pyppin/base/lazyinit.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyppin.base.lazyinit.reset_all" title="Link to this definition">¶</a></dt>
 <dd><p>Reset <em>all</em> <cite>lazyinit</cite>’ed variables inside a particular object.</p>
 <p>This is almost exclusively useful in unittests, if you need to hard-reset some kind of
 environment variable or something.</p>

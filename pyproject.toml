@@ -1,5 +1,64 @@
 [build-system]
-requires = ["setuptools", "wheel"]
-build-backend = "setuptools.build_meta"
-[tool.isort]
-profile = "black"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pyppin"
+version = "1.1.0"
+description = "Python tools collection"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "Apache-2.0" }
+keywords = ["threading", "stack trace", "utilities"]
+authors = [{ name = "Yonatan Zunger", email = "zunger@gmail.com" }]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "License :: OSI Approved :: Apache Software License",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+]
+dependencies = []
+
+[project.urls]
+Source = "https://github.com/yonatanzunger/pyppin"
+Tracker = "https://github.com/yonatanzunger/pyppin/issues"
+Documentation = "https://yonatanzunger.github.io/pyppin/"
+
+[dependency-groups]
+dev = ["pytest", "ruff", "pyright"]
+docs = ["sphinx", "sphinx-rtd-theme", "recommonmark", "sphinx-autosummary-accessors"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["pyppin"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+
+[tool.ruff.lint]
+# Maps the old flake8 selection (E,F,W,B) plus isort (I). E501 is left to the
+# formatter, matching the old .flake8 config. Mccabe complexity (C90) is omitted
+# because the old .flake8 selected `C` but never set max-complexity, so it never
+# actually fired.
+select = ["E", "F", "W", "B", "I"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.pyright]
+include = ["pyppin", "tests"]
+pythonVersion = "3.9"
+typeCheckingMode = "standard"
+# Mirrors the old mypy config (ignore_missing_imports + strict-ish defs).
+reportMissingImports = false
+reportMissingTypeStubs = false
+reportUntypedFunctionDecorator = true
+reportUntypedClassDecorator = true
+reportUntypedBaseClass = true

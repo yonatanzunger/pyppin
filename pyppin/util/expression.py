@@ -15,6 +15,7 @@ from typing import (
     Tuple,
     Type,
     Union,
+    cast,
 )
 
 
@@ -52,10 +53,12 @@ class Expression(object):
         self,
         expression: str,
         *,
-        functions: List[Callable] = [],
+        functions: Optional[List[Callable]] = None,
         allow_attribute_functions: bool = False,
         variables: Optional[List[str]] = None,
     ) -> None:
+        if functions is None:
+            functions = []
         self._fns: Dict[str, Callable] = _dict_sum(
             SAFE_BUILTINS, {fn.__name__: fn for fn in functions}
         )
@@ -97,9 +100,7 @@ class Expression(object):
         """List all the "free" variables, i.e. the ones that must be specified by arguments when
         calling the function.
         """
-        return tuple(
-            name for name in self.variables if not self.is_valid_function(name)
-        )
+        return tuple(name for name in self.variables if not self.is_valid_function(name))
 
     @property
     def ast(self) -> ast.AST:
@@ -309,26 +310,27 @@ class _ValidationContext(NamedTuple):
     allow_attribute_functions: bool
 
     def fail(self, node: ast.AST, error: str) -> NoReturn:
+        # The nodes we report on always carry source position info; the base ast.AST type doesn't
+        # declare it, so cast to ast.expr (which does) to read it.
+        located = cast(ast.expr, node)
         payload = (
             (
                 "<expression>",
-                node.lineno,
-                node.col_offset,
+                located.lineno,
+                located.col_offset,
                 self.expression,
-                node.end_lineno,
-                node.end_col_offset,
+                located.end_lineno,
+                located.end_col_offset,
             )
             if sys.hexversion >= 0x030A0000
-            else ("<expression>", node.lineno, node.col_offset, self.expression)
+            else ("<expression>", located.lineno, located.col_offset, self.expression)
         )
         raise SyntaxError(error, payload)
 
     def is_valid_name(self, name: Union[str, ast.Name]) -> bool:
         if isinstance(name, ast.Name):
             name = name.id
-        return (
-            self.variables is None or name in self.variables or name in self.functions
-        )
+        return self.variables is None or name in self.variables or name in self.functions
 
     def is_valid_function(self, name: str) -> bool:
         return name in self.functions
@@ -347,7 +349,7 @@ class _ValidationContext(NamedTuple):
             already_recursed = op(node, self)
 
         if not already_recursed:
-            for field, value in ast.iter_fields(node):
+            for _field, value in ast.iter_fields(node):
                 if isinstance(value, list):
                     for item in value:
                         if isinstance(item, ast.AST):
@@ -385,9 +387,7 @@ def _validate_call(node: ast.AST, context: _ValidationContext) -> bool:
                 f"of variables has been explicitly forbidden.",
             )
     else:
-        context.fail(
-            node, "Attempted to call something that is neither a name nor an attribute."
-        )
+        context.fail(node, "Attempted to call something that is neither a name nor an attribute.")
 
     return False
 
@@ -435,9 +435,7 @@ def _validate_comprehension(node: ast.AST, context: _ValidationContext) -> bool:
 
 
 def _unknown_node(node: ast.AST, context: _ValidationContext) -> bool:
-    context.fail(
-        node, f"Operations of type {type(node)} are not supported in Expressions."
-    )
+    context.fail(node, f"Operations of type {type(node)} are not supported in Expressions.")
     return False
 
 

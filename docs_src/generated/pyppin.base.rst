@@ -15,11 +15,11 @@
       :toctree:
       :recursive:
    
-      pyppin.base.cache
-      pyppin.base.flex_decorator
-      pyppin.base.import_file
-      pyppin.base.lazyinit
-      pyppin.base.registered_class
+      cache
+      flex_decorator
+      import_file
+      lazyinit
+      registered_class
    
    
 
