@@ -41,9 +41,7 @@ def trace_on_failure(
             exclude_assertion_failures=exclude_assertion_failures,
         )
     else:
-        return _decorate_function(
-            target, output=output, daemons=daemons, group=group, limit=limit
-        )
+        return _decorate_function(target, output=output, daemons=daemons, group=group, limit=limit)
 
 
 def _decorate_function(
@@ -61,9 +59,7 @@ def _decorate_function(
         except BaseException as e:
             print(f"Stop: {e.__class__.__name__}: {e}")
             if exclude is None or not issubclass(type(e), exclude):
-                print_all_stacks(
-                    output=output, limit=limit, daemons=daemons, group=group
-                )
+                print_all_stacks(output=output, limit=limit, daemons=daemons, group=group)
             raise
 
     return wrapped
@@ -82,9 +78,7 @@ def _decorate_test_case(
 ) -> Type[unittest.TestCase]:
     exclude = test.failureException if exclude_assertion_failures else None
 
-    for name in itertools.chain(
-        _TEST_METHODS, unittest.TestLoader().getTestCaseNames(test)
-    ):
+    for name in itertools.chain(_TEST_METHODS, unittest.TestLoader().getTestCaseNames(test)):
         if hasattr(test, name):
             setattr(
                 test,

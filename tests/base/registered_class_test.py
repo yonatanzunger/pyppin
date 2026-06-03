@@ -55,9 +55,7 @@ class RegistrationTest(unittest.TestCase):
         self.assertEqual({}, RegisteredClass.subclasses(ConcreteSubclass1))
 
     def testGetByName(self) -> None:
-        self.assertEqual(
-            ConcreteSubclass1, RegisteredClass.get(AbstractClass, "ConcreteSubclass1")
-        )
+        self.assertEqual(ConcreteSubclass1, RegisteredClass.get(AbstractClass, "ConcreteSubclass1"))
         self.assertEqual(ConcreteSubclass2, RegisteredClass.get(AbstractClass, "Foo"))
         # Shouldn't work, this class got a custom name.
         with self.assertRaises(KeyError):
@@ -81,7 +79,8 @@ class RegistrationTest(unittest.TestCase):
 
     def testClassMethods(self) -> None:
         self.assertEqual(
-            ConcreteSubclass1, AbstractClass.get_subclass("ConcreteSubclass1")  # type: ignore
+            ConcreteSubclass1,
+            AbstractClass.get_subclass("ConcreteSubclass1"),  # type: ignore
         )
         self.assertEqual(
             {

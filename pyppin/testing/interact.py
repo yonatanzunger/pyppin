@@ -1,4 +1,5 @@
 """A function to open an interactive debugging REPL anywhere in your code."""
+
 import code
 import sys
 from typing import Callable, Iterable, Optional
@@ -54,7 +55,7 @@ def interact(
             try:
                 return next(command)
             except StopIteration:
-                raise EOFError()
+                raise EOFError() from None
 
     # Now, grab the local and global variables from the stack layer from which we were invoked.
     stack = sys._getframe(1)

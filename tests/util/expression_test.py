@@ -54,9 +54,7 @@ class ExpressionTest(unittest.TestCase):
 
     def test_builtin_functions(self) -> None:
         e = Expression("list(zip(x, y))", variables=["x", "y"])
-        self.assertEqual(
-            [(1, "a"), (2, "b"), (3, "c")], e(x=[1, 2, 3], y=["a", "b", "c", "d"])
-        )
+        self.assertEqual([(1, "a"), (2, "b"), (3, "c")], e(x=[1, 2, 3], y=["a", "b", "c", "d"]))
         self.assertEqual({"x", "y", "list", "zip"}, set(e.variables))
 
     def test_passed_functions(self) -> None:

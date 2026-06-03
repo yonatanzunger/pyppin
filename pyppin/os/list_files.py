@@ -5,6 +5,7 @@ a reason -- correctly recursively listing things in the presence of file system 
 is surprisingly subtle and subject to exciting bugs. This function is here so that you never have to
 worry about that again.
 """
+
 import os
 import stat
 from pathlib import Path

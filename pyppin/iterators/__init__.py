@@ -44,7 +44,7 @@ def sample(source: Iterable[DataType], count: int) -> List[DataType]:
     result: List[DataType] = []
 
     try:
-        for k in range(count):
+        for _k in range(count):
             result.append(next(it))
 
         w = 1.0
@@ -52,7 +52,7 @@ def sample(source: Iterable[DataType], count: int) -> List[DataType]:
         while True:
             w *= math.pow(random.random(), 1 / count)
             skip = math.floor(math.log(random.random(), 1 - w)) + 1
-            for k in range(skip):
+            for _k in range(skip):
                 value = next(it)
             result[random.randrange(count)] = value
 

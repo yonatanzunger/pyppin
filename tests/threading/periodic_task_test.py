@@ -34,9 +34,7 @@ class PeriodicTaskTest(unittest.TestCase):
             self.ops.append(f"Ran at {int(self.time)}")
             bell.set()
 
-        task = PeriodicTask(
-            periodic, period=20, wait_for_first=True, _test_clock=self.clock
-        )
+        task = PeriodicTask(periodic, period=20, wait_for_first=True, _test_clock=self.clock)
         self.assertEqual(["Ran at 100"], self.ops)
         self.assertTrue(bell.is_set())
         bell.clear()

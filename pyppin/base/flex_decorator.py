@@ -60,9 +60,7 @@ def flex_decorator(decorator: Callable) -> Callable:
         )
 
     defaults = signature.kwonlydefaults or {}
-    kw_args_without_defaults = sorted(
-        key for key in signature.kwonlyargs if key not in defaults
-    )
+    kw_args_without_defaults = sorted(key for key in signature.kwonlyargs if key not in defaults)
 
     # We'll generate a poly decorator out of decorator, and return that. This means that
     # @flex_decorator def my_decorator(...) causes the symbol my_decorator to be defined as the
@@ -88,14 +86,12 @@ def flex_decorator(decorator: Callable) -> Callable:
     #       i.e., poly_decorator is called with only keyword arguments, and should return a zero-
     #       argument decorator which maps _foo onto decorator(_foo, arg1=X, arg2=Y, ...).
     @overload
-    def poly_decorator(target: DecoratedFunction) -> DecoratedFunction:
-        ...
+    def poly_decorator(target: DecoratedFunction) -> DecoratedFunction: ...
 
     @overload
     def poly_decorator(
         **kwargs: Any,
-    ) -> Callable[[DecoratedFunction], DecoratedFunction]:
-        ...
+    ) -> Callable[[DecoratedFunction], DecoratedFunction]: ...
 
     def poly_decorator(
         maybe_target: Optional[DecoratedFunction] = None, /, **kwargs: Any
@@ -106,7 +102,7 @@ def flex_decorator(decorator: Callable) -> Callable:
             if kw_args_without_defaults:
                 raise TypeError(
                     f"The decorator {decorator.__name__} does not have default values specified "
-                    f'for the argument(s) {", ".join(kw_args_without_defaults)}. You must '
+                    f"for the argument(s) {', '.join(kw_args_without_defaults)}. You must "
                     f"therefore use it with the syntax @{decorator.__name__}(arg=foo, ...) def "
                     f"thing_to_be_decorated(...)."
                 )
@@ -121,9 +117,7 @@ def flex_decorator(decorator: Callable) -> Callable:
             return inner_decorator
 
         else:
-            raise TypeError(
-                f"The decorator {decorator.__name__} must be applied to a callable."
-            )
+            raise TypeError(f"The decorator {decorator.__name__} must be applied to a callable.")
 
     # Also propagate the docstring, etc., from decorator onto the poly_decorator.
     return update_wrapper(poly_decorator, decorator)

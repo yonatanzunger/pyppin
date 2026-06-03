@@ -1,6 +1,6 @@
+import sys
 import unittest
 from pathlib import Path
-import sys
 
 from pyppin.os.bulk_import import bulk_import
 

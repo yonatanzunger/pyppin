@@ -78,9 +78,7 @@ class ZipperTest(unittest.TestCase):
                         missing=lambda x: f"noa_{x}",
                     ),
                     ZipSource([2, 3, 4], value=lambda x: f"b_{x}", missing_value=False),
-                    ZipSource(
-                        [1, 2, 3], value=lambda x: f"c_{x}", missing_value="bleah"
-                    ),
+                    ZipSource([1, 2, 3], value=lambda x: f"c_{x}", missing_value="bleah"),
                 )
             ),
         )
@@ -90,11 +88,7 @@ class ZipperTest(unittest.TestCase):
             list(zip_by_key(ZipSource([1, 2, 3], required=True, missing_value=3)))
 
         with self.assertRaises(AssertionError):
-            list(
-                zip_by_key(
-                    ZipSource([1, 2, 3], missing=lambda x: f"foo_{x}", missing_value=3)
-                )
-            )
+            list(zip_by_key(ZipSource([1, 2, 3], missing=lambda x: f"foo_{x}", missing_value=3)))
 
     def testPureAuxSources(self) -> None:
         # Just aux sources yields nothing.

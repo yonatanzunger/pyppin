@@ -85,7 +85,6 @@ circumstances but generally at peak traffic, in the middle of the night, or duri
 highly-visible public event. Don't let this happen to you. Release before you acquire.
 """
 
-
 from contextlib import AbstractContextManager
 from enum import Enum
 from threading import Condition, Lock
@@ -123,9 +122,7 @@ class Semaphore(object):
         This is a non-retriable error; future calls will always fail.
         """
 
-    def acquire(
-        self, amount: int = 1, timeout: Optional[float] = None
-    ) -> AcquireResult:
+    def acquire(self, amount: int = 1, timeout: Optional[float] = None) -> AcquireResult:
         """Acquire (take ownership of) some capacity within the semaphore.
 
         If this function returns SUCCESS, the capacity was successfully acquired; the caller now

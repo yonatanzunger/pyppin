@@ -87,8 +87,7 @@ class MemFile(FileLikeObject):
             bufsize = len(buffer)
             if size > bufsize:
                 raise ValueError(
-                    f"Buffer too small: Tried to read {size} bytes into a buffer of size "
-                    f"{bufsize}"
+                    f"Buffer too small: Tried to read {size} bytes into a buffer of size {bufsize}"
                 )
         else:
             buffer = bytearray()

@@ -6,12 +6,8 @@ from pyppin.text.now_and_then import Formats, now_and_then, relative_time_string
 
 class NowAndThenTest(unittest.TestCase):
     def test_relative_time_string(self) -> None:
-        self.assertEqual(
-            "110.0msec from now", relative_time_string(timedelta(seconds=0.11))
-        )
-        self.assertEqual(
-            "12.1 seconds ago", relative_time_string(timedelta(seconds=-12.1))
-        )
+        self.assertEqual("110.0msec from now", relative_time_string(timedelta(seconds=0.11)))
+        self.assertEqual("12.1 seconds ago", relative_time_string(timedelta(seconds=-12.1)))
         self.assertEqual(
             "0:43:14 from now", relative_time_string(timedelta(minutes=43, seconds=14))
         )
@@ -27,9 +23,7 @@ class NowAndThenTest(unittest.TestCase):
         # But Julian years are precisely 365.25 days.
         self.assertEqual(
             "12 years, 17 days, 5:20:00 ago",
-            relative_time_string(
-                -timedelta(days=4400, hours=5, minutes=20), julian=True
-            ),
+            relative_time_string(-timedelta(days=4400, hours=5, minutes=20), julian=True),
         )
 
     def test_now_and_then(self) -> None:
@@ -43,6 +37,4 @@ class NowAndThenTest(unittest.TestCase):
         )
 
         # Other way round, and let's use ISO format.
-        self.assertEqual(
-            "2022-07-01T00:00:00 (17 days, 15:22:23 ago)", now_and_then(time2, time1)
-        )
+        self.assertEqual("2022-07-01T00:00:00 (17 days, 15:22:23 ago)", now_and_then(time2, time1))

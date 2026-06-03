@@ -1,4 +1,5 @@
 """Make it easy to look up subclasses of an abstract class by name."""
+
 from typing import Any, Dict, Optional, Tuple, Type
 
 
@@ -69,9 +70,7 @@ class RegisteredClass(type):
         """
         assert hasattr(superclass, "_registry")
         if name not in superclass._registry:
-            raise KeyError(
-                f'No subclass "{name}" of "{superclass.__name__}" has been registered.'
-            )
+            raise KeyError(f'No subclass "{name}" of "{superclass.__name__}" has been registered.')
         result = superclass._registry[name]
         assert issubclass(result, superclass)
         return result
@@ -120,8 +119,8 @@ class RegisteredClass(type):
 
         # Doing it this way makes mypy happier.
         registry: Dict[str, Type[class_]] = {}  # type: ignore
-        setattr(class_, "_registry", registry)
-        setattr(class_, "__init_subclass__", classmethod(init_subclass))
+        class_._registry = registry
+        class_.__init_subclass__ = classmethod(init_subclass)
 
         # Also define some class implementations of the static functions. Alas, using these makes
         # mypy freak out, so if you do use them, you'll have to mark it # type: ignore.
@@ -132,7 +131,7 @@ class RegisteredClass(type):
         def subclasses(superclass: "RegisteredClass") -> Dict[str, "RegisteredClass"]:
             return RegisteredClass.subclasses(superclass)
 
-        setattr(class_, "get_subclass", classmethod(get_subclass))
-        setattr(class_, "subclasses", classmethod(subclasses))
+        class_.get_subclass = classmethod(get_subclass)
+        class_.subclasses = classmethod(subclasses)
 
         return class_

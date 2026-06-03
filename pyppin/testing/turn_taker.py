@@ -184,9 +184,7 @@ class _Game(object):
         else:
             return player
 
-    def wait_for_turn_locked(
-        self, player: Union[str, TurnTaker, Type[TurnTaker]]
-    ) -> None:
+    def wait_for_turn_locked(self, player: Union[str, TurnTaker, Type[TurnTaker]]) -> None:
         """Block until it is player's turn. Requires that self.lock be held."""
         player = self.name(player)
         self.waiters.add(player)
@@ -288,9 +286,7 @@ class _Game(object):
 
         barrier = threading.Barrier(len(self.players) + 1)
         threads = [
-            threading.Thread(
-                target=self.player_thread, name=player.name, args=(player, barrier)
-            )
+            threading.Thread(target=self.player_thread, name=player.name, args=(player, barrier))
             for player in self.players.values()
         ]
         for thread in threads:

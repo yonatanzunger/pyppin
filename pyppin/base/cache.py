@@ -110,9 +110,7 @@ WrappedFunctionType = Callable[..., ValueType]
 # The types you can pass in order to select the cache and its lock when decorating a method or a
 # bare function, respectively.
 MethodCacheArgument = Union[CacheType, Type[CacheType], str, None]
-MethodLockArgument = Union[
-    AbstractContextManager, Type[AbstractContextManager], bool, str
-]
+MethodLockArgument = Union[AbstractContextManager, Type[AbstractContextManager], bool, str]
 FunctionCacheArgument = Union[CacheType, Type[CacheType], None]
 FunctionLockArgument = Union[AbstractContextManager, Type[AbstractContextManager], bool]
 
@@ -149,9 +147,7 @@ class CacheFlags(NamedTuple):
                 elif lower == "w":
                     write = False
                 else:
-                    raise ValueError(
-                        f'Unexpected character "{char}" in cache skip argument'
-                    )
+                    raise ValueError(f'Unexpected character "{char}" in cache skip argument')
             return CacheFlags(read=read, write=write)
         else:
             raise TypeError(f'Bogus cache skip argument "{arg}"')
@@ -375,13 +371,13 @@ def _attribute_getter(name: str) -> Callable:
             raise AttributeError(
                 f'Tried to fetch the attribute "{name}" of self in a bare function; did you '
                 f"use the wrong @cache/@cachemethod decorator?"
-            )
+            ) from None
         except AttributeError:
             selfname = f' "{args[0].__name__}"' if hasattr(args[0], "__name__") else ""
             raise AttributeError(
                 f'The {type(args[0])}{selfname} has no attribute "{name}". Did you pass the wrong '
                 f"value to @cachemethod or forget to define the variable?"
-            )
+            ) from None
 
     return get_attribute
 
@@ -409,9 +405,7 @@ class _WrappedMethod(Generic[ValueType]):
         self.core = core
         self.instance = instance
 
-    def __call__(
-        self, *args: Any, _skip: CacheSkipArgument = None, **kwargs: Any
-    ) -> ValueType:
+    def __call__(self, *args: Any, _skip: CacheSkipArgument = None, **kwargs: Any) -> ValueType:
         # Note how we curry self.wrappedSelf as a fake "argument zero," just like if this were a
         # true instance method. We do this manually (rather than having Python do it) so that
         # WrappedMethod can implement more than just __call__ -- the built-in trick only works
@@ -447,9 +441,7 @@ class _WrappedFunction(Generic[ValueType]):
         self.core = core
         functools.update_wrapper(self, core.function)
 
-    def __call__(
-        self, *args: Any, _skip: CacheSkipArgument = None, **kwargs: Any
-    ) -> ValueType:
+    def __call__(self, *args: Any, _skip: CacheSkipArgument = None, **kwargs: Any) -> ValueType:
         return self.core.invoke(_skip, *args, **kwargs)
 
     def incache(self, *args: Any, **kwargs: Any) -> bool:
@@ -466,9 +458,9 @@ def _default_method_cache_key(self: object, *args: Any, **kwargs: Any) -> Hashab
 def _default_function_cache_key(*args: Any, **kwargs: Any) -> int:
     try:
         return hash(args + tuple(sorted(kwargs.items())))
-    except TypeError:
+    except TypeError as e:
         raise ExplicitKeyNeeded(
             "The default cache key cannot be used for this function; not all of its arguments "
             "are hashable types. Please specify an explicit key= argument for its caching "
             "decorator."
-        )
+        ) from e

@@ -66,12 +66,10 @@ class RingBuffer(MutableSequence[T]):
             yield self._at(i)
 
     @overload
-    def __getitem__(self, index: int) -> T:
-        ...
+    def __getitem__(self, index: int) -> T: ...
 
     @overload
-    def __getitem__(self, index: slice) -> List[T]:
-        ...
+    def __getitem__(self, index: slice) -> List[T]: ...
 
     def __getitem__(self, index: Union[int, slice]) -> Union[T, List[T]]:
         if isinstance(index, int):
@@ -89,16 +87,12 @@ class RingBuffer(MutableSequence[T]):
         return result
 
     @overload
-    def __setitem__(self, index: int, value: T) -> None:
-        ...
+    def __setitem__(self, index: int, value: T) -> None: ...
 
     @overload
-    def __setitem__(self, index: slice, value: Iterable[T]) -> None:
-        ...
+    def __setitem__(self, index: slice, value: Iterable[T]) -> None: ...
 
-    def __setitem__(
-        self, index: Union[int, slice], value: Union[T, Iterable[T]]
-    ) -> None:
+    def __setitem__(self, index: Union[int, slice], value: Union[T, Iterable[T]]) -> None:
         # CASE 1: index is an integer. By far the simplest case.
         if isinstance(index, int):
             self._set_at(index, value)  # type: ignore
@@ -141,9 +135,7 @@ class RingBuffer(MutableSequence[T]):
         # unclear. If we don't have new_data_length, we'll have to get it the (slow, expensive) way.
         if index.step != 1:
             # This is really complicated and not really worth it.
-            raise NotImplementedError(
-                "Extended slice setting is not supported by RingBuffer"
-            )
+            raise NotImplementedError("Extended slice setting is not supported by RingBuffer")
             if new_data_length is None:
                 value = list(value)
                 new_data_length = len(value)
@@ -284,9 +276,7 @@ class RingBuffer(MutableSequence[T]):
     def _normalize_slice(self, index: slice) -> slice:
         """Normalize a slice over indices to one whose elements are nonnegative, non-None, integers."""
         start = self._make_nonnegative(index.start if index.start is not None else 0)
-        stop = self._make_nonnegative(
-            index.stop if index.stop is not None else self._size
-        )
+        stop = self._make_nonnegative(index.stop if index.stop is not None else self._size)
         step = index.step or 1
         result = slice(start, stop, step)
         return result

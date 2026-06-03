@@ -6,14 +6,13 @@ import subprocess
 import sys
 from typing import List
 
-from _common import PACKAGE, REPO_ROOT
+PACKAGE = "pyppin"
+REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 
 
 def find_command(commandName: str) -> bool:
     return (
-        subprocess.run(
-            f"which {commandName}", shell=True, stdout=subprocess.DEVNULL
-        ).returncode
+        subprocess.run(f"which {commandName}", shell=True, stdout=subprocess.DEVNULL).returncode
         == 0
     )
 
@@ -27,9 +26,7 @@ def ensure_requirements() -> bool:
     except ImportError:
         reqs_file = os.path.abspath(os.path.join(REPO_ROOT, "tools/requirements.txt"))
         rel_path = os.path.relpath(os.getcwd(), reqs_file)
-        logging.error(
-            f"Required PIP packages are missing. Please run `pip install -r {rel_path}"
-        )
+        logging.error(f"Required PIP packages are missing. Please run `pip install -r {rel_path}")
         return False
 
     if not find_command("make"):
@@ -78,9 +75,7 @@ def rebuild_sphinx() -> None:
 def configure_site() -> None:
     # While Jekyll would have no problem finding the docs in any directory, the Jekyll that runs as
     # part of GitHub Pages seems a bit more specific.
-    shutil.move(
-        os.path.join(REPO_ROOT, "docs_src/build/html"), os.path.join(REPO_ROOT, "docs")
-    )
+    shutil.move(os.path.join(REPO_ROOT, "docs_src/build/html"), os.path.join(REPO_ROOT, "docs"))
     shutil.rmtree(os.path.join(REPO_ROOT, "docs_src/build"))
 
     with open(os.path.join(REPO_ROOT, "docs/_config.yml"), "w") as jekyll_config:

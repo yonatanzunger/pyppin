@@ -21,35 +21,25 @@ class PlotAsciiTest(unittest.TestCase):
 
         self.assertEqual(2, canvas.x_axis_height)
         self.assertEqual(canvas.height - canvas.x_axis_height, canvas.image_height)
-        self.assertEqual(
-            (canvas.image_height - 1) / (canvas.ymax - canvas.ymin), canvas.yscale
-        )
+        self.assertEqual((canvas.image_height - 1) / (canvas.ymax - canvas.ymin), canvas.yscale)
 
         self.assertEqual(canvas.width - canvas.y_axis_width, canvas.image_width)
-        self.assertEqual(
-            (canvas.image_width - 1) / (canvas.xmax - canvas.xmin), canvas.xscale
-        )
+        self.assertEqual((canvas.image_width - 1) / (canvas.xmax - canvas.xmin), canvas.xscale)
 
         self.assertEqual(0, canvas.natural_to_image_x(canvas.xmin))
         self.assertEqual(canvas.image_width - 1, canvas.natural_to_image_x(canvas.xmax))
         self.assertEqual(0, canvas.natural_to_image_y(canvas.ymin))
-        self.assertEqual(
-            canvas.image_height - 1, canvas.natural_to_image_y(canvas.ymax)
-        )
+        self.assertEqual(canvas.image_height - 1, canvas.natural_to_image_y(canvas.ymax))
 
         self.assertEqual(canvas.y_axis_width, canvas.natural_to_screen_x(canvas.xmin))
         self.assertEqual(canvas.width - 1, canvas.natural_to_screen_x(canvas.xmax))
-        self.assertEqual(
-            canvas.image_height - 1, canvas.natural_to_screen_y(canvas.ymin)
-        )
+        self.assertEqual(canvas.image_height - 1, canvas.natural_to_screen_y(canvas.ymin))
         self.assertEqual(0, canvas.natural_to_screen_y(canvas.ymax))
 
         self.assertEqual(canvas.xmin, canvas.image_to_natural_x(0))
         self.assertEqual(canvas.xmax, canvas.image_to_natural_x(canvas.image_width - 1))
         self.assertEqual(canvas.ymin, canvas.image_to_natural_y(0))
-        self.assertEqual(
-            canvas.ymax, canvas.image_to_natural_y(canvas.image_height - 1)
-        )
+        self.assertEqual(canvas.ymax, canvas.image_to_natural_y(canvas.image_height - 1))
 
         self.assertEqual(".", canvas.pixel(5, 5))
         canvas.set_pixel(5, 5, "#")

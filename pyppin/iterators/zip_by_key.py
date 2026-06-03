@@ -165,9 +165,7 @@ def zip_by_key(
         return
 
     # An array that we'll reuse.
-    result: List[Optional[YieldedType]] = [None] * (
-        len(sources) + (1 if yield_keys else 0)
-    )
+    result: List[Optional[YieldedType]] = [None] * (len(sources) + (1 if yield_keys else 0))
 
     assert len(result) > 0
 
@@ -248,9 +246,7 @@ class _Pointer(Generic[KeyType, ValueType, YieldedType]):
         else:
             self.active = True
             self.key = self.source.key(self.value) if self.source.key else self.value
-            self.result = (
-                self.source.value(self.value) if self.source.value else self.value
-            )
+            self.result = self.source.value(self.value) if self.source.value else self.value
 
     def __lt__(self, other: "_Pointer") -> bool:
         return self.key < other.key
@@ -277,9 +273,5 @@ class _Pointer(Generic[KeyType, ValueType, YieldedType]):
         self.result = self.source.value(self.value) if self.source.value else self.value
 
         if self.key <= oldkey:
-            name = (
-                f'iterator "{self.source.name}"' if self.source.name else "an iterator"
-            )
-            raise IndexError(
-                f"Sort error: {name} yielded {self.key} immediately after {oldkey}"
-            )
+            name = f'iterator "{self.source.name}"' if self.source.name else "an iterator"
+            raise IndexError(f"Sort error: {name} yielded {self.key} immediately after {oldkey}")

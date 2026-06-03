@@ -62,7 +62,7 @@ class RawTee(Tee, io.RawIOBase):
         return all(child.closed for child in self.children)
 
     def flush(self) -> None:
-        for child in self.children:
+        for _child in self.children:
             self.flush()
 
     def isatty(self) -> bool:
@@ -108,7 +108,7 @@ class TextTee(Tee, io.TextIOBase):
         return all(child.closed for child in self.children)
 
     def flush(self) -> None:
-        for child in self.children:
+        for _child in self.children:
             self.flush()
 
     def isatty(self) -> bool:

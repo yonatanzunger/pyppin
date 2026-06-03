@@ -92,9 +92,7 @@ class ThreadStack(object):
         self.thread = thread
         self.stack = stack
         self.exception = (
-            traceback.TracebackException.from_exception(exception)
-            if exception
-            else None
+            traceback.TracebackException.from_exception(exception) if exception else None
         )
 
         self._formatted: Optional[List[TraceLine]] = None
@@ -148,8 +146,7 @@ class ThreadStack(object):
                 tuple(
                     line.line
                     for line in self.formatted
-                    if line.line_type
-                    in (TraceLineType.TRACE_LINE, TraceLineType.EXCEPTION)
+                    if line.line_type in (TraceLineType.TRACE_LINE, TraceLineType.EXCEPTION)
                 )
             )
         return self._cluster_id
@@ -166,7 +163,9 @@ class ThreadStack(object):
 
         d = "daemon; " if self.thread.daemon else ""
         if self.thread.ident is not None:
-            return f'Thread "{self.thread.name}" ({d}{self.thread.ident}, TID {self.thread.native_id})'
+            return (
+                f'Thread "{self.thread.name}" ({d}{self.thread.ident}, TID {self.thread.native_id})'
+            )
         else:
             return f'Thread "{self.thread.name}" ({d}not started)'
 
@@ -261,9 +260,7 @@ class _FrameState(ABC):
 
     @staticmethod
     def make() -> "_FrameState":
-        return (
-            _FrameState310() if hasattr(sys, "_current_exceptions") else _FrameState39()
-        )
+        return _FrameState310() if hasattr(sys, "_current_exceptions") else _FrameState39()
 
 
 class _FrameState39(_FrameState):
@@ -288,9 +285,7 @@ class _FrameState39(_FrameState):
 
         return ThreadStack(
             thread=thread,
-            stack=traceback.extract_stack(frame, limit=limit)
-            if frame is not None
-            else None,
+            stack=traceback.extract_stack(frame, limit=limit) if frame is not None else None,
             exception=None,
         )
 
@@ -332,18 +327,12 @@ class _FrameState310(_FrameState):
         }
 
     def get_stack(self, thread: threading.Thread, limit: Optional[int]) -> ThreadStack:
-        exception = (
-            self.exceptions.get(thread.ident, None)
-            if thread.ident is not None
-            else None
-        )
+        exception = self.exceptions.get(thread.ident, None) if thread.ident is not None else None
         frame: Optional[FrameType]
         if exception is not None:
             # Use the exception's stack frame, not the one where we're executing the stack trace
             # printer!
-            frame = (
-                exception.__traceback__.tb_frame if exception.__traceback__ else None
-            )
+            frame = exception.__traceback__.tb_frame if exception.__traceback__ else None
         elif thread.ident is not None and thread.ident in self.frames:
             frame = self.frames[thread.ident]
         else:
@@ -351,9 +340,7 @@ class _FrameState310(_FrameState):
 
         return ThreadStack(
             thread=thread,
-            stack=traceback.extract_stack(frame, limit=limit)
-            if frame is not None
-            else None,
+            stack=traceback.extract_stack(frame, limit=limit) if frame is not None else None,
             exception=exception,
         )
 
@@ -415,9 +402,7 @@ def _format_stack_group(stacks: List[ThreadStack]) -> List[TraceLine]:
 ThreadGroup = Dict[int, List[ThreadStack]]
 
 
-def _append_group(
-    result: List[TraceLine], group: ThreadGroup, is_first: bool = False
-) -> None:
+def _append_group(result: List[TraceLine], group: ThreadGroup, is_first: bool = False) -> None:
     for index, stacks in enumerate(group.values()):
         if index or not is_first:
             result.append(TraceLine.blank())
