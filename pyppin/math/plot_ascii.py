@@ -206,7 +206,7 @@ class Canvas(object):
                 widest_x_label = true_widest_label
 
         # And finally, we can create the bitmap object for our image region.
-        self.image = array.array("u", background * self.image_width * self.image_height)
+        self.image = array.array("w", background * self.image_width * self.image_height)
 
     @classmethod
     def for_plot(
