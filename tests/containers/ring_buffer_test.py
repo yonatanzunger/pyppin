@@ -4,7 +4,7 @@ from typing import Iterable, Iterator, List, Optional, Union
 from pyppin.containers.ring_buffer import RingBuffer, T
 
 
-class TestingRingBuffer(RingBuffer[T]):
+class RingBufferWithList(RingBuffer[T]):
     """This is a RingBuffer that also has a list representation so that it can track the invariant
     that setop(X) == setop(A)[-capacity:].
     """
@@ -20,14 +20,14 @@ class TestingRingBuffer(RingBuffer[T]):
 
 
 class RingBufferTest(unittest.TestCase):
-    def _expect(self, buf: TestingRingBuffer[str], values: List[str]) -> None:
+    def _expect(self, buf: RingBufferWithList[str], values: List[str]) -> None:
         """Assert that buf's contents, as an array, are values."""
         self.assertEqual(len(values), len(buf))
         self.assertEqual(values, list(buf))
         self.assertLessEqual(len(buf._data), buf._capacity, f"Bad data: {buf._data}")
 
     def test_zero_capacity_buffer(self) -> None:
-        buf = TestingRingBuffer[str](0)
+        buf = RingBufferWithList[str](0)
         self.assertEqual(0, buf.capacity)
         self._expect(buf, [])
 
@@ -38,7 +38,7 @@ class RingBufferTest(unittest.TestCase):
             buf[1:2] = "foo"
 
     def test_capacity_one(self) -> None:
-        buf = TestingRingBuffer[str](1)
+        buf = RingBufferWithList[str](1)
         self.assertEqual(1, buf.capacity)
         self._expect(buf, [])
 
@@ -52,7 +52,7 @@ class RingBufferTest(unittest.TestCase):
         self._expect(buf, [])
 
     def test_capacity_three(self) -> None:
-        buf = TestingRingBuffer[str](3)
+        buf = RingBufferWithList[str](3)
         self.assertEqual(3, buf.capacity)
         self._expect(buf, [])
 
@@ -82,7 +82,7 @@ class RingBufferTest(unittest.TestCase):
     def test_slice_gets_aligned(self) -> None:
         # Set up a ring buffer with some stuff in it. We'll do our first tests on an "aligned"
         # buffer.
-        buf = TestingRingBuffer[str](4, ["one", "two", "three", "four"])
+        buf = RingBufferWithList[str](4, ["one", "two", "three", "four"])
         self.assertEqual(4, buf.capacity)
         self._expect(buf, ["one", "two", "three", "four"])
         self.assertEqual(0, buf._start)  # White-box check that we're looking at the right case
@@ -94,7 +94,7 @@ class RingBufferTest(unittest.TestCase):
         self.assertEqual(["one", "three"], buf[::2])
 
     def test_slice_gets_unaligned(self) -> None:
-        buf = TestingRingBuffer[str](4, ["one", "two", "three", "four"])
+        buf = RingBufferWithList[str](4, ["one", "two", "three", "four"])
         buf.extend(["five", "six"])
         self.assertEqual(4, buf.capacity)
         self._expect(buf, ["three", "four", "five", "six"])
@@ -113,7 +113,7 @@ class RingBufferTest(unittest.TestCase):
         self.assertEqual(["four", "six"], buf[1::2])
 
     def test_slice_sets_zero_capacity(self) -> None:
-        buf = TestingRingBuffer[str](0)
+        buf = RingBufferWithList[str](0)
         self._expect(buf, [])
 
         with self.assertRaises(IndexError):
@@ -123,7 +123,7 @@ class RingBufferTest(unittest.TestCase):
             buf[1:2] = ["foo"]
 
     def test_slice_sets(self) -> None:
-        buf = TestingRingBuffer[str](3, ["alpha"])
+        buf = RingBufferWithList[str](3, ["alpha"])
 
         self._expect(buf, ["alpha"])
 

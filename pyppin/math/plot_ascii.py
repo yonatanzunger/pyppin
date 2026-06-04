@@ -2,6 +2,7 @@
 
 import array
 import io
+import sys
 from typing import Callable, Dict, List, NamedTuple, Optional, Tuple
 
 from pyppin.base import assert_not_none
@@ -206,7 +207,8 @@ class Canvas(object):
                 widest_x_label = true_widest_label
 
         # And finally, we can create the bitmap object for our image region.
-        self.image = array.array("u", background * self.image_width * self.image_height)
+        arrayformat = "w" if sys.version_info >= (3, 13) else "u"
+        self.image = array.array(arrayformat, background * self.image_width * self.image_height)
 
     @classmethod
     def for_plot(

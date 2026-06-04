@@ -17,6 +17,7 @@ import traceback
 from abc import ABC, abstractmethod
 from collections import defaultdict
 from enum import Enum
+from traceback import TracebackException
 from types import FrameType
 from typing import Dict, Iterable, Iterator, List, NamedTuple, Optional, TextIO, Union
 
@@ -361,6 +362,16 @@ class _FrameState310(_FrameState):
 
 # Logic for turning stacks into lists of TraceLines
 
+# exc_type is deprecated and will be removed in 3.16; exc_type_str exists from 3.13 on.
+if sys.version_info >= (3, 13):
+
+    def _exc_type_name(et: TracebackException):
+        return et.exc_type_str
+else:
+
+    def _exc_type_name(et: TracebackException):
+        return et.exc_type.__name__
+
 
 def _format_stack(stack: ThreadStack, title: Optional[str] = None) -> List[TraceLine]:
     """Format just this thread into a list of trace lines."""
@@ -381,7 +392,7 @@ def _format_stack(stack: ThreadStack, title: Optional[str] = None) -> List[Trace
     if stack.exception:
         result.append(
             TraceLine(
-                f"Exception: {stack.exception.exc_type.__name__}: {stack.exception}\n",
+                f"Exception: {_exc_type_name(stack.exception)}: {stack.exception}\n",
                 TraceLineType.EXCEPTION,
             )
         )
