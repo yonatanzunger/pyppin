@@ -1,5 +1,6 @@
 import os
 import unittest
+from pathlib import Path
 from tempfile import TemporaryDirectory
 
 from pyppin.os.list_files import list_files
@@ -29,7 +30,7 @@ class ListFilesTest(unittest.TestCase):
 
             # Set up an absolute path to make it as hard as possible for relative_to to work below.
             # root = Path(__file__).parent.joinpath("list_files_test_data").resolve()
-            found = list_files(root, select=lambda path: "skip" not in path.name)
+            found = list(list_files(root, select=lambda path: "skip" not in path.name))
 
             # The fact that relative_to will work in this case is a guaranteed invariant of
             # list_files!
@@ -40,6 +41,34 @@ class ListFilesTest(unittest.TestCase):
             #   - subdir/loop is an infinite-loop symlink, and we don't fall into that trap.
             #   - skipme/not_seen.txt is skipped because of the select function.
             self.assertEqual(["foo.txt", "subdir/quux.txt"], sorted(relative))
+
+    def testRecursion(self) -> None:
+        with TemporaryDirectory() as tmpdir:
+            root = Path(str(tmpdir))
+            (root / "file1.txt").write_text("lorem ipsum")
+            (root / "file2.txt").write_text("dolor sit amet")
+            (root / "subdir").mkdir()
+            (root / "subdir" / "file3.txt").write_text("adipiscing consectetur elit")
+            (root / "subdir" / "subsubdir").mkdir()
+            (root / "subdir" / "subsubdir" / "file4.txt").write_text("copious amounts of blood")
+
+            self.assertEqual(
+                [
+                    "file1.txt",
+                    "file2.txt",
+                    "subdir/file3.txt",
+                    "subdir/subsubdir/file4.txt",
+                ],
+                sorted(str(name.relative_to(root)) for name in list_files(root)),
+            )
+
+            self.assertEqual(
+                [
+                    "file1.txt",
+                    "file2.txt",
+                ],
+                sorted(str(name.relative_to(root)) for name in list_files(root, recursive=False)),
+            )
 
 
 if __name__ == "__main__":

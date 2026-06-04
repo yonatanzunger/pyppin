@@ -31,12 +31,17 @@ def list_files(
     """
     if isinstance(base, str):
         base = Path(base)
-    yield from _list_files(base, recursive=recursive, select=select, seen=set())
+    # In recursive mode, we want to keep recursing forever. In non-recursive mode, we need to
+    # go down twice: once to look at the top-level inode, once for each of its children. So
+    # we initialize a counter at 0 or 2, respectively, decrement, and stop on *exactly* (not
+    # less than) zero.
+    recurse_depth = 0 if recursive else 2
+    yield from _list_files(base, recursions_left=recurse_depth, select=select, seen=set())
 
 
 def _list_files(
     base: Union[Path, os.DirEntry],
-    recursive: bool,
+    recursions_left: int,
     select: Optional[Callable[[Path], bool]],
     seen: Set[int],
 ) -> Iterator[Path]:
@@ -70,6 +75,9 @@ def _list_files(
     elif isDir:
         if select and not select(path):
             return
+        recursions_left = recursions_left - 1
+        if recursions_left == 0:  # Not <=!
+            return
         with os.scandir(path) as it:
             for dirEntry in it:
-                yield from _list_files(dirEntry, recursive, select, seen)
+                yield from _list_files(dirEntry, recursions_left, select, seen)
