@@ -363,12 +363,11 @@ class _FrameState310(_FrameState):
 # Logic for turning stacks into lists of TraceLines
 
 # exc_type is deprecated and will be removed in 3.16; exc_type_str exists from 3.13 on.
-try:
-    e = TracebackException.exc_type_str
+if sys.version_info >= (3, 13):
 
     def _exc_type_name(et: TracebackException):
         return et.exc_type_str
-except AttributeError:
+else:
 
     def _exc_type_name(et: TracebackException):
         return et.exc_type.__name__
